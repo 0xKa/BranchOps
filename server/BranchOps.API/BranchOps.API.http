@@ -1,0 +1,6 @@
+@BranchOps.API_HostAddress = http://localhost:5107
+
+GET {{BranchOps.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
