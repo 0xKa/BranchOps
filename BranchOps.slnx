@@ -4,4 +4,5 @@
     <File Path="README.md" />
   </Folder>
   <Project Path="server/BranchOps.Api/BranchOps.Api.csproj" />
+  <Project Path="server/BranchOps.Domain/BranchOps.Domain.csproj" Id="77d30241-6e58-43a3-b31d-497a169373b3" />
 </Solution>
