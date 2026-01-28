@@ -1,1 +1,7 @@
-<Solution />
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="BranchOps.Api/BranchOps.Api.csproj" Id="dcdb6a35-46ed-492d-8721-2cb781d36134" />
+</Solution>
