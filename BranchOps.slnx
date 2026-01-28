@@ -1,6 +1,1 @@
-<Solution>
-  <Project Path="server/BranchOps.API/BranchOps.API.csproj" />
-  <Project Path="server/BranchOps.Application/BranchOps.Application.csproj" />
-  <Project Path="server/BranchOps.Domain/BranchOps.Domain.csproj" />
-  <Project Path="server/BranchOps.Infrastructure/BranchOps.Infrastructure.csproj" />
-</Solution>
+<Solution />
