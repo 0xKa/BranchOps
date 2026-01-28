@@ -8,6 +8,10 @@ namespace BranchOps.Api.Data;
 public class BranchOpsDbContext(DbContextOptions<BranchOpsDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Branch> Branches { get; set; }
+    public DbSet<BranchPhone> BranchPhones { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<EmployeeSalary> EmployeeSalaries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
