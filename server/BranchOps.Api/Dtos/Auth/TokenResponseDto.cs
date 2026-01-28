@@ -1,4 +1,4 @@
-﻿namespace BranchOps.Api.Dtos;
+﻿namespace BranchOps.Api.Dtos.Auth;
 
 public class TokenResponseDto
 {

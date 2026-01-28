@@ -24,8 +24,4 @@
     <ProjectReference Include="..\BranchOps.Domain\BranchOps.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Configuration\" />
-  </ItemGroup>
-
 </Project>
