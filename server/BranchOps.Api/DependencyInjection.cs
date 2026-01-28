@@ -1,5 +1,6 @@
 ﻿using BranchOps.Api.Data;
 using BranchOps.Api.Security;
+using BranchOps.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace BranchOps.Api;
@@ -16,6 +17,10 @@ public static class DependencyInjection
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 
         services.AddScoped<Auth>();
+        services.AddScoped<BranchService>();
+        services.AddScoped<BranchPhoneService>();
+        services.AddScoped<EmployeeService>();
+        services.AddScoped<EmployeeSalaryService>();
 
         return services;
     }
