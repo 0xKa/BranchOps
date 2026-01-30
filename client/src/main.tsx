@@ -7,11 +7,13 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { DirectionProvider } from "@/components/ui/direction";
 
 import "./i18n";
-import i18n from "i18next";
+import { useTranslation } from "react-i18next";
 import { applyLangToHtml, langToDir } from "@/lib/i18n-ui";
 
 function Root() {
-  const lng = (i18n.language as "en" | "ar") ?? "en";
+  const { i18n } = useTranslation();
+
+  const lng = (i18n.resolvedLanguage as "en" | "ar") ?? "en";
   const dir = useMemo(() => langToDir(lng), [lng]);
 
   useEffect(() => {
@@ -20,7 +22,7 @@ function Root() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <DirectionProvider dir={dir}>
+      <DirectionProvider direction={dir} key={dir} dir={dir}>
         <App />
       </DirectionProvider>
     </ThemeProvider>

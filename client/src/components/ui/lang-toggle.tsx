@@ -1,4 +1,3 @@
-import i18n from "i18next";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
@@ -18,8 +17,9 @@ export function LangToggle({
   variant = "outline",
   className,
 }: LangToggleProps) {
-  const { t } = useTranslation();
-  const current = (i18n.language as "en" | "ar") ?? "en";
+  const { t, i18n } = useTranslation();
+
+  const current = (i18n.resolvedLanguage as "en" | "ar") ?? "en";
   const next = current === "en" ? "ar" : "en";
 
   const onToggle = async () => {

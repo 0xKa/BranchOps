@@ -1,8 +1,8 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import arCommon from "./locales/ar/common.json";
-import enCommon from "./locales/en/common.json";
+import arCommon from "./locales/ar.json";
+import enCommon from "./locales/en.json";
 
 const savedLng = (localStorage.getItem("lng") as "en" | "ar" | null) ?? "en";
 

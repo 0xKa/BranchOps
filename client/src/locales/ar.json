@@ -1,7 +1,8 @@
 {
   "appName": "BranchOps",
-  "language": "Language",
+  "language": "اللغة",
   "switchToArabic": "العربية",
   "switchToEnglish": "English",
-  "hello": "Hello!"
+  "hello": "مرحباً!",
+  "testKey": "هذا نص تجريبي"
 }

@@ -1,4 +1,3 @@
-import { ComponentExample } from "@/components/component-example";
 import { useTranslation } from "react-i18next";
 import { LangToggle } from "./components/ui/lang-toggle";
 
@@ -14,8 +13,9 @@ export function App() {
         </div>
 
         <p>{t("hello")}</p>
+        <p>{t("lorem")}</p>
+        <p>{t("testKey")}</p>
       </div>
-      <ComponentExample />
     </>
   );
 }
