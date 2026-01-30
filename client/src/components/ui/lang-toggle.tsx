@@ -1,0 +1,35 @@
+import i18n from "i18next";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+
+interface LangToggleProps {
+  variant?:
+    | "secondary"
+    | "link"
+    | "default"
+    | "outline"
+    | "ghost"
+    | "destructive"
+    | null;
+  className?: string;
+}
+
+export function LangToggle({
+  variant = "outline",
+  className,
+}: LangToggleProps) {
+  const { t } = useTranslation();
+  const current = (i18n.language as "en" | "ar") ?? "en";
+  const next = current === "en" ? "ar" : "en";
+
+  const onToggle = async () => {
+    await i18n.changeLanguage(next);
+    localStorage.setItem("lng", next);
+  };
+
+  return (
+    <Button variant={variant} onClick={onToggle} className={className}>
+      {current === "en" ? t("switchToArabic") : t("switchToEnglish")}
+    </Button>
+  );
+}
