@@ -2,13 +2,29 @@ import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/theme/theme-provider";
 
-export function ModeToggleButton() {
+interface ModeToggleProps {
+  className?: string;
+  size?:
+    | "sm"
+    | "lg"
+    | "icon"
+    | "default"
+    | "xs"
+    | "icon-xs"
+    | "icon-sm"
+    | "icon-lg"
+    | null
+    | undefined;
+}
+
+export function ModeToggle({ className, size }: ModeToggleProps) {
   const { theme, setTheme } = useTheme();
 
   return (
     <Button
       variant="outline"
-      size="icon"
+      size={size}
+      className={className}
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
       <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />

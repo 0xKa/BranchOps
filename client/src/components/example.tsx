@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ModeToggleButton } from "./theme/mode-toggle";
+import { ModeToggle } from "./theme/mode-toggle";
 
 function ExampleWrapper({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -35,7 +35,7 @@ function Example({
       )}
       {...props}
     >
-      <ModeToggleButton />
+      <ModeToggle />
       {title && (
         <div className="text-muted-foreground px-1.5 py-2 text-xs font-medium">
           {title}

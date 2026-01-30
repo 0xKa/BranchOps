@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
 interface LangToggleProps {
+  className?: string;
   variant?:
     | "secondary"
     | "link"
@@ -10,12 +11,23 @@ interface LangToggleProps {
     | "ghost"
     | "destructive"
     | null;
-  className?: string;
+  size?:
+    | "sm"
+    | "lg"
+    | "icon"
+    | "default"
+    | "xs"
+    | "icon-xs"
+    | "icon-sm"
+    | "icon-lg"
+    | null
+    | undefined;
 }
 
 export function LangToggle({
   variant = "outline",
   className,
+  size,
 }: LangToggleProps) {
   const { t, i18n } = useTranslation();
 
@@ -28,7 +40,12 @@ export function LangToggle({
   };
 
   return (
-    <Button variant={variant} onClick={onToggle} className={className}>
+    <Button
+      variant={variant}
+      onClick={onToggle}
+      className={className}
+      size={size}
+    >
       {current === "en" ? t("switchToArabic") : t("switchToEnglish")}
     </Button>
   );
