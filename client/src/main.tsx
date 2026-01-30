@@ -1,14 +1,23 @@
-import { StrictMode, useEffect, useMemo } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import App from "./App.tsx";
-
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { DirectionProvider } from "@/components/ui/direction";
-
-import "./i18n";
-import { useTranslation } from "react-i18next";
 import { applyLangToHtml, langToDir } from "@/lib/i18n-ui";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { StrictMode, useEffect, useMemo } from "react";
+import { createRoot } from "react-dom/client";
+import { useTranslation } from "react-i18next";
+import { RouterProvider } from "react-router";
+import "./i18n";
+import "./index.css";
+import { router } from "./router.tsx";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+    },
+  },
+});
 
 function Root() {
   const { i18n } = useTranslation();
@@ -22,9 +31,12 @@ function Root() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <DirectionProvider direction={dir} key={dir} dir={dir}>
-        <App />
-      </DirectionProvider>
+      <QueryClientProvider client={queryClient}>
+        <DirectionProvider direction={dir} key={dir} dir={dir}>
+          <RouterProvider router={router} />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </DirectionProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
