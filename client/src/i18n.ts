@@ -1,23 +1,32 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 
 import arCommon from "./locales/ar.json";
 import enCommon from "./locales/en.json";
 
-const savedLng = (localStorage.getItem("lng") as "en" | "ar" | null) ?? "en";
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: { common: enCommon },
+      ar: { common: arCommon },
+    },
+    fallbackLng: "en",
+    ns: ["common"],
+    defaultNS: "common",
+    interpolation: { escapeValue: false },
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: { common: enCommon },
-    ar: { common: arCommon },
-  },
-  lng: savedLng,
-  fallbackLng: "en",
-  ns: ["common"],
-  defaultNS: "common",
-  interpolation: {
-    escapeValue: false,
-  },
-});
+    detection: {
+      order: ["localStorage", "navigator"], // check localStorage first, then navigator
+      caches: ["localStorage"],
+      lookupLocalStorage: "lng",
+      convertDetectedLanguage: (lng) => {
+        const base = lng?.split("-")[0];
+        return base === "ar" ? "ar" : "en";
+      },
+    },
+  });
 
 export default i18n;

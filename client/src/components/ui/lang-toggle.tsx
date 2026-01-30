@@ -24,7 +24,7 @@ export function LangToggle({
 
   const onToggle = async () => {
     await i18n.changeLanguage(next);
-    localStorage.setItem("lng", next);
+    // localStorage.setItem("lng", next); // Handled by i18next-browser-languagedetector in i18n.ts
   };
 
   return (
