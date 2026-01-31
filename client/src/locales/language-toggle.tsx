@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { useAppLanguage } from "@/hooks/use-app-language";
 
-interface LangToggleProps {
+interface LanguageToggleProps {
   className?: string;
   variant?:
     | "secondary"
@@ -24,29 +25,22 @@ interface LangToggleProps {
     | undefined;
 }
 
-export function LangToggle({
+export function LanguageToggle({
   variant = "outline",
   className,
   size,
-}: LangToggleProps) {
-  const { t, i18n } = useTranslation();
-
-  const current = (i18n.resolvedLanguage as "en" | "ar") ?? "en";
-  const next = current === "en" ? "ar" : "en";
-
-  const onToggle = async () => {
-    await i18n.changeLanguage(next);
-    // localStorage.setItem("lng", next); // Handled by i18next-browser-languagedetector in i18n.ts
-  };
+}: LanguageToggleProps) {
+  const { t } = useTranslation();
+  const { lang, toggleLang } = useAppLanguage();
 
   return (
     <Button
       variant={variant}
-      onClick={onToggle}
+      onClick={toggleLang}
       className={className}
       size={size}
     >
-      {current === "en" ? t("switchToArabic") : t("switchToEnglish")}
+      {lang === "en" ? t("switchToArabic") : t("switchToEnglish")}
     </Button>
   );
 }

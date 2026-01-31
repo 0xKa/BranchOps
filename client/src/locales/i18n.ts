@@ -14,6 +14,7 @@ i18n
       ar: { common: arCommon },
     },
     fallbackLng: "en",
+    supportedLngs: ["en", "ar"],
     ns: ["common"],
     defaultNS: "common",
     interpolation: { escapeValue: false },
