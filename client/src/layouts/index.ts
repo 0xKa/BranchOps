@@ -1,3 +1,3 @@
-export { default as RootLayout } from "./RootLayout";
-export { default as ProtectedRoute } from "./ProtectedRoute";
-export { default as PublicOnlyRoute } from "./PublicOnlyRoute";
+export { default as RootLayout } from "./root-layout";
+export { default as ProtectedRoute } from "./protected-route";
+export { default as PublicOnlyRoute } from "./public-only-route";
