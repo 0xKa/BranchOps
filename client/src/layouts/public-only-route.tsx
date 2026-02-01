@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-const PublicOnlyRoute = () => {
+export default function PublicOnlyRoute() {
   //  render on not authenticated
   return (
     <>
@@ -7,6 +7,4 @@ const PublicOnlyRoute = () => {
       <Outlet />
     </>
   );
-};
-
-export default PublicOnlyRoute;
+}

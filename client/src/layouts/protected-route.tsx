@@ -1,12 +1,10 @@
 import { Outlet } from "react-router";
 
-const ProtectedRoute = () => {
+export default function ProtectedRoute() {
   // render on authenticated
   return (
     <>
       <Outlet />
     </>
   );
-};
-
-export default ProtectedRoute;
+}

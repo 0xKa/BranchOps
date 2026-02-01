@@ -1,6 +1,6 @@
 import { Outlet } from "react-router";
 
-const RootLayout = () => {
+export default function RootLayout() {
   return (
     <div className="relative flex min-h-svh flex-col">
       <main className="flex-1">
@@ -9,6 +9,4 @@ const RootLayout = () => {
       </main>
     </div>
   );
-};
-
-export default RootLayout;
+}

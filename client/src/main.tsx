@@ -1,14 +1,14 @@
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { DirectionProvider } from "@/components/ui/direction";
+import { useAppLanguage } from "@/hooks/use-app-language.ts";
 import "@/index.css";
 import "@/locales/i18n.ts";
+import { router } from "@/router.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
-import { useAppLanguage } from "@/hooks/use-app-language.ts";
-import { router } from "@/router.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {

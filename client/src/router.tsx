@@ -1,7 +1,7 @@
-import { createBrowserRouter } from "react-router";
 import { ProtectedRoute, PublicOnlyRoute, RootLayout } from "@/layouts";
-import LandingPage from "./features/landing/landing-page";
+import { createBrowserRouter } from "react-router";
 import DashboardPage from "./features/dashboard/dashboard-page";
+import LandingPage from "./features/landing/landing-page";
 
 export const router = createBrowserRouter([
   {

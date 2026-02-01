@@ -3,7 +3,7 @@ import { LanguageToggle } from "@/locales/language-toggle";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const LandingPage = () => {
+export default function LandingPage() {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -22,6 +22,4 @@ const LandingPage = () => {
       </div>
     </div>
   );
-};
-
-export default LandingPage;
+}
