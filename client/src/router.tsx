@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { ProtectedRoute, PublicOnlyRoute, RootLayout } from "@/layouts";
+import LandingPage from "./features/landing/landing-page";
+import DashboardPage from "./features/dashboard/dashboard-page";
 
 export const router = createBrowserRouter([
   {
@@ -8,7 +10,7 @@ export const router = createBrowserRouter([
     errorElement: <div>Oops! An error occurred.</div>,
     children: [
       // Public Routes
-      { index: true, element: <div>Landing Page</div> },
+      { index: true, element: <LandingPage /> },
 
       // Public-Only Routes
       {
@@ -19,7 +21,7 @@ export const router = createBrowserRouter([
       // Protected Routes
       {
         element: <ProtectedRoute />,
-        children: [{ path: "dashboard", element: <div>Dashboard</div> }],
+        children: [{ path: "dashboard", element: <DashboardPage /> }],
       },
 
       // Error testing routes (dev only)

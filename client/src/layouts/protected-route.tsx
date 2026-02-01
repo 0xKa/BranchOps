@@ -4,7 +4,6 @@ const ProtectedRoute = () => {
   // render on authenticated
   return (
     <>
-      <h1>Protected Route</h1>
       <Outlet />
     </>
   );
