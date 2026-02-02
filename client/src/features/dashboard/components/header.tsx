@@ -27,41 +27,43 @@ export default function Header({ title }: HeaderProps) {
   };
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-      <div className="flex items-center gap-2 px-4">
-        <SidebarTrigger className="-ml-1.5" />
-        <Separator
-          orientation="vertical"
-          className="mr-2 data-[orientation=vertical]:h-6"
-        />
-        <Breadcrumb>
-          <BreadcrumbList>
-            {pathSegments.map((segment, index) => {
-              const href = `/${pathSegments.slice(0, index + 1).join("/")}`;
-              const isLast = index === pathSegments.length - 1;
+    <>
+      <header className="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-10 ">
+        <div className="flex items-center gap-2 px-4">
+          <SidebarTrigger className="-ml-1.5" />
+          <Separator orientation="vertical" className="mr-2 h-6" />
+          <Breadcrumb>
+            <BreadcrumbList>
+              {pathSegments.map((segment, index) => {
+                const href = `/${pathSegments.slice(0, index + 1).join("/")}`;
+                const isLast = index === pathSegments.length - 1;
 
-              return (
-                <Fragment key={href}>
-                  <BreadcrumbItem className={isLast ? "" : "hidden md:block"}>
-                    {isLast ? (
-                      <BreadcrumbPage>
-                        {title || formatSegment(segment)}
-                      </BreadcrumbPage>
-                    ) : (
-                      <BreadcrumbLink asChild>
-                        <Link to={href}>{formatSegment(segment)}</Link>
-                      </BreadcrumbLink>
+                return (
+                  <Fragment key={href}>
+                    <BreadcrumbItem className={isLast ? "" : "hidden md:block"}>
+                      {isLast ? (
+                        <BreadcrumbPage>
+                          {title || formatSegment(segment)}
+                        </BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink asChild>
+                          <Link to={href}>{formatSegment(segment)}</Link>
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                    {!isLast && (
+                      <BreadcrumbSeparator className="hidden md:block" />
                     )}
-                  </BreadcrumbItem>
-                  {!isLast && (
-                    <BreadcrumbSeparator className="hidden md:block" />
-                  )}
-                </Fragment>
-              );
-            })}
-          </BreadcrumbList>
-        </Breadcrumb>
+                  </Fragment>
+                );
+              })}
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </header>
+      <div className="w-[98%] flex mx-auto">
+        <Separator className="mb-4" />
       </div>
-    </header>
+    </>
   );
 }
