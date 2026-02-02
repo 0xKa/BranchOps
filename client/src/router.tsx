@@ -1,4 +1,9 @@
-import { ProtectedRoute, PublicOnlyRoute, RootLayout } from "@/layouts";
+import {
+  DashboardLayout,
+  ProtectedRoute,
+  PublicOnlyRoute,
+  RootLayout,
+} from "@/layouts";
 import { createBrowserRouter } from "react-router";
 import DashboardPage from "./features/dashboard/dashboard-page";
 import LandingPage from "./features/landing/landing-page";
@@ -21,7 +26,12 @@ export const router = createBrowserRouter([
       // Protected Routes
       {
         element: <ProtectedRoute />,
-        children: [{ path: "dashboard", element: <DashboardPage /> }],
+        children: [
+          {
+            element: <DashboardLayout />,
+            children: [{ path: "dashboard/*", element: <DashboardPage /> }],
+          },
+        ],
       },
 
       // Error testing routes (dev only)
