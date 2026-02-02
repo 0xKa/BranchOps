@@ -7,12 +7,13 @@ import {
 import { createBrowserRouter } from "react-router";
 import DashboardPage from "./features/dashboard/dashboard-page";
 import LandingPage from "./features/landing/landing-page";
+import ErrorState from "./components/error-state";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout />,
-    errorElement: <div>Oops! An error occurred.</div>,
+    errorElement: <ErrorState />,
     children: [
       // Public Routes
       { index: true, element: <LandingPage /> },
