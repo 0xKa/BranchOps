@@ -60,6 +60,29 @@
     "Guest": "Guest"
   },
 
+  "breadcrumb": {
+    "dashboard": "Dashboard",
+    "branches": "Branches",
+    "products": "Products",
+    "all-products": "All Products",
+    "categories": "Categories",
+    "pos-orders": "POS / Orders",
+    "new-order": "New Order",
+    "order-history": "Order History",
+    "inventory": "Inventory",
+    "stock-levels": "Stock Levels",
+    "stock-adjustments": "Stock Adjustments",
+    "low-stock-alerts": "Low Stock Alerts",
+    "reports": "Reports",
+    "daily-sales": "Daily Sales",
+    "sales-by-branch": "Sales by Branch",
+    "top-products": "Top Products",
+    "forecasting": "Forecasting",
+    "audit-log": "Audit Log",
+    "users": "Users",
+    "settings": "Settings"
+  },
+
   "common": {
     "search": "Search",
     "save": "Save",

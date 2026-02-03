@@ -13,6 +13,7 @@ import { Fragment } from "react";
 import { LanguageToggle } from "@/locales/language-toggle";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { useAppLanguage } from "@/hooks/use-app-language";
+import { useTranslation } from "react-i18next";
 
 interface HeaderProps {
   title?: string;
@@ -21,6 +22,7 @@ interface HeaderProps {
 export default function Header({ title }: HeaderProps) {
   const location = useLocation();
   const { isRTL } = useAppLanguage();
+  const { t } = useTranslation();
   const pathSegments = location.pathname.split("/").filter(Boolean);
 
   const formatSegment = (segment: string) => {
@@ -30,9 +32,16 @@ export default function Header({ title }: HeaderProps) {
       .join(" ");
   };
 
+  const getTranslatedSegment = (segment: string) => {
+    const translationKey = `breadcrumb.${segment}`;
+    const translated = t(translationKey);
+    // If translation key doesn't exist, fall back to formatted segment
+    return translated !== translationKey ? translated : formatSegment(segment);
+  };
+
   return (
     <>
-      <header className="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-10 ">
+      <header className="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-10">
         <div className="flex items-center gap-2 px-4">
           <SidebarTrigger
             className={isRTL ? "-mr-1.5 rotate-180" : "-ml-1.5"}
@@ -49,11 +58,11 @@ export default function Header({ title }: HeaderProps) {
                     <BreadcrumbItem className={isLast ? "" : "hidden md:block"}>
                       {isLast ? (
                         <BreadcrumbPage>
-                          {title || formatSegment(segment)}
+                          {title || getTranslatedSegment(segment)}
                         </BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink asChild>
-                          <Link to={href}>{formatSegment(segment)}</Link>
+                          <Link to={href}>{getTranslatedSegment(segment)}</Link>
                         </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>
@@ -67,7 +76,7 @@ export default function Header({ title }: HeaderProps) {
           </Breadcrumb>
         </div>
         <div
-          className={`${isRTL ? "mr-auto ml-4" : "ml-auto mr-4 flex items-center gap-3"} flex items-center gap-3`}
+          className={`flex items-center gap-3 ${isRTL ? "mr-auto ml-4" : "ml-auto mr-4"}`}
         >
           <LanguageToggle size="lg" />
           <ModeToggle size="lg" />

@@ -60,6 +60,29 @@
     "Guest": "زائر"
   },
 
+  "breadcrumb": {
+    "dashboard": "لوحة التحكم",
+    "branches": "الفروع",
+    "products": "المنتجات",
+    "all-products": "جميع المنتجات",
+    "categories": "الفئات",
+    "pos-orders": "نقاط البيع / الطلبات",
+    "new-order": "طلب جديد",
+    "order-history": "سجل الطلبات",
+    "inventory": "المخزون",
+    "stock-levels": "مستويات المخزون",
+    "stock-adjustments": "تعديلات المخزون",
+    "low-stock-alerts": "تنبيهات نقص المخزون",
+    "reports": "التقارير",
+    "daily-sales": "المبيعات اليومية",
+    "sales-by-branch": "المبيعات حسب الفرع",
+    "top-products": "أفضل المنتجات",
+    "forecasting": "التنبؤات",
+    "audit-log": "سجل المراجعة",
+    "users": "المستخدمين",
+    "settings": "الإعدادات"
+  },
+
   "common": {
     "search": "بحث",
     "save": "حفظ",
