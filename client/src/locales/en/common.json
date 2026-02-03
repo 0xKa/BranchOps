@@ -98,6 +98,13 @@
     "settings": "Settings"
   },
 
+  "errors": {
+    "networkError": "Unable to connect to server.",
+    "timeout": "Server took too long to respond.",
+    "serverNotResponding": "Server is not responding. Please try again later.",
+    "unexpectedError": "An unexpected error occurred"
+  },
+
   "common": {
     "search": "Search",
     "save": "Save",
