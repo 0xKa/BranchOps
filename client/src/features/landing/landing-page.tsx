@@ -19,6 +19,10 @@ export default function LandingPage() {
         <Button size="lg" onClick={() => navigate("/dashboard")}>
           Dashboard
         </Button>
+
+        <Button size="lg" onClick={() => navigate("/login")}>
+          Login
+        </Button>
       </div>
     </div>
   );
