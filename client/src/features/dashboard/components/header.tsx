@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import { useLocation, Link } from "react-router-dom";
 import { Fragment } from "react";
+import { LanguageToggle } from "@/locales/language-toggle";
+import { ModeToggle } from "@/components/theme/mode-toggle";
+import { useAppLanguage } from "@/hooks/use-app-language";
 
 interface HeaderProps {
   title?: string;
@@ -17,6 +20,7 @@ interface HeaderProps {
 
 export default function Header({ title }: HeaderProps) {
   const location = useLocation();
+  const { isRTL } = useAppLanguage();
   const pathSegments = location.pathname.split("/").filter(Boolean);
 
   const formatSegment = (segment: string) => {
@@ -30,8 +34,10 @@ export default function Header({ title }: HeaderProps) {
     <>
       <header className="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-10 ">
         <div className="flex items-center gap-2 px-4">
-          <SidebarTrigger className="-ml-1.5" />
-          <Separator orientation="vertical" className="mr-2 h-6" />
+          <SidebarTrigger
+            className={isRTL ? "-mr-1.5 rotate-180" : "-ml-1.5"}
+          />
+          <Separator orientation="vertical" className="mx-2 h-6" />
           <Breadcrumb>
             <BreadcrumbList>
               {pathSegments.map((segment, index) => {
@@ -59,6 +65,12 @@ export default function Header({ title }: HeaderProps) {
               })}
             </BreadcrumbList>
           </Breadcrumb>
+        </div>
+        <div
+          className={`${isRTL ? "mr-auto ml-4" : "ml-auto mr-4 flex items-center gap-3"} flex items-center gap-3`}
+        >
+          <LanguageToggle size="lg" />
+          <ModeToggle size="lg" />
         </div>
       </header>
       <div className="w-[98%] flex mx-auto">

@@ -21,6 +21,7 @@ import {
 import AppSidebarHeader from "./app-sidebar-header";
 import { NavUser, type User } from "./nav-user";
 import NavMain, { type NavItem } from "./nav-main";
+import { useAppLanguage } from "@/hooks/use-app-language";
 
 // Navigation items configuration
 const mainNavItems: NavItem[] = [
@@ -111,8 +112,10 @@ const currentUser: User = {
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
 export default function AppSidebar(props: AppSidebarProps) {
+  const { isRTL } = useAppLanguage();
+
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" side={isRTL ? "right" : "left"} {...props}>
       <SidebarHeader>
         <AppSidebarHeader />
       </SidebarHeader>
