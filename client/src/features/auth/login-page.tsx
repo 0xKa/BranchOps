@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useLogin } from "./useLogin";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -25,20 +26,26 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { mutate: login, isPending, isError, error } = useLogin();
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
-    // TODO: Implement actual login logic
-    console.log(data);
-    if (data.username === "reda" && data.password === "1234") {
-      navigate("/dashboard");
-    }
+  const onSubmit = (data: LoginFormData) => {
+    login(data, {
+      onError: (err) => {
+        console.log("Login failed:", err.message);
+        // TODO: USE TOAST NOTIFCATION
+      },
+      onSuccess: () => {
+        navigate("/dashboard");
+      },
+    });
   };
 
   return (
@@ -57,6 +64,11 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {isError && (
+              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+                {error?.message}
+              </div>
+            )}
             <div className="space-y-2 ">
               <div className="flex items-end justify-between">
                 <Label htmlFor="username" className="text-xs">
@@ -105,9 +117,9 @@ export default function LoginPage() {
             <Button
               type="submit"
               className="w-full h-8 mt-4"
-              disabled={isSubmitting}
+              disabled={isPending}
             >
-              {isSubmitting ? "Logging In..." : "Log In"}
+              {isPending ? "Logging In..." : "Log In"}
             </Button>
           </form>
         </CardContent>
