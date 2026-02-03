@@ -22,84 +22,7 @@ import AppSidebarHeader from "./app-sidebar-header";
 import { NavUser, type User } from "./nav-user";
 import NavMain, { type NavItem } from "./nav-main";
 import { useAppLanguage } from "@/hooks/use-app-language";
-
-// Navigation items configuration
-const mainNavItems: NavItem[] = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Branches",
-    url: "/branches",
-    icon: Building2,
-  },
-  {
-    title: "Products",
-    url: "/products",
-    icon: Package,
-    items: [
-      { title: "All Products", url: "/products" },
-      { title: "Categories", url: "/products/categories" },
-    ],
-  },
-  {
-    title: "POS / Orders",
-    url: "/pos",
-    icon: ShoppingCart,
-    items: [
-      { title: "New Order", url: "/pos" },
-      { title: "Order History", url: "/pos/orders" },
-    ],
-  },
-  {
-    title: "Inventory",
-    url: "/inventory",
-    icon: Warehouse,
-    items: [
-      { title: "Stock Levels", url: "/inventory" },
-      { title: "Stock Adjustments", url: "/inventory/adjustments" },
-      { title: "Low Stock Alerts", url: "/inventory/alerts" },
-    ],
-  },
-];
-
-const analyticsNavItems: NavItem[] = [
-  {
-    title: "Reports",
-    url: "/reports",
-    icon: BarChart3,
-    items: [
-      { title: "Daily Sales", url: "/reports/daily-sales" },
-      { title: "Sales by Branch", url: "/reports/branch-sales" },
-      { title: "Top Products", url: "/reports/top-products" },
-    ],
-  },
-  {
-    title: "Forecasting",
-    url: "/forecasting",
-    icon: TrendingUp,
-  },
-  {
-    title: "Audit Log",
-    url: "/audit-log",
-    icon: FileText,
-  },
-];
-
-const adminNavItems: NavItem[] = [
-  {
-    title: "Users",
-    url: "/users",
-    icon: Users,
-  },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-];
+import { useTranslation } from "react-i18next";
 
 // Placeholder user data
 const currentUser: User = {
@@ -113,6 +36,85 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
 export default function AppSidebar(props: AppSidebarProps) {
   const { isRTL } = useAppLanguage();
+  const { t } = useTranslation();
+
+  // Navigation items with translations
+  const mainNavItems: NavItem[] = [
+    {
+      title: t("nav.dashboard"),
+      url: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: t("nav.branches"),
+      url: "/branches",
+      icon: Building2,
+    },
+    {
+      title: t("nav.products"),
+      url: "/products",
+      icon: Package,
+      items: [
+        { title: t("nav.allProducts"), url: "/products" },
+        { title: t("nav.categories"), url: "/products/categories" },
+      ],
+    },
+    {
+      title: t("nav.posOrders"),
+      url: "/pos",
+      icon: ShoppingCart,
+      items: [
+        { title: t("nav.newOrder"), url: "/pos" },
+        { title: t("nav.orderHistory"), url: "/pos/orders" },
+      ],
+    },
+    {
+      title: t("nav.inventory"),
+      url: "/inventory",
+      icon: Warehouse,
+      items: [
+        { title: t("nav.stockLevels"), url: "/inventory" },
+        { title: t("nav.stockAdjustments"), url: "/inventory/adjustments" },
+        { title: t("nav.lowStockAlerts"), url: "/inventory/alerts" },
+      ],
+    },
+  ];
+
+  const analyticsNavItems: NavItem[] = [
+    {
+      title: t("nav.reports"),
+      url: "/reports",
+      icon: BarChart3,
+      items: [
+        { title: t("nav.dailySales"), url: "/reports/daily-sales" },
+        { title: t("nav.salesByBranch"), url: "/reports/branch-sales" },
+        { title: t("nav.topProducts"), url: "/reports/top-products" },
+      ],
+    },
+    {
+      title: t("nav.forecasting"),
+      url: "/forecasting",
+      icon: TrendingUp,
+    },
+    {
+      title: t("nav.auditLog"),
+      url: "/audit-log",
+      icon: FileText,
+    },
+  ];
+
+  const adminNavItems: NavItem[] = [
+    {
+      title: t("nav.users"),
+      url: "/users",
+      icon: Users,
+    },
+    {
+      title: t("nav.settings"),
+      url: "/settings",
+      icon: Settings,
+    },
+  ];
 
   return (
     <Sidebar collapsible="icon" side={isRTL ? "right" : "left"} {...props}>
@@ -120,9 +122,9 @@ export default function AppSidebar(props: AppSidebarProps) {
         <AppSidebarHeader />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={mainNavItems} label="Main" />
-        <NavMain items={analyticsNavItems} label="Analytics" />
-        <NavMain items={adminNavItems} label="Administration" />
+        <NavMain items={mainNavItems} label={t("nav.main")} />
+        <NavMain items={analyticsNavItems} label={t("nav.analytics")} />
+        <NavMain items={adminNavItems} label={t("nav.administration")} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={currentUser} />

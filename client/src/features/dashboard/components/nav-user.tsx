@@ -21,6 +21,7 @@ import {
   LogOut,
   Settings,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export interface User {
   name: string;
@@ -35,6 +36,7 @@ interface NavUserProps {
 
 export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar();
+  const { t } = useTranslation();
 
   return (
     <SidebarMenu>
@@ -49,7 +51,7 @@ export function NavUser({ user }: NavUserProps) {
               <div className="grid flex-1 text-start text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {user.role}
+                  {t(`user.${user.role}`)}
                 </span>
               </div>
               <ChevronsUpDown className="ms-auto size-4" />
@@ -78,21 +80,21 @@ export function NavUser({ user }: NavUserProps) {
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck className="me-2 size-4" />
-                Account
+                {t("user.account")}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Settings className="me-2 size-4" />
-                Settings
+                {t("nav.settings")}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell className="me-2 size-4" />
-                Notifications
+                {t("user.notifications")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-destructive">
               <LogOut className="me-2 size-4" />
-              Log out
+              {t("user.logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -4,5 +4,78 @@
   "switchToArabic": "العربية",
   "switchToEnglish": "English",
   "hello": "مرحباً!",
-  "testKey": "هذا نص تجريبي"
+  "testKey": "هذا نص تجريبي",
+  "currency": "ر.ع",
+
+  "nav": {
+    "main": "الرئيسية",
+    "analytics": "التحليلات",
+    "administration": "الإدارة",
+    "dashboard": "لوحة التحكم",
+    "branches": "الفروع",
+    "products": "المنتجات",
+    "allProducts": "جميع المنتجات",
+    "categories": "الفئات",
+    "posOrders": "نقاط البيع / الطلبات",
+    "newOrder": "طلب جديد",
+    "orderHistory": "سجل الطلبات",
+    "inventory": "المخزون",
+    "stockLevels": "مستويات المخزون",
+    "stockAdjustments": "تعديلات المخزون",
+    "lowStockAlerts": "تنبيهات نقص المخزون",
+    "reports": "التقارير",
+    "dailySales": "المبيعات اليومية",
+    "salesByBranch": "المبيعات حسب الفرع",
+    "topProducts": "أفضل المنتجات",
+    "forecasting": "التنبؤات",
+    "auditLog": "سجل المراجعة",
+    "users": "المستخدمين",
+    "settings": "الإعدادات"
+  },
+
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحباً بعودتك",
+    "overview": "نظرة عامة",
+    "recentActivity": "النشاط الأخير",
+    "statistics": "الإحصائيات",
+    "totalSales": "إجمالي المبيعات",
+    "totalOrders": "إجمالي الطلبات",
+    "totalBranches": "إجمالي الفروع",
+    "totalProducts": "إجمالي المنتجات",
+    "todaysSales": "مبيعات اليوم",
+    "thisWeek": "هذا الأسبوع",
+    "thisMonth": "هذا الشهر",
+    "viewAll": "عرض الكل"
+  },
+
+  "user": {
+    "profile": "الملف الشخصي",
+    "account": "الحساب",
+    "logout": "تسجيل الخروج",
+    "notifications": "الإشعارات",
+    "Admin": "مسؤول",
+    "Branch Manager": "مدير فرع",
+    "Employee": "موظف",
+    "Guest": "زائر"
+  },
+
+  "common": {
+    "search": "بحث",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "create": "إنشاء",
+    "update": "تحديث",
+    "loading": "جاري التحميل...",
+    "noResults": "لا توجد نتائج",
+    "error": "حدث خطأ",
+    "success": "تم بنجاح",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق"
+  }
 }

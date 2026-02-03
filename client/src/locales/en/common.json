@@ -4,5 +4,78 @@
   "switchToArabic": "العربية",
   "switchToEnglish": "English",
   "hello": "Hello!",
-  "testKey": "This is a test string"
+  "testKey": "This is a test string",
+  "currency": "OMR",
+
+  "nav": {
+    "main": "Main",
+    "analytics": "Analytics",
+    "administration": "Administration",
+    "dashboard": "Dashboard",
+    "branches": "Branches",
+    "products": "Products",
+    "allProducts": "All Products",
+    "categories": "Categories",
+    "posOrders": "POS / Orders",
+    "newOrder": "New Order",
+    "orderHistory": "Order History",
+    "inventory": "Inventory",
+    "stockLevels": "Stock Levels",
+    "stockAdjustments": "Stock Adjustments",
+    "lowStockAlerts": "Low Stock Alerts",
+    "reports": "Reports",
+    "dailySales": "Daily Sales",
+    "salesByBranch": "Sales by Branch",
+    "topProducts": "Top Products",
+    "forecasting": "Forecasting",
+    "auditLog": "Audit Log",
+    "users": "Users",
+    "settings": "Settings"
+  },
+
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back",
+    "overview": "Overview",
+    "recentActivity": "Recent Activity",
+    "statistics": "Statistics",
+    "totalSales": "Total Sales",
+    "totalOrders": "Total Orders",
+    "totalBranches": "Total Branches",
+    "totalProducts": "Total Products",
+    "todaysSales": "Today's Sales",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "viewAll": "View All"
+  },
+
+  "user": {
+    "profile": "Profile",
+    "account": "Account",
+    "logout": "Log out",
+    "notifications": "Notifications",
+    "Admin": "Admin",
+    "Branch Manager": "Branch Manager",
+    "Employee": "Employee",
+    "Guest": "Guest"
+  },
+
+  "common": {
+    "search": "Search",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "create": "Create",
+    "update": "Update",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "error": "An error occurred",
+    "success": "Success",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  }
 }
