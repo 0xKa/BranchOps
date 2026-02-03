@@ -16,16 +16,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLogin } from "./useLogin";
+import { useTranslation } from "react-i18next";
 
 const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(4, "Password must be at least 4 characters"),
+  username: z.string().min(1, "login.usernameRequired"),
+  password: z.string().min(4, "login.passwordMinLength"),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { mutate: login, isPending, isError, error } = useLogin();
 
   const {
@@ -59,8 +61,8 @@ export default function LoginPage() {
           <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Building2 className="size-6" />
           </div>
-          <CardTitle className="text-2xl">Welcome to BranchOps</CardTitle>
-          <CardDescription>Log in to your account to continue</CardDescription>
+          <CardTitle className="text-2xl">{t("login.title")}</CardTitle>
+          <CardDescription>{t("login.description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -72,18 +74,18 @@ export default function LoginPage() {
             <div className="space-y-2 ">
               <div className="flex items-end justify-between">
                 <Label htmlFor="username" className="text-xs">
-                  Username
+                  {t("login.username")}
                 </Label>
                 {errors.username && (
                   <span className="text-xs text-destructive">
-                    {errors.username.message}
+                    {t(errors.username.message || "")}
                   </span>
                 )}
               </div>
               <Input
                 id="username"
                 type="text"
-                placeholder="Your username"
+                placeholder={t("login.usernamePlaceholder")}
                 {...register("username")}
                 aria-invalid={errors.username ? "true" : "false"}
               />
@@ -91,25 +93,25 @@ export default function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-end justify-between">
                 <Label htmlFor="password" className="text-xs">
-                  Password
+                  {t("login.password")}
                 </Label>
                 {errors.password ? (
                   <span className="text-xs text-destructive">
-                    {errors.password.message}
+                    {t(errors.password.message || "")}
                   </span>
                 ) : (
                   <Link
                     to="/forgot-password"
                     className="text-xs text-primary hover:underline"
                   >
-                    Forgot password?
+                    {t("login.forgotPassword")}
                   </Link>
                 )}
               </div>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder={t("login.passwordPlaceholder")}
                 {...register("password")}
                 aria-invalid={errors.password ? "true" : "false"}
               />
@@ -119,7 +121,7 @@ export default function LoginPage() {
               className="w-full h-8 mt-4"
               disabled={isPending}
             >
-              {isPending ? "Logging In..." : "Log In"}
+              {isPending ? t("login.loggingIn") : t("login.logIn")}
             </Button>
           </form>
         </CardContent>

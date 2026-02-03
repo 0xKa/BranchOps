@@ -60,6 +60,21 @@
     "Guest": "Guest"
   },
 
+  "login": {
+    "title": "Welcome to BranchOps",
+    "description": "Log in to your account to continue",
+    "username": "Username",
+    "usernamePlaceholder": "Your username",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Forgot password?",
+    "logIn": "Log In",
+    "loggingIn": "Logging In...",
+    "usernameRequired": "Username is required",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 4 characters"
+  },
+
   "breadcrumb": {
     "dashboard": "Dashboard",
     "branches": "Branches",

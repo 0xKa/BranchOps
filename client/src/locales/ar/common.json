@@ -60,6 +60,21 @@
     "Guest": "زائر"
   },
 
+  "login": {
+    "title": "مرحباً بك في BranchOps",
+    "description": "قم بتسجيل الدخول إلى حسابك للمتابعة",
+    "username": "اسم المستخدم",
+    "usernamePlaceholder": "اسم المستخدم الخاص بك",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "logIn": "تسجيل الدخول",
+    "loggingIn": "جاري تسجيل الدخول...",
+    "usernameRequired": "اسم المستخدم مطلوب",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "passwordMinLength": "يجب أن تكون كلمة المرور 4 أحرف على الأقل"
+  },
+
   "breadcrumb": {
     "dashboard": "لوحة التحكم",
     "branches": "الفروع",
