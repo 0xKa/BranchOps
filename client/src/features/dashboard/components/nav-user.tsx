@@ -22,6 +22,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useLogout } from "@/features/auth/useLogout";
 
 export interface User {
   name: string;
@@ -37,6 +38,7 @@ interface NavUserProps {
 export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar();
   const { t } = useTranslation();
+  const { logout, isPending } = useLogout();
 
   return (
     <SidebarMenu>
@@ -92,9 +94,13 @@ export function NavUser({ user }: NavUserProps) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={() => logout("/")}
+              disabled={isPending}
+            >
               <LogOut className="me-2 size-4" />
-              {t("user.logout")}
+              {isPending ? "Logging out..." : t("user.logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
