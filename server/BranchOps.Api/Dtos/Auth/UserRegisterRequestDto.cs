@@ -27,5 +27,5 @@ public class UserRegisterRequestDto
 
     [Required]
     [EnumDataType(typeof(UserRole))]
-    public UserRole Role { get; set; } = UserRole.Employee;
+    public UserRole Role { get; set; } = UserRole.Cashier;
 }

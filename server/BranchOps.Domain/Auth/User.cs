@@ -10,7 +10,7 @@ public class User : BaseDomainObject
     public string PasswordHash { get; set; } = string.Empty;
     [EmailAddress]
     public string? Email { get; set; } = null;
-    public UserRole Role { get; set; } = UserRole.Employee;
+    public UserRole Role { get; set; } = UserRole.Cashier;
 
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpiryTime { get; set; }

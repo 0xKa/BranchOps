@@ -8,7 +8,7 @@ namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class BranchPhonesController(BranchPhoneService branchPhoneService) : ControllerBase
 {
     [HttpGet]
