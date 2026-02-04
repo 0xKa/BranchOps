@@ -72,7 +72,10 @@
     "loggingIn": "جاري تسجيل الدخول...",
     "usernameRequired": "اسم المستخدم مطلوب",
     "passwordRequired": "كلمة المرور مطلوبة",
-    "passwordMinLength": "يجب أن تكون كلمة المرور 4 أحرف على الأقل"
+    "passwordMinLength": "يجب أن تكون كلمة المرور 4 أحرف على الأقل",
+    "successMessage": "تم تسجيل الدخول بنجاح!",
+    "failedMessage": "فشل تسجيل الدخول",
+    "logoutMessage": "تم تسجيل الخروج بنجاح."
   },
 
   "breadcrumb": {

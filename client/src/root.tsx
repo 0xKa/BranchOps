@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
+import { Toaster } from "./components/ui/sonner";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -22,6 +23,7 @@ export default function Root() {
         <DirectionProvider direction={dir} key={dir} dir={dir}>
           <RouterProvider router={router} />
           {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+          <Toaster position="top-center" duration={4000} />
         </DirectionProvider>
       </QueryClientProvider>
     </ThemeProvider>

@@ -10,13 +10,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LanguageToggle } from "@/locales/language-toggle";
-import { Building2 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Building2 } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 import { useLogin } from "./useLogin";
-import { useTranslation } from "react-i18next";
 
 const loginSchema = z.object({
   username: z.string().min(1, "login.usernameRequired"),
@@ -26,7 +26,6 @@ const loginSchema = z.object({
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const { mutate: login, isPending, isError, error } = useLogin();
 
@@ -39,15 +38,7 @@ export default function LoginPage() {
   });
 
   const onSubmit = (data: LoginFormData) => {
-    login(data, {
-      onError: (err) => {
-        console.log("Login failed:", err.message);
-        // TODO: USE TOAST NOTIFCATION
-      },
-      onSuccess: () => {
-        navigate("/dashboard");
-      },
-    });
+    login(data);
   };
 
   return (

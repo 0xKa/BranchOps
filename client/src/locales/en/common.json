@@ -72,7 +72,10 @@
     "loggingIn": "Logging In...",
     "usernameRequired": "Username is required",
     "passwordRequired": "Password is required",
-    "passwordMinLength": "Password must be at least 4 characters"
+    "passwordMinLength": "Password must be at least 4 characters",
+    "successMessage": "Successfully logged in!",
+    "failedMessage": "Login failed",
+    "logoutMessage": "Successfully logged out."
   },
 
   "breadcrumb": {

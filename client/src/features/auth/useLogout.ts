@@ -2,6 +2,8 @@ import { api } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "./authStore";
+import { toast } from "sonner";
+import { t } from "i18next";
 
 type LogoutRequest = {
   refreshToken: string;
@@ -24,6 +26,7 @@ export const useLogout = () => {
     // Always clear local state after mutation completes (success or error)
     onSettled: () => {
       logoutFromStore();
+      toast.success(t("login.logoutMessage"));
     },
   });
 

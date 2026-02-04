@@ -2,6 +2,8 @@ import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "./authStore";
+import { toast } from "sonner";
+import { t } from "i18next";
 
 type LoginRequest = {
   username: string;
@@ -44,14 +46,13 @@ export const useLogin = () => {
         accessTokenExpiresAt: data.accessTokenExpiresAt,
       };
 
-      // Store in Zustand (also persists to localStorage via middleware)
-      login(user, tokens);
-
-      // console.log("Login successful - user authenticated:", user.username);
+      toast.success(t("login.successMessage"));
+      login(user, tokens); // to Zustand store
     },
 
-    // onError: (error) => {
-    //   console.log("Login failed:", error.message);
-    // },
+    onError: (error) => {
+      // Show error toast
+      toast.error(t("login.failedMessage"), { description: error.message });
+    },
   });
 };
