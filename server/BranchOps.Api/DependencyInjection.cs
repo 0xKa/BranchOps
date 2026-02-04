@@ -21,6 +21,9 @@ public static class DependencyInjection
         services.AddScoped<BranchPhoneService>();
         services.AddScoped<EmployeeService>();
         services.AddScoped<EmployeeSalaryService>();
+        services.AddScoped<ProductCategoryService>();
+        services.AddScoped<ProductService>();
+        services.AddScoped<OrderService>();
 
         return services;
     }
