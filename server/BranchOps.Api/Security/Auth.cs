@@ -171,4 +171,57 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options)
         return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
 
+
+    public async Task<UserMeResponseDto?> GetUserWithEmployeeInfoAsync(Guid userId)
+    {
+        var user = await context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId);
+
+        if (user is null)
+            return null;
+
+        var response = new UserMeResponseDto
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            Role = user.Role,
+            CreatedAt = user.CreatedAt
+        };
+
+        // Fetch employee information if user is not an Admin
+        if (user.Role != UserRole.Admin)
+        {
+            var employee = await context.Employees
+                .Include(e => e.Branch)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.UserId == user.Id);
+
+            if (employee is not null)
+            {
+                response.Employee = new EmployeeInfoDto
+                {
+                    Id = employee.Id,
+                    FullName = employee.FullName,
+                    Phone = employee.Phone,
+                    JobTitle = employee.JobTitle,
+                    IsActive = employee.IsActive,
+                    HiredAt = employee.HiredAt,
+                    Branch = new BranchInfoDto
+                    {
+                        Id = employee.Branch.Id,
+                        Code = employee.Branch.Code,
+                        DisplayName = employee.Branch.DisplayName,
+                        City = employee.Branch.City,
+                        IsActive = employee.Branch.IsActive
+                    }
+                };
+            }
+        }
+
+        return response;
+    }
+
 }
+

@@ -20,15 +20,14 @@ public class AuthController(Auth auth) : ControllerBase
     public IActionResult Get() => Ok($"Auth controller is working! UserId: {UserId}");
 
     [HttpGet("me")]
-    public IActionResult Me()
+    public async Task<ActionResult<UserMeResponseDto>> Me()
     {
-        return Ok(new
-        {
-            Id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value,
-            Name = User.FindFirst(ClaimTypes.Name)?.Value,
-            Email = User.FindFirst(ClaimTypes.Email)?.Value,
-            Role = User.FindFirst(ClaimTypes.Role)?.Value
-        });
+        var response = await auth.GetUserWithEmployeeInfoAsync(UserId);
+
+        if (response is null)
+            return Unauthorized(new ApiError("No authenticated user found."));
+
+        return Ok(response);
     }
 
     [AllowAnonymous]
