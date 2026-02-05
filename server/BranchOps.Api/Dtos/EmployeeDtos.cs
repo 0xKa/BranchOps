@@ -1,3 +1,4 @@
+using BranchOps.Domain.Auth;
 using System.ComponentModel.DataAnnotations;
 
 namespace BranchOps.Api.Dtos;
@@ -17,9 +18,23 @@ public record EmployeeDto(
 
 public record EmployeeCreateDto
 {
+    // User Registration Fields
     [Required]
-    public Guid UserId { get; init; }
+    [MinLength(3)]
+    public string Username { get; init; } = string.Empty;
 
+    [Required]
+    [MinLength(4)]
+    public string Password { get; init; } = string.Empty;
+
+    [EmailAddress]
+    public string? Email { get; init; }
+
+    [Required]
+    [EnumDataType(typeof(UserRole))]
+    public UserRole Role { get; init; } = UserRole.Cashier;
+
+    // Employee Fields
     [Required]
     public Guid BranchId { get; init; }
 
