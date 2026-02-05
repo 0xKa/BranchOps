@@ -53,8 +53,7 @@ public class AuthController(Auth auth) : ControllerBase
             Id = user.Id,
             Username = user.Username,
             Email = user.Email,
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
+            FullName = dto.FullName,
             Role = user.Role.ToString(),
             CreatedAt = user.CreatedAt
         };

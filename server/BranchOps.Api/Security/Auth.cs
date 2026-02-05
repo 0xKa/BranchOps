@@ -38,6 +38,30 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options)
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
+        // Create employee record for non-admin users
+        if (userDto.Role != UserRole.Admin)
+        {
+            var defaultBranch = await context.Branches
+                .Where(b => b.IsActive)
+                .OrderBy(b => b.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (defaultBranch is not null)
+            {
+                var employee = new Domain.Employee
+                {
+                    UserId = user.Id,
+                    BranchId = defaultBranch.Id,
+                    FullName = userDto.FullName,
+                    IsActive = true,
+                    HiredAt = DateTime.UtcNow
+                };
+
+                context.Employees.Add(employee);
+                await context.SaveChangesAsync();
+            }
+        }
+
         return RegisterResult.Ok(user);
     }
 
