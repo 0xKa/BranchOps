@@ -172,6 +172,36 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options)
     }
 
 
+    public async Task<IReadOnlyList<UserRegisterResponseDto>> GetUsersByRoleAsync(UserRole? role)
+    {
+        var query = context.Users.AsNoTracking();
+
+        if (role.HasValue)
+            query = query.Where(u => u.Role == role.Value);
+
+        var users = await query.OrderBy(u => u.Username).ToListAsync();
+
+        return [.. users.Select(u => new UserRegisterResponseDto
+        {
+            Id = u.Id,
+            Username = u.Username,
+            Email = u.Email,
+            FullName = u.Username, // Admins only have username
+            Role = u.Role.ToString(),
+            CreatedAt = u.CreatedAt
+        })];
+    }
+
+    public async Task<bool> DeleteUserAsync(Guid userId)
+    {
+        var user = await context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user is null)
+            return false;
+
+        context.Users.Remove(user);
+        return await context.SaveChangesAsync() > 0;
+    }
+
     public async Task<UserMeResponseDto?> GetUserWithEmployeeInfoAsync(Guid userId)
     {
         var user = await context.Users

@@ -96,6 +96,23 @@ public class AuthController(Auth auth) : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("users")]
+    public async Task<ActionResult<IReadOnlyList<UserRegisterResponseDto>>> GetUsers([FromQuery] int? role)
+    {
+        Domain.Auth.UserRole? userRole = role.HasValue ? (Domain.Auth.UserRole)role.Value : null;
+        var users = await auth.GetUsersByRoleAsync(userRole);
+        return Ok(users);
+    }
+
+    [HttpDelete("users/{id:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        var success = await auth.DeleteUserAsync(id);
+        if (!success)
+            return NotFound(new ApiError("User not found."));
+        return NoContent();
+    }
+
     [HttpGet("auth-only")]
     public async Task<IActionResult> AuthOnly()
     {
