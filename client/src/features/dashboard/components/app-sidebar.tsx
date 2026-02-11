@@ -105,8 +105,13 @@ export default function AppSidebar(props: AppSidebarProps) {
 
   const adminNavItems: NavItem[] = [
     {
-      title: t("nav.users"),
-      url: "/users",
+      title: "Admins",
+      url: "/admins",
+      icon: Users,
+    },
+    {
+      title: "Employees",
+      url: "/employees",
       icon: Users,
     },
     {

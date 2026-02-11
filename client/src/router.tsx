@@ -9,6 +9,8 @@ import DashboardPage from "./features/dashboard/dashboard-page";
 import LandingPage from "./features/landing/landing-page";
 import ErrorState from "./components/error-state";
 import LoginPage from "./features/auth/login-page";
+import EmployeesPage from "./features/users/employees-page";
+import AdminsPage from "./features/users/admins-page";
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +36,11 @@ export const router = createBrowserRouter([
         children: [
           {
             element: <DashboardLayout />,
-            children: [{ path: "dashboard/*", element: <DashboardPage /> }],
+            children: [
+              { path: "dashboard/*", element: <DashboardPage /> },
+              { path: "admins", element: <AdminsPage /> },
+              { path: "employees", element: <EmployeesPage /> },
+            ],
           },
         ],
       },
