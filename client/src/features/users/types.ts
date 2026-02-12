@@ -12,6 +12,7 @@ export interface Employee {
   notes: string | null;
   isActive: boolean;
   hiredAt: string | null;
+  role: string;
   createdAt: string;
   updatedAt: string;
 }

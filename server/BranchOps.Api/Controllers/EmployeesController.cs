@@ -76,6 +76,7 @@ public class EmployeesController(EmployeeService employeeService) : ControllerBa
             employee.Notes,
             employee.IsActive,
             employee.HiredAt,
+            employee.User.Role.ToString(),
             employee.CreatedAt,
             employee.UpdatedAt);
 

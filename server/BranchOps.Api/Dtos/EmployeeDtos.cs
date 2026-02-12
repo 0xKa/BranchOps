@@ -13,6 +13,7 @@ public record EmployeeDto(
     string? Notes,
     bool IsActive,
     DateTime? HiredAt,
+    string Role,
     DateTime CreatedAt,
     DateTime UpdatedAt);
 

@@ -18,6 +18,7 @@ public class EmployeeService(BranchOpsDbContext db, Auth auth)
             query = query.Where(x => x.BranchId == branchId.Value);
 
         return await query
+            .Include(e => e.User)
             .OrderBy(x => x.FullName)
             .ToListAsync(cancellationToken);
     }
@@ -26,6 +27,7 @@ public class EmployeeService(BranchOpsDbContext db, Auth auth)
     {
         return await db.Employees
             .AsNoTracking()
+            .Include(e => e.User)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
