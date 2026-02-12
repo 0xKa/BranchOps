@@ -9,7 +9,7 @@ namespace BranchOps.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 // [Authorize(Roles = "Admin")]
-public class EmployeesController(EmployeeService employeeService) : ControllerBase
+public class EmployeesController(EmployeeService employeeService, Security.Auth auth) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<EmployeeDto>>> GetAll([FromQuery] Guid? branchId, CancellationToken cancellationToken)
@@ -31,11 +31,39 @@ public class EmployeesController(EmployeeService employeeService) : ControllerBa
     [HttpPost]
     public async Task<ActionResult<EmployeeDto>> Create(EmployeeCreateDto dto, CancellationToken cancellationToken)
     {
-        var result = await employeeService.CreateAsync(dto, cancellationToken);
-        if (!result.Success)
-            return MapError(result);
+        // Map to user registration DTO
+        var userRegisterDto = new Dtos.Auth.UserRegisterRequestDto
+        {
+            Username = dto.Username,
+            Password = dto.Password,
+            Email = dto.Email,
+            FullName = dto.FullName,
+            Role = dto.Role,
+            BranchId = dto.BranchId,
+            Phone = dto.Phone,
+            JobTitle = dto.JobTitle,
+            Notes = dto.Notes,
+            IsActive = dto.IsActive,
+            HiredAt = dto.HiredAt
+        };
 
-        var employeeDto = ToDto(result.Value!);
+        var registerResult = await auth.RegisterAsync(userRegisterDto);
+        if (!registerResult.Success)
+        {
+            return registerResult.Error switch
+            {
+                Dtos.Auth.ResultObjects.RegisterError.UsernameTaken => Conflict(new ApiError("Username is already taken.")),
+                Dtos.Auth.ResultObjects.RegisterError.EmailTaken => Conflict(new ApiError("Email is already registered.")),
+                _ => BadRequest(new ApiError("Registration failed."))
+            };
+        }
+
+        // Fetch the created employee by UserId
+        var employee = await employeeService.GetByUserIdAsync(registerResult.User!.Id, cancellationToken);
+        if (employee == null)
+            return NotFound(new ApiError("Employee not found after creation."));
+
+        var employeeDto = ToDto(employee);
         return CreatedAtAction(nameof(GetById), new { id = employeeDto.Id }, employeeDto);
     }
 

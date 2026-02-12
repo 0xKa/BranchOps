@@ -1,14 +1,13 @@
 using BranchOps.Api.Data;
 using BranchOps.Api.Dtos;
 using BranchOps.Api.Dtos.Auth;
-using BranchOps.Api.Dtos.Auth.ResultObjects;
-using BranchOps.Api.Security;
 using BranchOps.Domain;
+using BranchOps.Domain.Auth;
 using Microsoft.EntityFrameworkCore;
 
 namespace BranchOps.Api.Services;
 
-public class EmployeeService(BranchOpsDbContext db, Auth auth)
+public class EmployeeService(BranchOpsDbContext db)
 {
     public async Task<IReadOnlyList<Employee>> GetAllAsync(Guid? branchId, CancellationToken cancellationToken = default)
     {
@@ -31,54 +30,62 @@ public class EmployeeService(BranchOpsDbContext db, Auth auth)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
-    public async Task<ServiceResult<Employee>> CreateAsync(EmployeeCreateDto dto, CancellationToken cancellationToken = default)
+    public async Task<Employee?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        var branchExists = await db.Branches.AnyAsync(x => x.Id == dto.BranchId, cancellationToken);
-        if (!branchExists)
-            return ServiceResult<Employee>.NotFound("Branch not found.");
+        return await db.Employees
+            .AsNoTracking()
+            .Include(e => e.User)
+            .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
+    }
 
-        // Register user first
-        var userRegisterDto = new UserRegisterRequestDto
-        {
-            Username = dto.Username,
-            Password = dto.Password,
-            Email = dto.Email,
-            Role = dto.Role,
-            FullName = dto.FullName
-        };
+    public async Task<Employee?> CreateEmployeeForUserAsync(
+        Guid userId,
+        UserRole role,
+        UserRegisterRequestDto userDto,
+        CancellationToken cancellationToken = default)
+    {
+        Guid? branchId = userDto.BranchId;
 
-        var registerResult = await auth.RegisterAsync(userRegisterDto);
-        if (!registerResult.Success)
+        // If no branch specified, use default
+        if (!branchId.HasValue)
         {
-            return registerResult.Error switch
-            {
-                RegisterError.UsernameTaken => ServiceResult<Employee>.Conflict("Username is already taken."),
-                RegisterError.EmailTaken => ServiceResult<Employee>.Conflict("Email is already registered."),
-                _ => ServiceResult<Employee>.Invalid("User registration failed.")
-            };
+            var defaultBranch = await db.Branches
+                .Where(b => b.IsActive)
+                .OrderBy(b => b.CreatedAt)
+                .FirstOrDefaultAsync(cancellationToken);
+            branchId = defaultBranch?.Id;
         }
 
-        var user = registerResult.User!;
+        if (!branchId.HasValue)
+            return null;
 
-        // Create employee record
         var employee = new Employee
         {
-            Id = Guid.NewGuid(),
-            UserId = user.Id,
-            BranchId = dto.BranchId,
-            FullName = dto.FullName,
-            Phone = dto.Phone,
-            JobTitle = dto.JobTitle,
-            Notes = dto.Notes,
-            IsActive = dto.IsActive,
-            HiredAt = dto.HiredAt ?? DateTime.UtcNow
+            UserId = userId,
+            BranchId = branchId.Value,
+            FullName = userDto.FullName,
+            Phone = userDto.Phone,
+            JobTitle = string.IsNullOrWhiteSpace(userDto.JobTitle)
+                ? FormatRoleAsJobTitle(role)
+                : userDto.JobTitle,
+            Notes = userDto.Notes,
+            IsActive = userDto.IsActive ?? true,
+            HiredAt = userDto.HiredAt ?? DateTime.UtcNow
         };
 
         db.Employees.Add(employee);
         await db.SaveChangesAsync(cancellationToken);
 
-        return ServiceResult<Employee>.Ok(employee);
+        return employee;
     }
+
+    private static string FormatRoleAsJobTitle(UserRole role)
+    {
+        var roleName = role.ToString();
+        return System.Text.RegularExpressions.Regex.Replace(roleName, "([a-z])([A-Z])", "$1 $2");
+    }
+
+
 
     public async Task<ServiceResult<Employee>> UpdateAsync(Guid id, EmployeeUpdateDto dto, CancellationToken cancellationToken = default)
     {

@@ -1,6 +1,7 @@
 ﻿using BranchOps.Api.Data;
 using BranchOps.Api.Dtos.Auth;
 using BranchOps.Api.Dtos.Auth.ResultObjects;
+using BranchOps.Api.Services;
 using BranchOps.Domain.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ using System.Text;
 
 namespace BranchOps.Api.Security;
 
-public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options)
+public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options, EmployeeService employeeService)
 {
     private readonly JwtSettings _jwtSettings = options.Value;
 
@@ -41,25 +42,7 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options)
         // Create employee record for non-admin users
         if (userDto.Role != UserRole.Admin)
         {
-            var defaultBranch = await context.Branches
-                .Where(b => b.IsActive)
-                .OrderBy(b => b.CreatedAt)
-                .FirstOrDefaultAsync();
-
-            if (defaultBranch is not null)
-            {
-                var employee = new Domain.Employee
-                {
-                    UserId = user.Id,
-                    BranchId = defaultBranch.Id,
-                    FullName = userDto.FullName,
-                    IsActive = true,
-                    HiredAt = DateTime.UtcNow
-                };
-
-                context.Employees.Add(employee);
-                await context.SaveChangesAsync();
-            }
+            await employeeService.CreateEmployeeForUserAsync(user.Id, user.Role, userDto);
         }
 
         return RegisterResult.Ok(user);

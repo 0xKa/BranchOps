@@ -23,4 +23,12 @@ public class UserRegisterRequestDto
     [Required]
     [EnumDataType(typeof(UserRole))]
     public UserRole Role { get; set; } = UserRole.Cashier;
+
+    // Optional Employee fields
+    public Guid? BranchId { get; set; }
+    public string? Phone { get; set; }
+    public string? JobTitle { get; set; }
+    public string? Notes { get; set; }
+    public bool? IsActive { get; set; }
+    public DateTime? HiredAt { get; set; }
 }
