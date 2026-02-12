@@ -2,6 +2,7 @@ import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "./auth-store";
+import { fetchAndStoreMe } from "./use-me";
 import { toast } from "sonner";
 import { t } from "i18next";
 
@@ -48,6 +49,9 @@ export const useLogin = () => {
 
       toast.success(t("login.successMessage"));
       login(user, tokens); // to Zustand store
+
+      // Fetch full user profile (role, employee info, etc.)
+      fetchAndStoreMe().catch(console.error);
     },
 
     onError: (error) => {

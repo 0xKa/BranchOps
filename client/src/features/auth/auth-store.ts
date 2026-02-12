@@ -1,9 +1,27 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-interface User {
+export interface User {
   id: string;
   username: string;
+  email?: string | null;
+  role?: string;
+  fullName?: string;
+  employee?: {
+    id: string;
+    fullName: string;
+    phone?: string | null;
+    jobTitle?: string | null;
+    isActive: boolean;
+    hiredAt?: string | null;
+    branch: {
+      id: string;
+      code: string;
+      displayName: string;
+      city?: string | null;
+      isActive: boolean;
+    };
+  } | null;
 }
 
 interface TokenData {
@@ -22,6 +40,7 @@ interface AuthState {
 interface AuthActions {
   login: (user: User, tokens: TokenData) => void;
   logout: () => void;
+  setUser: (user: User) => void;
   setTokens: (tokens: TokenData) => void;
   setHydrated: (hydrated: boolean) => void;
   getAccessToken: () => string | null;
@@ -54,6 +73,10 @@ export const useAuthStore = create<AuthState & AuthActions>()(
           tokens: null,
           isAuthenticated: false,
         });
+      },
+
+      setUser: (user: User) => {
+        set({ user });
       },
 
       setTokens: (tokens: TokenData) => {

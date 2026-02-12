@@ -19,22 +19,16 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import AppSidebarHeader from "./app-sidebar-header";
-import { NavUser, type User } from "./nav-user";
+import { NavUser } from "./nav-user";
 import NavMain, { type NavItem } from "./nav-main";
 import { useAppLanguage } from "@/hooks/use-app-language";
 import { useTranslation } from "react-i18next";
-
-// Placeholder user data
-const currentUser: User = {
-  name: "Reda Hilal",
-  email: "reda@branchops.com",
-  role: "Admin",
-  avatar: "",
-};
+import { useUser } from "@/features/auth/auth-store";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
 export default function AppSidebar(props: AppSidebarProps) {
+  const user = useUser();
   const { isRTL } = useAppLanguage();
   const { t } = useTranslation();
 
@@ -121,6 +115,13 @@ export default function AppSidebar(props: AppSidebarProps) {
     },
   ];
 
+  const currentUser = {
+    name: user?.fullName ?? user?.username ?? "User",
+    email: user?.email ?? "",
+    role: user?.role ?? "",
+    avatar: "",
+  };
+
   return (
     <Sidebar collapsible="icon" side={isRTL ? "right" : "left"} {...props}>
       <SidebarHeader>
@@ -128,8 +129,13 @@ export default function AppSidebar(props: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={mainNavItems} label={t("nav.main")} />
-        <NavMain items={analyticsNavItems} label={t("nav.analytics")} />
-        <NavMain items={adminNavItems} label={t("nav.administration")} />
+        {(currentUser.role === "Admin" ||
+          currentUser.role === "BranchManager") && (
+          <NavMain items={analyticsNavItems} label={t("nav.analytics")} />
+        )}
+        {currentUser.role === "Admin" && (
+          <NavMain items={adminNavItems} label={t("nav.administration")} />
+        )}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={currentUser} />
