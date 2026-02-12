@@ -11,6 +11,7 @@ import ErrorState from "./components/error-state";
 import LoginPage from "./features/auth/login-page";
 import EmployeesPage from "./features/users/employees-page";
 import AdminsPage from "./features/users/admins-page";
+import BranchesPage from "./features/branches/branches-page";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
               { path: "dashboard/*", element: <DashboardPage /> },
               { path: "admins", element: <AdminsPage /> },
               { path: "employees", element: <EmployeesPage /> },
+              { path: "branches", element: <BranchesPage /> },
             ],
           },
         ],
