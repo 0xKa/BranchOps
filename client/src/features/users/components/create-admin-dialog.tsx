@@ -9,10 +9,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { USER_ROLES } from "@/features/auth/types";
-import type { AdminRegisterRequest } from "../types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import type { AdminRegisterRequest } from "../hooks/use-register-admin";
 
 const schema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),

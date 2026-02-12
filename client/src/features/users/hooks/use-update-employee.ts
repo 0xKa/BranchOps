@@ -2,7 +2,18 @@ import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { Employee, EmployeeUpdateRequest } from "../types";
+import type { Employee } from "../types";
+
+export interface EmployeeUpdateRequest {
+  userId: string;
+  branchId: string;
+  fullName: string;
+  phone?: string | null;
+  jobTitle?: string | null;
+  notes?: string | null;
+  isActive: boolean;
+  hiredAt?: string | null;
+}
 
 const updateEmployee = async ({
   id,

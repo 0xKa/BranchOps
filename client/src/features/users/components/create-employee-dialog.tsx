@@ -18,10 +18,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { USER_ROLES, USER_ROLE_LABELS } from "@/features/auth/types";
 import type { Branch } from "@/features/branches/hooks/use-branches";
-import type { EmployeeCreateRequest } from "../types";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import type { EmployeeCreateRequest } from "../hooks/use-create-employee";
 
 const EMPLOYEE_ROLES = Object.entries(USER_ROLES).filter(
   ([, value]) => value !== USER_ROLES.Admin,
@@ -30,7 +30,7 @@ const EMPLOYEE_ROLES = Object.entries(USER_ROLES).filter(
 const schema = z.object({
   username: z.string().min(3, "Username must be at least 3 characters"),
   password: z.string().min(4, "Password must be at least 4 characters"),
-  email: z.string().email("Invalid email").or(z.literal("")).optional(),
+  email: z.email("Invalid email").or(z.literal("")).optional(),
   role: z.number().min(1).max(4),
   branchId: z.string().min(1, "Branch is required"),
   fullName: z.string().min(1, "Full name is required").max(200),

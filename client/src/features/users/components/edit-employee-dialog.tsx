@@ -17,10 +17,11 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { Branch } from "@/features/branches/hooks/use-branches";
-import type { Employee, EmployeeUpdateRequest } from "../types";
+import type { Employee } from "../types";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import type { EmployeeUpdateRequest } from "../hooks/use-update-employee";
 
 const schema = z.object({
   userId: z.string(),

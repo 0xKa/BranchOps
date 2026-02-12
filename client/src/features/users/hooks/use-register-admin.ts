@@ -2,7 +2,24 @@ import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { AdminRegisterRequest, AdminRegisterResponse } from "../types";
+import type { UserRole } from "@/features/auth/types";
+
+export interface AdminRegisterRequest {
+  username: string;
+  password: string;
+  email?: string | null;
+  fullName: string;
+  role: UserRole;
+}
+
+export interface AdminRegisterResponse {
+  id: string;
+  username: string;
+  email: string | null;
+  fullName: string;
+  role: string;
+  createdAt: string;
+}
 
 const registerAdmin = async (
   data: AdminRegisterRequest,

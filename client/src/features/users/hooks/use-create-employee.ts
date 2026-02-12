@@ -2,7 +2,22 @@ import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { Employee, EmployeeCreateRequest } from "../types";
+import type { Employee } from "../types";
+import type { UserRole } from "@/features/auth/types";
+
+export interface EmployeeCreateRequest {
+  username: string;
+  password: string;
+  email?: string | null;
+  role: UserRole;
+  branchId: string;
+  fullName: string;
+  phone?: string | null;
+  jobTitle?: string | null;
+  notes?: string | null;
+  isActive: boolean;
+  hiredAt?: string | null;
+}
 
 const createEmployee = async (
   data: EmployeeCreateRequest,

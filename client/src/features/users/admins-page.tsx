@@ -19,9 +19,9 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { useAdmins, useRegisterAdmin, useDeleteAdmin } from "./hooks/index";
-import type { AdminRegisterResponse } from "./types";
 import CreateAdminDialog from "./components/create-admin-dialog";
 import DeleteConfirmDialog from "./components/delete-confirm-dialog";
+import type { AdminRegisterResponse } from "./hooks/use-register-admin";
 
 export default function AdminsPage() {
   const { data: admins, isLoading } = useAdmins();
