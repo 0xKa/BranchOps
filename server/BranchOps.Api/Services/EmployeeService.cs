@@ -89,7 +89,9 @@ public class EmployeeService(BranchOpsDbContext db)
 
     public async Task<ServiceResult<Employee>> UpdateAsync(Guid id, EmployeeUpdateDto dto, CancellationToken cancellationToken = default)
     {
-        var employee = await db.Employees.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var employee = await db.Employees
+            .Include(e => e.User)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (employee == null)
             return ServiceResult<Employee>.NotFound("Employee not found.");
 
@@ -129,8 +131,9 @@ public class EmployeeService(BranchOpsDbContext db)
             return ServiceResult<bool>.NotFound("Employee not found.");
 
         db.Employees.Remove(employee);
-        await db.SaveChangesAsync(cancellationToken);
+        db.Users.RemoveRange(db.Users.Where(u => u.Id == employee.UserId));
 
+        await db.SaveChangesAsync(cancellationToken);
         return ServiceResult<bool>.Ok(true);
     }
 }
