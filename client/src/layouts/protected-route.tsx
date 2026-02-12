@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useIsAuthenticated, useIsHydrated } from "@/features/auth/authStore";
+import { useIsAuthenticated, useIsHydrated } from "@/features/auth/auth-store";
 import { CustomSpinner } from "@/components/ui/spinner";
 
 export default function ProtectedRoute() {

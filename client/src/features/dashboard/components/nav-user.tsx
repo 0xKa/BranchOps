@@ -22,7 +22,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useLogout } from "@/features/auth/useLogout";
+import { useLogout } from "@/features/auth/use-logout";
 
 export interface User {
   name: string;

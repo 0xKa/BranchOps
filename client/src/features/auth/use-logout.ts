@@ -1,7 +1,7 @@
 import { api } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { useAuthStore } from "./authStore";
+import { useAuthStore } from "./auth-store";
 import { toast } from "sonner";
 import { t } from "i18next";
 
