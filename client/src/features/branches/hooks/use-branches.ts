@@ -1,19 +1,7 @@
 import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
-
-export interface Branch {
-  id: string;
-  code: string;
-  displayName: string;
-  addressLine1: string | null;
-  addressLine2: string | null;
-  city: string | null;
-  country: string | null;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
+import type { Branch } from "../types";
 
 const fetchBranches = async (): Promise<Branch[]> => {
   try {

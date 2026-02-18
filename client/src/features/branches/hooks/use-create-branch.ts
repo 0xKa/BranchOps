@@ -2,7 +2,7 @@ import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { Branch } from "./use-branches";
+import type { Branch } from "../types";
 
 export interface BranchCreateRequest {
   code: string;

@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import type { Branch } from "../hooks/use-branches";
+import type { Branch } from "../types";
 import type { BranchUpdateRequest } from "../hooks/use-update-branch";
 
 const schema = z.object({

@@ -27,7 +27,7 @@ import {
   useDeleteBranch,
   useUpdateBranch,
 } from "./hooks/index";
-import type { Branch } from "./hooks/use-branches";
+import type { Branch } from "./types";
 
 export default function BranchesPage() {
   const { data: branches, isLoading } = useBranches();
