@@ -24,8 +24,9 @@ import NavMain, { type NavItem } from "./nav-main";
 import { useAppLanguage } from "@/hooks/use-app-language";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@/features/auth/auth-store";
+import { USER_ROLES, USER_ROLE_KEYS } from "@/features/auth/types";
 
-interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> { }
 
 export default function AppSidebar(props: AppSidebarProps) {
   const user = useUser();
@@ -116,9 +117,9 @@ export default function AppSidebar(props: AppSidebarProps) {
   ];
 
   const currentUser = {
-    name: user?.fullName ?? user?.username ?? "User",
+    name: user?.employee?.fullName ?? user?.username ?? "User",
     email: user?.email ?? "",
-    role: user?.role ?? "",
+    role: user?.role != null ? USER_ROLE_KEYS[user.role] : "",
     avatar: "",
   };
 
@@ -129,11 +130,11 @@ export default function AppSidebar(props: AppSidebarProps) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={mainNavItems} label={t("nav.main")} />
-        {(currentUser.role === "Admin" ||
-          currentUser.role === "BranchManager") && (
-          <NavMain items={analyticsNavItems} label={t("nav.analytics")} />
-        )}
-        {currentUser.role === "Admin" && (
+        {(user?.role === USER_ROLES.Admin ||
+          user?.role === USER_ROLES.BranchManager) && (
+            <NavMain items={analyticsNavItems} label={t("nav.analytics")} />
+          )}
+        {user?.role === USER_ROLES.Admin && (
           <NavMain items={adminNavItems} label={t("nav.administration")} />
         )}
       </SidebarContent>

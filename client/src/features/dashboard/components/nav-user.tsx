@@ -22,9 +22,9 @@ import {
   Settings,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useLogout } from "@/features/auth/use-logout";
+import { useLogout } from "@/features/auth/hooks/use-logout";
 
-export interface User {
+interface NavUserDisplay {
   name: string;
   email: string;
   avatar?: string;
@@ -32,7 +32,7 @@ export interface User {
 }
 
 interface NavUserProps {
-  user: User;
+  user: NavUserDisplay;
 }
 
 export function NavUser({ user }: NavUserProps) {
