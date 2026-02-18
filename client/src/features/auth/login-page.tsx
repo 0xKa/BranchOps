@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { z } from "zod";
-import { useLogin } from "./use-login";
+import { useLogin } from "./hooks/use-login";
 
 const loginSchema = z.object({
   username: z.string().min(1, "login.usernameRequired"),

@@ -1,23 +1,23 @@
 import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
-import { useAuthStore } from "./auth-store";
-import { fetchAndStoreMe } from "./use-me";
+import { useAuthStore } from "../auth-store";
+import { useFetchMe } from "./use-fetch-me";
 import { toast } from "sonner";
 import { t } from "i18next";
 
-type LoginRequest = {
+interface LoginRequest {
   username: string;
   password: string;
-};
+}
 
-type LoginResponse = {
+interface LoginResponse {
   accessToken: string;
   refreshToken: string;
   accessTokenExpiresAt: string;
   userId: string;
   username: string;
-};
+}
 
 const loginUser = async (data: LoginRequest): Promise<LoginResponse> => {
   try {
@@ -30,32 +30,34 @@ const loginUser = async (data: LoginRequest): Promise<LoginResponse> => {
 
 export const useLogin = () => {
   const login = useAuthStore((state) => state.login);
+  const meMutation = useFetchMe();
 
   return useMutation<LoginResponse, Error, LoginRequest>({
     mutationFn: loginUser,
 
-    onSuccess: (data) => {
-      // construct user and tokens objects to store in Zustand
-      const user = {
-        id: data.userId,
-        username: data.username,
-      };
-
+    onSuccess: async (data) => {
       const tokens = {
         accessToken: data.accessToken,
         refreshToken: data.refreshToken,
         accessTokenExpiresAt: data.accessTokenExpiresAt,
       };
 
-      toast.success(t("login.successMessage"));
-      login(user, tokens); // to Zustand store
+      // Store tokens first so authenticated API calls work
+      useAuthStore.getState().setTokens(tokens);
 
-      // Fetch full user profile (role, employee info, etc.)
-      fetchAndStoreMe().catch(console.error);
+      toast.success(t("login.successMessage"));
+
+      // Fetch full user profile then complete login
+      try {
+        const user = await meMutation.mutateAsync();
+        login(user, tokens);
+      } catch (error) {
+        console.error(error);
+        toast.error("Fetch User Failed", { description: error instanceof Error ? error.message : String(error) });
+      }
     },
 
     onError: (error) => {
-      // Show error toast
       toast.error(t("login.failedMessage"), { description: error.message });
     },
   });

@@ -1,28 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-
-export interface User {
-  id: string;
-  username: string;
-  email?: string | null;
-  role?: string;
-  fullName?: string;
-  employee?: {
-    id: string;
-    fullName: string;
-    phone?: string | null;
-    jobTitle?: string | null;
-    isActive: boolean;
-    hiredAt?: string | null;
-    branch: {
-      id: string;
-      code: string;
-      displayName: string;
-      city?: string | null;
-      isActive: boolean;
-    };
-  } | null;
-}
+import type { User } from "./types";
 
 interface TokenData {
   accessToken: string;
