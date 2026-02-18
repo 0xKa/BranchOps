@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DeleteConfirmDialog from "@/features/users/components/delete-confirm-dialog";
+import DeleteConfirmDialog from "@/components/shared/delete-confirm-dialog";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
 import { MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";

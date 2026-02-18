@@ -4,13 +4,13 @@ import { useQuery } from "@tanstack/react-query";
 import type { Employee } from "../types";
 
 const fetchEmployees = async (): Promise<Employee[]> => {
-  try {
-    const res = await api.get<Employee[]>("/employees");
-    return res.data;
-  } catch (error) {
-    return handleApiError(error);
-  }
+    try {
+        const res = await api.get<Employee[]>("/employees");
+        return res.data;
+    } catch (error) {
+        return handleApiError(error);
+    }
 };
 
 export const useEmployees = () =>
-  useQuery({ queryKey: ["employees"], queryFn: fetchEmployees });
+    useQuery({ queryKey: ["employees"], queryFn: fetchEmployees });
