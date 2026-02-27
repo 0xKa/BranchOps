@@ -12,6 +12,8 @@ import LoginPage from "./features/auth/login-page";
 import EmployeesPage from "./features/users/employee/employees-page";
 import AdminsPage from "./features/users/admin/admins-page";
 import BranchesPage from "./features/branches/branches-page";
+import ProductsPage from "./features/products/products-page";
+import CategoriesPage from "./features/products/categories/categories-page";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +44,8 @@ export const router = createBrowserRouter([
               { path: "admins", element: <AdminsPage /> },
               { path: "employees", element: <EmployeesPage /> },
               { path: "branches", element: <BranchesPage /> },
+              { path: "products", element: <ProductsPage /> },
+              { path: "products/categories", element: <CategoriesPage /> },
             ],
           },
         ],
