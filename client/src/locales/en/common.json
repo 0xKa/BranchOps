@@ -6,7 +6,6 @@
   "hello": "Hello!",
   "testKey": "This is a test string",
   "currency": "OMR",
-
   "nav": {
     "main": "Main",
     "analytics": "Analytics",
@@ -32,7 +31,6 @@
     "users": "Users",
     "settings": "Settings"
   },
-
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome back",
@@ -48,7 +46,6 @@
     "thisMonth": "This Month",
     "viewAll": "View All"
   },
-
   "user": {
     "profile": "Profile",
     "account": "Account",
@@ -59,7 +56,6 @@
     "Employee": "Employee",
     "Guest": "Guest"
   },
-
   "login": {
     "title": "Welcome to BranchOps",
     "description": "Log in to your account to continue",
@@ -77,7 +73,6 @@
     "failedMessage": "Login failed",
     "logoutMessage": "Successfully logged out."
   },
-
   "breadcrumb": {
     "dashboard": "Dashboard",
     "branches": "Branches",
@@ -100,14 +95,39 @@
     "users": "Users",
     "settings": "Settings"
   },
-
+  "landing": {
+    "badge": "Branch Management Platform",
+    "headline": "Manage all your branches from one place",
+    "subheadline": "Streamline operations across branches with real-time POS, inventory tracking, and centralized reporting.",
+    "getStarted": "Get Started",
+    "backToHome": "Back to Home",
+    "featuresHeading": "Everything you need to run your branches",
+    "features": [
+      {
+        "title": "Multi-Branch Management",
+        "description": "Centralized control over all your branches, employees, and daily operations."
+      },
+      {
+        "title": "POS & Orders",
+        "description": "Process orders in real-time with a fast, reliable point-of-sale system."
+      },
+      {
+        "title": "Inventory Control",
+        "description": "Track stock levels, adjustments, and low-stock alerts across every branch."
+      },
+      {
+        "title": "Reports & Analytics",
+        "description": "Make data-driven decisions with sales reports, forecasting, and audit logs."
+      }
+    ],
+    "rights": "All rights reserved."
+  },
   "errors": {
     "networkError": "Unable to connect to server.",
     "timeout": "Server took too long to respond.",
     "serverNotResponding": "Server is not responding. Please try again later.",
     "unexpectedError": "An unexpected error occurred"
   },
-
   "common": {
     "search": "Search",
     "save": "Save",

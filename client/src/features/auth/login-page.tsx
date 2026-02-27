@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { z } from "zod";
+import { BackToHomeButton } from "@/components/shared/back-to-home-button";
 import { useLogin } from "./hooks/use-login";
 
 const loginSchema = z.object({
@@ -44,6 +45,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-svh flex items-center justify-center bg-muted/10 p-4">
       <div className="absolute top-4 right-4 flex items-center gap-3 ltr:flex-row-reverse ">
+        <BackToHomeButton />
         <LanguageToggle className="h-10 w-20" />
         <ModeToggle className="h-10 w-10" />
       </div>
