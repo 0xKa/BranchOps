@@ -14,6 +14,8 @@ import AdminsPage from "./features/users/admin/admins-page";
 import BranchesPage from "./features/branches/branches-page";
 import ProductsPage from "./features/products/products-page";
 import CategoriesPage from "./features/products/categories/categories-page";
+import NewOrderPage from "./features/pos/new-order-page";
+import OrderHistoryPage from "./features/pos/order-history-page";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +48,8 @@ export const router = createBrowserRouter([
               { path: "branches", element: <BranchesPage /> },
               { path: "products", element: <ProductsPage /> },
               { path: "products/categories", element: <CategoriesPage /> },
+              { path: "pos", element: <NewOrderPage /> },
+              { path: "pos/orders", element: <OrderHistoryPage /> },
             ],
           },
         ],
