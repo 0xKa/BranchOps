@@ -145,7 +145,8 @@
     "networkError": "Unable to connect to server.",
     "timeout": "Server took too long to respond.",
     "serverNotResponding": "Server is not responding. Please try again later.",
-    "unexpectedError": "An unexpected error occurred"
+    "unexpectedError": "An unexpected error occurred",
+    "accessDenied": "You don't have permission to access this page."
   },
   "dailySales": {
     "title": "Daily Sales",

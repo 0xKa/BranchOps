@@ -2,9 +2,11 @@ import {
   DashboardLayout,
   ProtectedRoute,
   PublicOnlyRoute,
+  RoleRoute,
   RootLayout,
 } from "@/layouts";
 import { createBrowserRouter } from "react-router";
+import { USER_ROLES } from "@/features/auth/types";
 import DashboardPage from "./features/dashboard/dashboard-page";
 import LandingPage from "./features/landing/landing-page";
 import ErrorState from "./components/error-state";
@@ -25,6 +27,8 @@ import TopProductsPage from "./features/reports/top-products-page";
 import AuditLogPage from "./features/audit-log/audit-log-page";
 import SettingsPage from "./features/settings/settings-page";
 
+const { Admin, StockManager, BranchManager, Cashier } = USER_ROLES;
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -43,29 +47,58 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // Protected Routes
+      // Protected Routes (all authenticated users)
       {
         element: <ProtectedRoute />,
         children: [
           {
             element: <DashboardLayout />,
             children: [
+              // Accessible to all authenticated users
               { path: "dashboard/*", element: <DashboardPage /> },
-              { path: "admins", element: <AdminsPage /> },
-              { path: "employees", element: <EmployeesPage /> },
-              { path: "branches", element: <BranchesPage /> },
-              { path: "products", element: <ProductsPage /> },
-              { path: "products/categories", element: <CategoriesPage /> },
-              { path: "pos", element: <NewOrderPage /> },
-              { path: "pos/orders", element: <OrderHistoryPage /> },
-              { path: "inventory", element: <StockLevelsPage /> },
-              { path: "inventory/adjustments", element: <StockAdjustmentsPage /> },
-              { path: "inventory/alerts", element: <LowStockAlertsPage /> },
-              { path: "reports/daily-sales", element: <DailySalesPage /> },
-              { path: "reports/branch-sales", element: <SalesByBranchPage /> },
-              { path: "reports/top-products", element: <TopProductsPage /> },
-              { path: "audit-log", element: <AuditLogPage /> },
               { path: "settings", element: <SettingsPage /> },
+
+              // Admin only
+              {
+                element: <RoleRoute allowedRoles={[Admin]} />,
+                children: [
+                  { path: "admins", element: <AdminsPage /> },
+                  { path: "audit-log", element: <AuditLogPage /> },
+                ],
+              },
+
+              // Admin + BranchManager
+              {
+                element: <RoleRoute allowedRoles={[Admin, BranchManager]} />,
+                children: [
+                  { path: "employees", element: <EmployeesPage /> },
+                  { path: "branches", element: <BranchesPage /> },
+                  { path: "reports/daily-sales", element: <DailySalesPage /> },
+                  { path: "reports/branch-sales", element: <SalesByBranchPage /> },
+                  { path: "reports/top-products", element: <TopProductsPage /> },
+                ],
+              },
+
+              // Admin + BranchManager + Cashier
+              {
+                element: <RoleRoute allowedRoles={[Admin, BranchManager, Cashier]} />,
+                children: [
+                  { path: "pos", element: <NewOrderPage /> },
+                  { path: "pos/orders", element: <OrderHistoryPage /> },
+                ],
+              },
+
+              // Admin + StockManager + BranchManager + Cashier
+              {
+                element: <RoleRoute allowedRoles={[Admin, StockManager, BranchManager, Cashier]} />,
+                children: [
+                  { path: "products", element: <ProductsPage /> },
+                  { path: "products/categories", element: <CategoriesPage /> },
+                  { path: "inventory", element: <StockLevelsPage /> },
+                  { path: "inventory/adjustments", element: <StockAdjustmentsPage /> },
+                  { path: "inventory/alerts", element: <LowStockAlertsPage /> },
+                ],
+              },
             ],
           },
         ],
