@@ -19,6 +19,7 @@ import OrderHistoryPage from "./features/pos/order-history-page";
 import StockLevelsPage from "./features/inventory/stock-levels-page";
 import StockAdjustmentsPage from "./features/inventory/stock-adjustments-page";
 import LowStockAlertsPage from "./features/inventory/low-stock-alerts-page";
+import DailySalesPage from "./features/reports/daily-sales-page";
 import SettingsPage from "./features/settings/settings-page";
 
 export const router = createBrowserRouter([
@@ -57,6 +58,7 @@ export const router = createBrowserRouter([
               { path: "inventory", element: <StockLevelsPage /> },
               { path: "inventory/adjustments", element: <StockAdjustmentsPage /> },
               { path: "inventory/alerts", element: <LowStockAlertsPage /> },
+              { path: "reports/daily-sales", element: <DailySalesPage /> },
               { path: "settings", element: <SettingsPage /> },
             ],
           },

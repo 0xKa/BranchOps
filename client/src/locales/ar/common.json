@@ -147,6 +147,25 @@
     "serverNotResponding": "الخادم لا يستجيب. يرجى محاولة مرة أخرى لاحقاً.",
     "unexpectedError": "حدث خطأ غير متوقع"
   },
+  "dailySales": {
+    "title": "المبيعات اليومية",
+    "description": "عرض أداء المبيعات اليومية عبر فروعك.",
+    "branch": "الفرع",
+    "allBranches": "جميع الفروع",
+    "from": "من",
+    "to": "إلى",
+    "totalSales": "إجمالي المبيعات",
+    "totalOrders": "إجمالي الطلبات",
+    "totalItemsSold": "العناصر المباعة",
+    "cancelledOrders": "ملغية",
+    "date": "التاريخ",
+    "orders": "الطلبات",
+    "sales": "المبيعات",
+    "avgOrder": "متوسط الطلب",
+    "itemsSold": "العناصر المباعة",
+    "cancelled": "ملغية",
+    "noData": "لا توجد بيانات مبيعات للفترة المحددة."
+  },
   "common": {
     "search": "بحث",
     "save": "حفظ",

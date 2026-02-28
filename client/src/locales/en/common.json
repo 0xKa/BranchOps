@@ -147,6 +147,25 @@
     "serverNotResponding": "Server is not responding. Please try again later.",
     "unexpectedError": "An unexpected error occurred"
   },
+  "dailySales": {
+    "title": "Daily Sales",
+    "description": "View daily sales performance across your branches.",
+    "branch": "Branch",
+    "allBranches": "All branches",
+    "from": "From",
+    "to": "To",
+    "totalSales": "Total Sales",
+    "totalOrders": "Total Orders",
+    "totalItemsSold": "Items Sold",
+    "cancelledOrders": "Cancelled",
+    "date": "Date",
+    "orders": "Orders",
+    "sales": "Sales",
+    "avgOrder": "Avg. Order",
+    "itemsSold": "Items Sold",
+    "cancelled": "Cancelled",
+    "noData": "No sales data for the selected period."
+  },
   "common": {
     "search": "Search",
     "save": "Save",
