@@ -22,6 +22,7 @@ import LowStockAlertsPage from "./features/inventory/low-stock-alerts-page";
 import DailySalesPage from "./features/reports/daily-sales-page";
 import SalesByBranchPage from "./features/reports/sales-by-branch-page";
 import TopProductsPage from "./features/reports/top-products-page";
+import AuditLogPage from "./features/audit-log/audit-log-page";
 import SettingsPage from "./features/settings/settings-page";
 
 export const router = createBrowserRouter([
@@ -63,6 +64,7 @@ export const router = createBrowserRouter([
               { path: "reports/daily-sales", element: <DailySalesPage /> },
               { path: "reports/branch-sales", element: <SalesByBranchPage /> },
               { path: "reports/top-products", element: <TopProductsPage /> },
+              { path: "audit-log", element: <AuditLogPage /> },
               { path: "settings", element: <SettingsPage /> },
             ],
           },

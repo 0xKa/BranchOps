@@ -221,5 +221,21 @@
     "back": "رجوع",
     "next": "التالي",
     "previous": "السابق"
+  },
+  "auditLog": {
+    "title": "سجل المراجعة",
+    "description": "تتبع جميع الإجراءات المنفذة عبر النظام.",
+    "action": "الإجراء",
+    "allActions": "جميع الإجراءات",
+    "entityType": "نوع الكيان",
+    "allEntityTypes": "جميع الأنواع",
+    "from": "من",
+    "to": "إلى",
+    "timestamp": "التوقيت",
+    "user": "المستخدم",
+    "details": "التفاصيل",
+    "system": "النظام",
+    "noData": "لا توجد سجلات مراجعة.",
+    "pageInfo": "صفحة {{page}} من {{totalPages}} ({{total}} إجمالي)"
   }
 }

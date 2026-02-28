@@ -221,5 +221,21 @@
     "back": "Back",
     "next": "Next",
     "previous": "Previous"
+  },
+  "auditLog": {
+    "title": "Audit Log",
+    "description": "Track all actions performed across the system.",
+    "action": "Action",
+    "allActions": "All actions",
+    "entityType": "Entity Type",
+    "allEntityTypes": "All types",
+    "from": "From",
+    "to": "To",
+    "timestamp": "Timestamp",
+    "user": "User",
+    "details": "Details",
+    "system": "System",
+    "noData": "No audit log entries found.",
+    "pageInfo": "Page {{page}} of {{totalPages}} ({{total}} total)"
   }
 }
