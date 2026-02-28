@@ -65,3 +65,23 @@ public record DashboardOverviewDto(
     IReadOnlyList<TopSellingProductDto> TopProducts,
     IReadOnlyList<BranchPerformanceDto> BranchPerformance,
     IReadOnlyList<LowStockAlertDto> LowStockAlerts);
+
+// ── Daily Sales Report ─────────────────────────────────────────
+public record DailySalesRowDto(
+    DateTime Date,
+    int OrderCount,
+    decimal TotalSales,
+    decimal AverageOrderValue,
+    int TotalItemsSold,
+    int CancelledOrders);
+
+public record DailySalesReportDto(
+    DateTime FromDate,
+    DateTime ToDate,
+    Guid? BranchId,
+    string? BranchName,
+    decimal GrandTotalSales,
+    int GrandTotalOrders,
+    int GrandTotalItemsSold,
+    int GrandTotalCancelled,
+    IReadOnlyList<DailySalesRowDto> Rows);

@@ -277,4 +277,6 @@ public class DashboardService(BranchOpsDbContext db)
             recentOrders, topProducts,
             branchPerformance, lowStockAlerts);
     }
+
+
 }
