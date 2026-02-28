@@ -5,6 +5,7 @@ namespace BranchOps.Api.Dtos;
 public record EmployeeSalaryDto(
     Guid Id,
     Guid EmployeeId,
+    string EmployeeName,
     decimal Amount,
     string Currency,
     DateTime EffectiveFrom,

@@ -12,6 +12,7 @@ import LandingPage from "./features/landing/landing-page";
 import ErrorState from "./components/error-state";
 import LoginPage from "./features/auth/login-page";
 import EmployeesPage from "./features/users/employee/employees-page";
+import EmployeeSalariesPage from "./features/users/employee-salaries/employee-salaries-page";
 import AdminsPage from "./features/users/admin/admins-page";
 import BranchesPage from "./features/branches/branches-page";
 import ProductsPage from "./features/products/products-page";
@@ -72,6 +73,7 @@ export const router = createBrowserRouter([
                 element: <RoleRoute allowedRoles={[Admin, BranchManager]} />,
                 children: [
                   { path: "employees", element: <EmployeesPage /> },
+                  { path: "employee-salaries", element: <EmployeeSalariesPage /> },
                   { path: "branches", element: <BranchesPage /> },
                   { path: "reports/daily-sales", element: <DailySalesPage /> },
                   { path: "reports/branch-sales", element: <SalesByBranchPage /> },

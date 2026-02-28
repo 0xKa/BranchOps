@@ -8,7 +8,7 @@ namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,BranchManager")]
 public class EmployeeSalariesController(EmployeeSalaryService employeeSalaryService) : ControllerBase
 {
     [HttpGet]
@@ -69,6 +69,7 @@ public class EmployeeSalariesController(EmployeeSalaryService employeeSalaryServ
         => new(
             salary.Id,
             salary.EmployeeId,
+            salary.Employee?.FullName ?? string.Empty,
             salary.Amount,
             salary.Currency,
             salary.EffectiveFrom,

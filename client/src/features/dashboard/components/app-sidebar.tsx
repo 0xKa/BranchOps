@@ -9,6 +9,7 @@ import {
   Settings,
   FileText,
   TrendingUp,
+  DollarSign,
 } from "lucide-react";
 
 import {
@@ -109,6 +110,11 @@ export default function AppSidebar(props: AppSidebarProps) {
       title: "Employees",
       url: "/employees",
       icon: Users,
+    },
+    {
+      title: "Salaries",
+      url: "/employee-salaries",
+      icon: DollarSign,
     },
     {
       title: t("nav.settings"),

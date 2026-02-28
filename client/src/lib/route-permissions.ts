@@ -16,6 +16,7 @@ export const ROUTE_PERMISSIONS: Record<string, readonly UserRole[]> = {
     // Admin + BranchManager
     "/branches": [Admin, BranchManager],
     "/employees": [Admin, BranchManager],
+    "/employee-salaries": [Admin, BranchManager],
     "/reports/daily-sales": [Admin, BranchManager],
     "/reports/branch-sales": [Admin, BranchManager],
     "/reports/top-products": [Admin, BranchManager],

@@ -15,6 +15,7 @@ public class EmployeeSalaryService(BranchOpsDbContext db)
             query = query.Where(x => x.EmployeeId == employeeId.Value);
 
         return await query
+            .Include(x => x.Employee)
             .OrderByDescending(x => x.EffectiveFrom)
             .ToListAsync(cancellationToken);
     }
@@ -23,6 +24,7 @@ public class EmployeeSalaryService(BranchOpsDbContext db)
     {
         return await db.EmployeeSalaries
             .AsNoTracking()
+            .Include(x => x.Employee)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
@@ -49,12 +51,16 @@ public class EmployeeSalaryService(BranchOpsDbContext db)
         db.EmployeeSalaries.Add(salary);
         await db.SaveChangesAsync(cancellationToken);
 
+        await db.Entry(salary).Reference(s => s.Employee).LoadAsync(cancellationToken);
+
         return ServiceResult<EmployeeSalary>.Ok(salary);
     }
 
     public async Task<ServiceResult<EmployeeSalary>> UpdateAsync(Guid id, EmployeeSalaryUpdateDto dto, CancellationToken cancellationToken = default)
     {
-        var salary = await db.EmployeeSalaries.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var salary = await db.EmployeeSalaries
+            .Include(x => x.Employee)
+            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         if (salary == null)
             return ServiceResult<EmployeeSalary>.NotFound("Employee salary not found.");
 
@@ -73,6 +79,9 @@ public class EmployeeSalaryService(BranchOpsDbContext db)
         salary.Notes = dto.Notes;
 
         await db.SaveChangesAsync(cancellationToken);
+
+        // Reload employee if it changed
+        await db.Entry(salary).Reference(s => s.Employee).LoadAsync(cancellationToken);
 
         return ServiceResult<EmployeeSalary>.Ok(salary);
     }
