@@ -17,6 +17,7 @@ public static class DependencyInjection
         services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 
         services.AddScoped<Auth>();
+        services.AddScoped<AccountSettingsService>();
         services.AddScoped<BranchService>();
         services.AddScoped<BranchPhoneService>();
         services.AddScoped<EmployeeService>();
