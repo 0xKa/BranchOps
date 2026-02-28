@@ -20,6 +20,8 @@ import StockLevelsPage from "./features/inventory/stock-levels-page";
 import StockAdjustmentsPage from "./features/inventory/stock-adjustments-page";
 import LowStockAlertsPage from "./features/inventory/low-stock-alerts-page";
 import DailySalesPage from "./features/reports/daily-sales-page";
+import SalesByBranchPage from "./features/reports/sales-by-branch-page";
+import TopProductsPage from "./features/reports/top-products-page";
 import SettingsPage from "./features/settings/settings-page";
 
 export const router = createBrowserRouter([
@@ -59,6 +61,8 @@ export const router = createBrowserRouter([
               { path: "inventory/adjustments", element: <StockAdjustmentsPage /> },
               { path: "inventory/alerts", element: <LowStockAlertsPage /> },
               { path: "reports/daily-sales", element: <DailySalesPage /> },
+              { path: "reports/branch-sales", element: <SalesByBranchPage /> },
+              { path: "reports/top-products", element: <TopProductsPage /> },
               { path: "settings", element: <SettingsPage /> },
             ],
           },

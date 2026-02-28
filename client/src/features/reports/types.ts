@@ -18,3 +18,20 @@ export interface DailySalesReport {
     grandTotalCancelled: number;
     rows: DailySalesRow[];
 }
+
+export interface BranchSalesRow {
+    branchId: string;
+    branchName: string;
+    totalSales: number;
+    orderCount: number;
+    employeeCount: number;
+    lowStockItems: number;
+}
+
+export interface TopProductRow {
+    productId: string;
+    productName: string;
+    categoryName: string;
+    totalQuantitySold: number;
+    totalRevenue: number;
+}
