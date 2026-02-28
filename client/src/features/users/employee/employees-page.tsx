@@ -62,6 +62,7 @@ export default function EmployeesPage() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Full Name</TableHead>
+                                <TableHead>Username</TableHead>
                                 <TableHead>Job Title</TableHead>
                                 <TableHead>Phone</TableHead>
                                 <TableHead>Role</TableHead>
@@ -82,7 +83,7 @@ export default function EmployeesPage() {
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={7} className="text-center py-8">
+                                    <TableCell colSpan={8} className="text-center py-8">
                                         No employees found.
                                     </TableCell>
                                 </TableRow>
@@ -148,6 +149,7 @@ function EmployeeRow({
     return (
         <TableRow>
             <TableCell className="font-medium">{employee.fullName}</TableCell>
+            <TableCell>{employee.username}</TableCell>
             <TableCell>{employee.jobTitle ?? "—"}</TableCell>
             <TableCell>{employee.phone ?? "—"}</TableCell>
             <TableCell>

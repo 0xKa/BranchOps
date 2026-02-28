@@ -3,6 +3,7 @@ export interface Employee {
     userId: string;
     branchId: string;
     fullName: string;
+    username: string;
     phone: string | null;
     jobTitle: string | null;
     notes: string | null;

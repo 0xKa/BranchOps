@@ -109,6 +109,7 @@ public class EmployeesController(EmployeeService employeeService, Security.Auth 
             employee.UserId,
             employee.BranchId,
             employee.FullName,
+            employee.User.Username,
             employee.Phone,
             employee.JobTitle,
             employee.Notes,

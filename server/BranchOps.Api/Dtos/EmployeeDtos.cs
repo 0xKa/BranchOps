@@ -8,6 +8,7 @@ public record EmployeeDto(
     Guid UserId,
     Guid BranchId,
     string FullName,
+    string Username,
     string? Phone,
     string? JobTitle,
     string? Notes,
