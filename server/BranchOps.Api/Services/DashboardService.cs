@@ -79,31 +79,35 @@ public class DashboardService(BranchOpsDbContext db)
         if (branchId.HasValue)
             query = query.Where(o => o.BranchId == branchId.Value);
 
+        // Fetch raw order data then group in-memory (GroupBy + constructor
+        // projections are not translatable by the Npgsql EF Core provider).
+        var rawOrders = await query
+            .Select(o => new { o.CreatedAt, o.Total })
+            .ToListAsync(ct);
+
         List<SalesDataPointDto> dataPoints;
 
         if (label == "year")
         {
-            // Group by month for yearly view
-            dataPoints = await query
+            dataPoints = rawOrders
                 .GroupBy(o => new { o.CreatedAt.Year, o.CreatedAt.Month })
                 .Select(g => new SalesDataPointDto(
                     new DateTime(g.Key.Year, g.Key.Month, 1, 0, 0, 0, DateTimeKind.Utc),
                     g.Sum(o => o.Total),
                     g.Count()))
                 .OrderBy(d => d.Date)
-                .ToListAsync(ct);
+                .ToList();
         }
         else
         {
-            // Group by day
-            dataPoints = await query
+            dataPoints = rawOrders
                 .GroupBy(o => o.CreatedAt.Date)
                 .Select(g => new SalesDataPointDto(
                     g.Key,
                     g.Sum(o => o.Total),
                     g.Count()))
                 .OrderBy(d => d.Date)
-                .ToListAsync(ct);
+                .ToList();
         }
 
         var totalSales = dataPoints.Sum(d => d.TotalSales);
@@ -163,17 +167,30 @@ public class DashboardService(BranchOpsDbContext db)
         if (branchId.HasValue)
             query = query.Where(i => i.Order.BranchId == branchId.Value);
 
-        var products = await query
-            .GroupBy(i => new { i.ProductId, i.Product.Name, CategoryName = i.Product.Category.Name })
+        // Fetch raw data then aggregate in-memory (GroupBy with navigation
+        // property access in key is not translatable by Npgsql).
+        var rawItems = await query
+            .Select(i => new
+            {
+                i.ProductId,
+                ProductName = i.Product.Name,
+                CategoryName = i.Product.Category.Name,
+                i.Quantity,
+                i.LineTotal
+            })
+            .ToListAsync(ct);
+
+        var products = rawItems
+            .GroupBy(i => new { i.ProductId, i.ProductName, i.CategoryName })
             .Select(g => new TopSellingProductDto(
                 g.Key.ProductId,
-                g.Key.Name,
+                g.Key.ProductName,
                 g.Key.CategoryName,
                 g.Sum(i => i.Quantity),
                 g.Sum(i => i.LineTotal)))
             .OrderByDescending(p => p.TotalRevenue)
             .Take(count)
-            .ToListAsync(ct);
+            .ToList();
 
         return products;
     }
