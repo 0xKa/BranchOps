@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLogout } from "@/features/auth/hooks/use-logout";
+import { useNavigate } from "react-router-dom";
 
 interface NavUserDisplay {
   name: string;
@@ -39,6 +40,7 @@ export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar();
   const { t } = useTranslation();
   const { logout, isPending } = useLogout();
+  const navigate = useNavigate();
 
   return (
     <SidebarMenu>
@@ -80,11 +82,11 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/settings")}>
                 <BadgeCheck className="me-2 size-4" />
                 {t("user.account")}
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/settings")}>
                 <Settings className="me-2 size-4" />
                 {t("nav.settings")}
               </DropdownMenuItem>
