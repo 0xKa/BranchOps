@@ -94,12 +94,16 @@ public class ReportsService(BranchOpsDbContext db)
 
     // ── Sales by Branch ────────────────────────────────────────────
     public async Task<IReadOnlyList<BranchPerformanceDto>> GetSalesByBranchAsync(
-        int? days = 30, CancellationToken ct = default)
+        int? days = 30, CancellationToken ct = default, Guid? branchId = null)
     {
-        var branches = await db.Branches
+        var branchesQuery = db.Branches
             .AsNoTracking()
-            .Where(b => b.IsActive)
-            .ToListAsync(ct);
+            .Where(b => b.IsActive);
+
+        if (branchId.HasValue)
+            branchesQuery = branchesQuery.Where(b => b.Id == branchId.Value);
+
+        var branches = await branchesQuery.ToListAsync(ct);
 
         DateTime? from = days.HasValue ? DateTime.UtcNow.AddDays(-days.Value) : null;
 

@@ -1,4 +1,5 @@
 using BranchOps.Api.Dtos;
+using BranchOps.Api.Security;
 using BranchOps.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,8 @@ public class DashboardController(DashboardService dashboardService) : Controller
     public async Task<ActionResult<DashboardOverviewDto>> GetOverview(
         CancellationToken ct)
     {
-        var overview = await dashboardService.GetOverviewAsync(ct);
+        var branchId = User.GetEffectiveBranchId(null);
+        var overview = await dashboardService.GetOverviewAsync(ct, branchId);
         return Ok(overview);
     }
 
@@ -30,7 +32,8 @@ public class DashboardController(DashboardService dashboardService) : Controller
     public async Task<ActionResult<DashboardSummaryDto>> GetSummary(
         CancellationToken ct)
     {
-        var summary = await dashboardService.GetSummaryAsync(ct);
+        var branchId = User.GetEffectiveBranchId(null);
+        var summary = await dashboardService.GetSummaryAsync(ct, branchId);
         return Ok(summary);
     }
 
@@ -45,7 +48,8 @@ public class DashboardController(DashboardService dashboardService) : Controller
         [FromQuery] Guid? branchId = null,
         CancellationToken ct = default)
     {
-        var chart = await dashboardService.GetSalesChartAsync(period, branchId, ct);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var chart = await dashboardService.GetSalesChartAsync(period, effectiveBranchId, ct);
         return Ok(chart);
     }
 
@@ -62,7 +66,8 @@ public class DashboardController(DashboardService dashboardService) : Controller
     {
         if (count is < 1 or > 50) count = 10;
 
-        var orders = await dashboardService.GetRecentOrdersAsync(count, branchId, ct);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var orders = await dashboardService.GetRecentOrdersAsync(count, effectiveBranchId, ct);
         return Ok(orders);
     }
 
@@ -81,7 +86,8 @@ public class DashboardController(DashboardService dashboardService) : Controller
     {
         if (count is < 1 or > 50) count = 10;
 
-        var products = await dashboardService.GetTopSellingProductsAsync(count, days, branchId, ct);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var products = await dashboardService.GetTopSellingProductsAsync(count, days, effectiveBranchId, ct);
         return Ok(products);
     }
 
@@ -94,7 +100,8 @@ public class DashboardController(DashboardService dashboardService) : Controller
         [FromQuery] int? days = 30,
         CancellationToken ct = default)
     {
-        var performance = await dashboardService.GetBranchPerformanceAsync(days, ct);
+        var branchId = User.GetEffectiveBranchId(null);
+        var performance = await dashboardService.GetBranchPerformanceAsync(days, ct, branchId);
         return Ok(performance);
     }
 
@@ -107,7 +114,8 @@ public class DashboardController(DashboardService dashboardService) : Controller
         [FromQuery] Guid? branchId = null,
         CancellationToken ct = default)
     {
-        var alerts = await dashboardService.GetLowStockAlertsAsync(branchId, ct);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var alerts = await dashboardService.GetLowStockAlertsAsync(effectiveBranchId, ct);
         return Ok(alerts);
     }
 }

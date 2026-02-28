@@ -1,4 +1,5 @@
 using BranchOps.Api.Dtos;
+using BranchOps.Api.Security;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +22,8 @@ public class OrdersController(OrderService orderService) : ControllerBase
         [FromQuery] DateTime? toDate,
         CancellationToken cancellationToken)
     {
-        var result = await orderService.GetAllAsync(pagination, branchId, status, fromDate, toDate, cancellationToken);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var result = await orderService.GetAllAsync(pagination, effectiveBranchId, status, fromDate, toDate, cancellationToken);
 
         return Ok(new PagedResult<OrderSummaryDto>(
             result.Items.Select(ToSummaryDto).ToList(),
@@ -38,6 +40,11 @@ public class OrdersController(OrderService orderService) : ControllerBase
         if (order == null)
             return NotFound(new ApiError("Order not found."));
 
+        // Non-admin users can only view orders from their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && order.BranchId != userBranchId.Value)
+            return Forbid();
+
         return Ok(ToDto(order));
     }
 
@@ -46,9 +53,14 @@ public class OrdersController(OrderService orderService) : ControllerBase
         PlaceOrderDto dto,
         CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        var userId = User.GetUserId();
         if (userId == null)
             return Unauthorized(new ApiError("User not authenticated."));
+
+        // Non-admin users can only place orders for their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && dto.BranchId != userBranchId.Value)
+            return Forbid();
 
         var result = await orderService.PlaceOrderAsync(dto, userId.Value, cancellationToken);
         if (!result.Success)
@@ -65,6 +77,15 @@ public class OrdersController(OrderService orderService) : ControllerBase
         UpdateOrderDto dto,
         CancellationToken cancellationToken)
     {
+        // Non-admin users can only update orders from their own branch
+        var order = await orderService.GetByIdAsync(id, cancellationToken);
+        if (order == null)
+            return NotFound(new ApiError("Order not found."));
+
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && order.BranchId != userBranchId.Value)
+            return Forbid();
+
         var result = await orderService.UpdateOrderAsync(id, dto, cancellationToken);
         if (!result.Success)
             return MapError(result);
@@ -78,9 +99,18 @@ public class OrdersController(OrderService orderService) : ControllerBase
         CancelOrderDto dto,
         CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        var userId = User.GetUserId();
         if (userId == null)
             return Unauthorized(new ApiError("User not authenticated."));
+
+        // Non-admin users can only cancel orders from their own branch
+        var order = await orderService.GetByIdAsync(id, cancellationToken);
+        if (order == null)
+            return NotFound(new ApiError("Order not found."));
+
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && order.BranchId != userBranchId.Value)
+            return Forbid();
 
         var result = await orderService.CancelOrderAsync(id, userId.Value, dto.Reason, cancellationToken);
         if (!result.Success)
@@ -93,6 +123,15 @@ public class OrdersController(OrderService orderService) : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
+        // Non-admin users can only delete orders from their own branch
+        var order = await orderService.GetByIdAsync(id, cancellationToken);
+        if (order == null)
+            return NotFound(new ApiError("Order not found."));
+
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && order.BranchId != userBranchId.Value)
+            return Forbid();
+
         var result = await orderService.DeleteOrderAsync(id, cancellationToken);
         if (!result.Success)
         {
@@ -104,12 +143,6 @@ public class OrdersController(OrderService orderService) : ControllerBase
         }
 
         return NoContent();
-    }
-
-    private Guid? GetCurrentUserId()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        return Guid.TryParse(userIdClaim, out var userId) ? userId : null;
     }
 
     private static OrderDto ToDto(Order order)

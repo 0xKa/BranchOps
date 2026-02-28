@@ -8,28 +8,45 @@ namespace BranchOps.Api.Services;
 public class DashboardService(BranchOpsDbContext db)
 {
     // ── Summary ────────────────────────────────────────────────────
-    public async Task<DashboardSummaryDto> GetSummaryAsync(CancellationToken ct = default)
+    public async Task<DashboardSummaryDto> GetSummaryAsync(CancellationToken ct = default, Guid? branchId = null)
     {
         var todayUtc = DateTime.UtcNow.Date;
 
-        var totalSales = await db.Orders
+        var ordersQuery = db.Orders.AsQueryable();
+        if (branchId.HasValue)
+            ordersQuery = ordersQuery.Where(o => o.BranchId == branchId.Value);
+
+        var totalSales = await ordersQuery
             .Where(o => o.Status == OrderStatus.Paid)
             .SumAsync(o => (decimal?)o.Total, ct) ?? 0m;
 
-        var totalSalesToday = await db.Orders
+        var totalSalesToday = await ordersQuery
             .Where(o => o.Status == OrderStatus.Paid && o.CreatedAt >= todayUtc)
             .SumAsync(o => (decimal?)o.Total, ct) ?? 0m;
 
-        var totalOrders = await db.Orders.CountAsync(ct);
-        var totalOrdersToday = await db.Orders.CountAsync(o => o.CreatedAt >= todayUtc, ct);
+        var totalOrders = await ordersQuery.CountAsync(ct);
+        var totalOrdersToday = await ordersQuery.CountAsync(o => o.CreatedAt >= todayUtc, ct);
 
-        var totalBranches = await db.Branches.CountAsync(ct);
-        var activeBranches = await db.Branches.CountAsync(b => b.IsActive, ct);
+        int totalBranches, activeBranches;
+        if (branchId.HasValue)
+        {
+            totalBranches = await db.Branches.CountAsync(b => b.Id == branchId.Value, ct);
+            activeBranches = await db.Branches.CountAsync(b => b.Id == branchId.Value && b.IsActive, ct);
+        }
+        else
+        {
+            totalBranches = await db.Branches.CountAsync(ct);
+            activeBranches = await db.Branches.CountAsync(b => b.IsActive, ct);
+        }
 
         var totalProducts = await db.Products.CountAsync(ct);
         var activeProducts = await db.Products.CountAsync(p => p.IsActive, ct);
 
-        var totalEmployees = await db.Employees.CountAsync(e => e.IsActive, ct);
+        var employeesQuery = db.Employees.Where(e => e.IsActive);
+        if (branchId.HasValue)
+            employeesQuery = employeesQuery.Where(e => e.BranchId == branchId.Value);
+        var totalEmployees = await employeesQuery.CountAsync(ct);
+
         var totalCategories = await db.ProductCategories.CountAsync(c => c.IsActive, ct);
 
         return new DashboardSummaryDto(
@@ -197,12 +214,16 @@ public class DashboardService(BranchOpsDbContext db)
 
     // ── Branch Performance ─────────────────────────────────────────
     public async Task<IReadOnlyList<BranchPerformanceDto>> GetBranchPerformanceAsync(
-        int? days = 30, CancellationToken ct = default)
+        int? days = 30, CancellationToken ct = default, Guid? branchId = null)
     {
-        var branches = await db.Branches
+        var branchesQuery = db.Branches
             .AsNoTracking()
-            .Where(b => b.IsActive)
-            .ToListAsync(ct);
+            .Where(b => b.IsActive);
+
+        if (branchId.HasValue)
+            branchesQuery = branchesQuery.Where(b => b.Id == branchId.Value);
+
+        var branches = await branchesQuery.ToListAsync(ct);
 
         DateTime? from = days.HasValue ? DateTime.UtcNow.AddDays(-days.Value) : null;
 
@@ -260,16 +281,16 @@ public class DashboardService(BranchOpsDbContext db)
     }
 
     // ── Combined Overview ──────────────────────────────────────────
-    public async Task<DashboardOverviewDto> GetOverviewAsync(CancellationToken ct = default)
+    public async Task<DashboardOverviewDto> GetOverviewAsync(CancellationToken ct = default, Guid? branchId = null)
     {
-        var summary = await GetSummaryAsync(ct);
-        var todaySales = await GetSalesChartAsync("today", ct: ct);
-        var weeklySales = await GetSalesChartAsync("week", ct: ct);
-        var monthlySales = await GetSalesChartAsync("month", ct: ct);
-        var recentOrders = await GetRecentOrdersAsync(ct: ct);
-        var topProducts = await GetTopSellingProductsAsync(ct: ct);
-        var branchPerformance = await GetBranchPerformanceAsync(ct: ct);
-        var lowStockAlerts = await GetLowStockAlertsAsync(ct: ct);
+        var summary = await GetSummaryAsync(ct, branchId);
+        var todaySales = await GetSalesChartAsync("today", branchId, ct);
+        var weeklySales = await GetSalesChartAsync("week", branchId, ct);
+        var monthlySales = await GetSalesChartAsync("month", branchId, ct);
+        var recentOrders = await GetRecentOrdersAsync(ct: ct, branchId: branchId);
+        var topProducts = await GetTopSellingProductsAsync(ct: ct, branchId: branchId);
+        var branchPerformance = await GetBranchPerformanceAsync(ct: ct, branchId: branchId);
+        var lowStockAlerts = await GetLowStockAlertsAsync(branchId, ct);
 
         return new DashboardOverviewDto(
             summary,

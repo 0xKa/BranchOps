@@ -1,4 +1,5 @@
 using BranchOps.Api.Dtos;
+using BranchOps.Api.Security;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,8 @@ public class EmployeesController(EmployeeService employeeService, Security.Auth 
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<EmployeeDto>>> GetAll([FromQuery] Guid? branchId, CancellationToken cancellationToken)
     {
-        var employees = await employeeService.GetAllAsync(branchId, cancellationToken);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var employees = await employeeService.GetAllAsync(effectiveBranchId, cancellationToken);
         return Ok(employees.Select(ToDto));
     }
 
@@ -24,6 +26,11 @@ public class EmployeesController(EmployeeService employeeService, Security.Auth 
         var employee = await employeeService.GetByIdAsync(id, cancellationToken);
         if (employee == null)
             return NotFound(new ApiError("Employee not found."));
+
+        // Non-admin users can only view employees from their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && employee.BranchId != userBranchId.Value)
+            return Forbid();
 
         return Ok(ToDto(employee));
     }

@@ -100,7 +100,7 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options, Emp
     {
         TokenResponseDto tokenResponse = new()
         {
-            AccessToken = CreateToken(user),
+            AccessToken = await CreateTokenAsync(user),
             RefreshToken = await GenerateAndSaveRefreshTokenAsync(user),
             AccessTokenExpiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationMinutes),
             UserId = user.Id,
@@ -128,7 +128,7 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options, Emp
         return refreshToken;
     }
 
-    private string CreateToken(User user)
+    private async Task<string> CreateTokenAsync(User user)
     {
         var claims = new List<Claim>
         {
@@ -137,6 +137,19 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options, Emp
             new(ClaimTypes.Email, user.Email ?? string.Empty),
             new(ClaimTypes.Role, user.Role.ToString()),
         };
+
+        // Add BranchId claim for non-Admin users
+        if (user.Role != UserRole.Admin)
+        {
+            var employee = await context.Employees
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.UserId == user.Id);
+
+            if (employee is not null)
+            {
+                claims.Add(new Claim("BranchId", employee.BranchId.ToString()));
+            }
+        }
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_jwtSettings.Key));

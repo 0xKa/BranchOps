@@ -1,4 +1,5 @@
 using BranchOps.Api.Dtos;
+using BranchOps.Api.Security;
 using BranchOps.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,8 @@ public class ReportsController(ReportsService reportsService) : ControllerBase
         [FromQuery] Guid? branchId = null,
         CancellationToken ct = default)
     {
-        var report = await reportsService.GetDailySalesAsync(fromDate, toDate, branchId, ct);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var report = await reportsService.GetDailySalesAsync(fromDate, toDate, effectiveBranchId, ct);
         return Ok(report);
     }
 
@@ -34,7 +36,8 @@ public class ReportsController(ReportsService reportsService) : ControllerBase
         [FromQuery] int? days = 30,
         CancellationToken ct = default)
     {
-        var data = await reportsService.GetSalesByBranchAsync(days, ct);
+        var branchId = User.GetEffectiveBranchId(null);
+        var data = await reportsService.GetSalesByBranchAsync(days, ct, branchId);
         return Ok(data);
     }
 
@@ -54,7 +57,8 @@ public class ReportsController(ReportsService reportsService) : ControllerBase
     {
         if (count is < 1 or > 50) count = 10;
 
-        var products = await reportsService.GetTopProductsAsync(count, days, branchId, ct);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var products = await reportsService.GetTopProductsAsync(count, days, effectiveBranchId, ct);
         return Ok(products);
     }
 }

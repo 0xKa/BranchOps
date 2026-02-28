@@ -1,4 +1,5 @@
 using BranchOps.Api.Dtos;
+using BranchOps.Api.Security;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +23,8 @@ public class StockController(StockService stockService) : ControllerBase
         [FromQuery] bool? lowStockOnly,
         CancellationToken cancellationToken)
     {
-        var result = await stockService.GetAllAsync(pagination, branchId, productId, lowStockOnly, cancellationToken);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var result = await stockService.GetAllAsync(pagination, effectiveBranchId, productId, lowStockOnly, cancellationToken);
 
         return Ok(new PagedResult<BranchStockDto>(
             result.Items.Select(ToDto).ToList(),
@@ -39,6 +41,11 @@ public class StockController(StockService stockService) : ControllerBase
         if (stock == null)
             return NotFound(new ApiError("Stock record not found."));
 
+        // Non-admin users can only view stock from their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && stock.BranchId != userBranchId.Value)
+            return Forbid();
+
         return Ok(ToDto(stock));
     }
 
@@ -48,6 +55,11 @@ public class StockController(StockService stockService) : ControllerBase
         [FromQuery] Guid productId,
         CancellationToken cancellationToken)
     {
+        // Non-admin users can only query their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && branchId != userBranchId.Value)
+            return Forbid();
+
         var stock = await stockService.GetByBranchAndProductAsync(branchId, productId, cancellationToken);
         if (stock == null)
             return NotFound(new ApiError("Stock record not found."));
@@ -60,7 +72,8 @@ public class StockController(StockService stockService) : ControllerBase
         [FromQuery] Guid? branchId,
         CancellationToken cancellationToken)
     {
-        var alerts = await stockService.GetLowStockAlertsAsync(branchId, cancellationToken);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var alerts = await stockService.GetLowStockAlertsAsync(effectiveBranchId, cancellationToken);
         return Ok(alerts.Select(s => new LowStockAlertDto(
             s.Id,
             s.BranchId,
@@ -81,7 +94,8 @@ public class StockController(StockService stockService) : ControllerBase
         [FromQuery] StockAdjustmentType? type,
         CancellationToken cancellationToken)
     {
-        var result = await stockService.GetAdjustmentsAsync(pagination, branchId, productId, type, cancellationToken);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var result = await stockService.GetAdjustmentsAsync(pagination, effectiveBranchId, productId, type, cancellationToken);
 
         return Ok(new PagedResult<StockAdjustmentDto>(
             result.Items.Select(ToAdjustmentDto).ToList(),
@@ -99,7 +113,12 @@ public class StockController(StockService stockService) : ControllerBase
         SetStockDto dto,
         CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        // Non-admin users can only set stock for their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && dto.BranchId != userBranchId.Value)
+            return Forbid();
+
+        var userId = User.GetUserId();
         var result = await stockService.SetStockAsync(dto, userId, cancellationToken);
         if (!result.Success)
             return MapError(result);
@@ -113,7 +132,12 @@ public class StockController(StockService stockService) : ControllerBase
         AdjustStockDto dto,
         CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        // Non-admin users can only adjust stock for their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && dto.BranchId != userBranchId.Value)
+            return Forbid();
+
+        var userId = User.GetUserId();
         var result = await stockService.AdjustStockAsync(dto, userId, cancellationToken);
         if (!result.Success)
             return MapError(result);
@@ -127,7 +151,12 @@ public class StockController(StockService stockService) : ControllerBase
         BulkAdjustStockDto dto,
         CancellationToken cancellationToken)
     {
-        var userId = GetCurrentUserId();
+        // Non-admin users can only bulk-adjust stock for their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && dto.BranchId != userBranchId.Value)
+            return Forbid();
+
+        var userId = User.GetUserId();
         var result = await stockService.BulkAdjustStockAsync(dto, userId, cancellationToken);
         if (!result.Success)
         {
@@ -174,12 +203,6 @@ public class StockController(StockService stockService) : ControllerBase
     }
 
     // ── Helpers ────────────────────────────────────────────────
-
-    private Guid? GetCurrentUserId()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        return Guid.TryParse(userIdClaim, out var userId) ? userId : null;
-    }
 
     private static BranchStockDto ToDto(BranchStock stock)
         => new(

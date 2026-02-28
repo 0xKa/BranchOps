@@ -1,4 +1,5 @@
 using BranchOps.Api.Dtos;
+using BranchOps.Api.Security;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -15,12 +16,23 @@ public class BranchesController(BranchService branchService) : ControllerBase
     public async Task<ActionResult<IReadOnlyList<BranchDto>>> GetAll(CancellationToken cancellationToken)
     {
         var branches = await branchService.GetAllAsync(cancellationToken);
+
+        // Non-admin users only see their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue)
+            branches = branches.Where(b => b.Id == userBranchId.Value).ToList();
+
         return Ok(branches.Select(ToDto));
     }
 
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<BranchDto>> GetById(Guid id, CancellationToken cancellationToken)
     {
+        // Non-admin users can only access their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && id != userBranchId.Value)
+            return Forbid();
+
         var branch = await branchService.GetByIdAsync(id, cancellationToken);
         if (branch == null)
             return NotFound(new ApiError("Branch not found."));
