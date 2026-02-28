@@ -8,7 +8,7 @@ namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-// [Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,BranchManager")]
 public class EmployeesController(EmployeeService employeeService, Security.Auth auth) : ControllerBase
 {
     [HttpGet]
@@ -28,6 +28,7 @@ public class EmployeesController(EmployeeService employeeService, Security.Auth 
         return Ok(ToDto(employee));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<EmployeeDto>> Create(EmployeeCreateDto dto, CancellationToken cancellationToken)
     {
@@ -67,6 +68,7 @@ public class EmployeesController(EmployeeService employeeService, Security.Auth 
         return CreatedAtAction(nameof(GetById), new { id = employeeDto.Id }, employeeDto);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<EmployeeDto>> Update(Guid id, EmployeeUpdateDto dto, CancellationToken cancellationToken)
     {
@@ -77,6 +79,7 @@ public class EmployeesController(EmployeeService employeeService, Security.Auth 
         return Ok(ToDto(result.Value!));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {

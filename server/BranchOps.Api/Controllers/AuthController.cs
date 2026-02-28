@@ -30,7 +30,7 @@ public class AuthController(Auth auth) : ControllerBase
         return Ok(response);
     }
 
-    [AllowAnonymous]
+    [Authorize(Roles = "Admin")]
     [HttpPost("register")]
     public async Task<ActionResult<UserRegisterResponseDto>> Register(UserRegisterRequestDto dto)
     {
@@ -96,6 +96,7 @@ public class AuthController(Auth auth) : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("users")]
     public async Task<ActionResult<IReadOnlyList<UserRegisterResponseDto>>> GetUsers([FromQuery] int? role)
     {
@@ -104,6 +105,7 @@ public class AuthController(Auth auth) : ControllerBase
         return Ok(users);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("users/{id:guid}")]
     public async Task<IActionResult> DeleteUser(Guid id)
     {
@@ -113,6 +115,7 @@ public class AuthController(Auth auth) : ControllerBase
         return NoContent();
     }
 
+#if DEBUG
     [HttpGet("auth-only")]
     public async Task<IActionResult> AuthOnly()
     {
@@ -139,6 +142,7 @@ public class AuthController(Auth auth) : ControllerBase
     {
         return Ok("User and Admin controller is working!");
     }
+#endif
 
     private Guid GetAuthenticatedUserId()
     {

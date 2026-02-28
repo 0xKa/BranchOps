@@ -1,6 +1,7 @@
 using BranchOps.Api.Dtos;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,7 +9,7 @@ namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(Roles = "Admin,StockManager,BranchManager")]
+[Authorize(Roles = "Admin,StockManager,BranchManager,Cashier")]
 public class StockController(StockService stockService) : ControllerBase
 {
     // ── Stock levels ───────────────────────────────────────────
@@ -92,6 +93,7 @@ public class StockController(StockService stockService) : ControllerBase
 
     // ── Commands ───────────────────────────────────────────────
 
+    [Authorize(Roles = "Admin,StockManager,BranchManager")]
     [HttpPost("set")]
     public async Task<ActionResult<BranchStockDto>> SetStock(
         SetStockDto dto,
@@ -105,6 +107,7 @@ public class StockController(StockService stockService) : ControllerBase
         return Ok(ToDto(result.Value!));
     }
 
+    [Authorize(Roles = "Admin,StockManager,BranchManager")]
     [HttpPost("adjust")]
     public async Task<ActionResult<BranchStockDto>> AdjustStock(
         AdjustStockDto dto,
@@ -118,6 +121,7 @@ public class StockController(StockService stockService) : ControllerBase
         return Ok(ToDto(result.Value!));
     }
 
+    [Authorize(Roles = "Admin,StockManager,BranchManager")]
     [HttpPost("bulk-adjust")]
     public async Task<ActionResult<IReadOnlyList<BranchStockDto>>> BulkAdjustStock(
         BulkAdjustStockDto dto,
@@ -138,6 +142,7 @@ public class StockController(StockService stockService) : ControllerBase
         return Ok(result.Value!.Select(ToDto).ToList());
     }
 
+    [Authorize(Roles = "Admin,StockManager")]
     [HttpPatch("{id:guid}/threshold")]
     public async Task<ActionResult<BranchStockDto>> UpdateThreshold(
         Guid id,
@@ -151,6 +156,7 @@ public class StockController(StockService stockService) : ControllerBase
         return Ok(ToDto(result.Value!));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {

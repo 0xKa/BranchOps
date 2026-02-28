@@ -1,6 +1,7 @@
 using BranchOps.Api.Dtos;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,7 +9,7 @@ namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,BranchManager,Cashier")]
 public class OrdersController(OrderService orderService) : ControllerBase
 {
     [HttpGet]
@@ -57,6 +58,7 @@ public class OrdersController(OrderService orderService) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = orderDto.Id }, orderDto);
     }
 
+    [Authorize(Roles = "Admin,BranchManager")]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<OrderDto>> Update(
         Guid id,
@@ -87,6 +89,7 @@ public class OrdersController(OrderService orderService) : ControllerBase
         return Ok(ToDto(result.Value!));
     }
 
+    [Authorize(Roles = "Admin,BranchManager")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {

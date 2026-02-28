@@ -1,13 +1,14 @@
 using BranchOps.Api.Dtos;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,StockManager,BranchManager,Cashier")]
 public class ProductsController(ProductService productService) : ControllerBase
 {
     [HttpGet]
@@ -38,6 +39,7 @@ public class ProductsController(ProductService productService) : ControllerBase
         return Ok(ToDto(product));
     }
 
+    [Authorize(Roles = "Admin,StockManager")]
     [HttpPost]
     public async Task<ActionResult<ProductDto>> Create(
         ProductCreateDto dto,
@@ -51,6 +53,7 @@ public class ProductsController(ProductService productService) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = productDto.Id }, productDto);
     }
 
+    [Authorize(Roles = "Admin,StockManager")]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<ProductDto>> Update(
         Guid id,
@@ -64,6 +67,7 @@ public class ProductsController(ProductService productService) : ControllerBase
         return Ok(ToDto(result.Value!));
     }
 
+    [Authorize(Roles = "Admin,StockManager")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {

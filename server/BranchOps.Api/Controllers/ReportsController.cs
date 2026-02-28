@@ -1,12 +1,13 @@
 using BranchOps.Api.Dtos;
 using BranchOps.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(Roles = "Admin,BranchManager")]
+[Authorize(Roles = "Admin,BranchManager")]
 public class ReportsController(ReportsService reportsService) : ControllerBase
 {
     /// <summary>

@@ -1,13 +1,14 @@
 using BranchOps.Api.Dtos;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,BranchManager")]
 public class BranchesController(BranchService branchService) : ControllerBase
 {
     [HttpGet]
@@ -27,6 +28,7 @@ public class BranchesController(BranchService branchService) : ControllerBase
         return Ok(ToDto(branch));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<BranchDto>> Create(BranchCreateDto dto, CancellationToken cancellationToken)
     {
@@ -38,6 +40,7 @@ public class BranchesController(BranchService branchService) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = branchDto.Id }, branchDto);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<BranchDto>> Update(Guid id, BranchUpdateDto dto, CancellationToken cancellationToken)
     {
@@ -48,6 +51,7 @@ public class BranchesController(BranchService branchService) : ControllerBase
         return Ok(ToDto(result.Value!));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
