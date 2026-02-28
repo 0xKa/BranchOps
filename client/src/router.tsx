@@ -16,6 +16,9 @@ import ProductsPage from "./features/products/products-page";
 import CategoriesPage from "./features/products/categories/categories-page";
 import NewOrderPage from "./features/pos/new-order-page";
 import OrderHistoryPage from "./features/pos/order-history-page";
+import StockLevelsPage from "./features/inventory/stock-levels-page";
+import StockAdjustmentsPage from "./features/inventory/stock-adjustments-page";
+import LowStockAlertsPage from "./features/inventory/low-stock-alerts-page";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +53,9 @@ export const router = createBrowserRouter([
               { path: "products/categories", element: <CategoriesPage /> },
               { path: "pos", element: <NewOrderPage /> },
               { path: "pos/orders", element: <OrderHistoryPage /> },
+              { path: "inventory", element: <StockLevelsPage /> },
+              { path: "inventory/adjustments", element: <StockAdjustmentsPage /> },
+              { path: "inventory/alerts", element: <LowStockAlertsPage /> },
             ],
           },
         ],
