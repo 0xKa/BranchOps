@@ -24,7 +24,8 @@ import NavMain, { type NavItem } from "./nav-main";
 import { useAppLanguage } from "@/hooks/use-app-language";
 import { useTranslation } from "react-i18next";
 import { useUser } from "@/features/auth/auth-store";
-import { USER_ROLES, USER_ROLE_KEYS } from "@/features/auth/types";
+import { USER_ROLE_KEYS } from "@/features/auth/types";
+import { filterNavByRole } from "@/lib/route-permissions";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> { }
 
@@ -116,6 +117,12 @@ export default function AppSidebar(props: AppSidebarProps) {
     },
   ];
 
+  // Filter nav items based on the user's role
+  const role = user?.role ?? null;
+  const filteredMain = filterNavByRole(mainNavItems, role);
+  const filteredAnalytics = filterNavByRole(analyticsNavItems, role);
+  const filteredAdmin = filterNavByRole(adminNavItems, role);
+
   const currentUser = {
     name: user?.employee?.fullName ?? user?.username ?? "User",
     email: user?.email ?? "",
@@ -129,13 +136,12 @@ export default function AppSidebar(props: AppSidebarProps) {
         <AppSidebarHeader />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={mainNavItems} label={t("nav.main")} />
-        {(user?.role === USER_ROLES.Admin ||
-          user?.role === USER_ROLES.BranchManager) && (
-            <NavMain items={analyticsNavItems} label={t("nav.analytics")} />
-          )}
-        {user?.role === USER_ROLES.Admin && (
-          <NavMain items={adminNavItems} label={t("nav.administration")} />
+        <NavMain items={filteredMain} label={t("nav.main")} />
+        {filteredAnalytics.length > 0 && (
+          <NavMain items={filteredAnalytics} label={t("nav.analytics")} />
+        )}
+        {filteredAdmin.length > 0 && (
+          <NavMain items={filteredAdmin} label={t("nav.administration")} />
         )}
       </SidebarContent>
       <SidebarFooter>

@@ -14,6 +14,8 @@ import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useBranches } from "@/features/branches/hooks";
+import { useUser } from "@/features/auth/auth-store";
+import { USER_ROLES } from "@/features/auth/types";
 import { useProducts } from "@/features/products/hooks";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
 import {
@@ -24,7 +26,7 @@ import {
     Trash2,
     X,
 } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePlaceOrder } from "./hooks";
 import {
     PAYMENT_METHOD,
@@ -34,10 +36,19 @@ import {
 } from "./types";
 
 export default function NewOrderPage() {
+    const user = useUser();
+    const isAdmin = user?.role === USER_ROLES.Admin;
     const { data: branchesData } = useBranches();
     const placeMutation = usePlaceOrder();
 
     const [branchId, setBranchId] = useState("");
+
+    // Auto-select the user's branch for non-Admin users
+    useEffect(() => {
+        if (!isAdmin && user?.employee?.branch?.id) {
+            setBranchId(user.employee.branch.id);
+        }
+    }, [isAdmin, user?.employee?.branch?.id]);
     const [search, setSearch] = useState("");
     const [cart, setCart] = useState<CartItem[]>([]);
     const [discount, setDiscount] = useState(0);
@@ -165,24 +176,30 @@ export default function NewOrderPage() {
                     {/* Branch Selection */}
                     <div className="space-y-1">
                         <Label>Branch</Label>
-                        <Select
-                            value={branchId}
-                            onValueChange={setBranchId}
-                        >
-                            <SelectTrigger className="w-full max-w-xs">
-                                <SelectValue placeholder="Select a branch" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {branches.map((branch) => (
-                                    <SelectItem
-                                        key={branch.id}
-                                        value={branch.id}
-                                    >
-                                        {branch.displayName}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        {isAdmin ? (
+                            <Select
+                                value={branchId}
+                                onValueChange={setBranchId}
+                            >
+                                <SelectTrigger className="w-full max-w-xs">
+                                    <SelectValue placeholder="Select a branch" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {branches.map((branch) => (
+                                        <SelectItem
+                                            key={branch.id}
+                                            value={branch.id}
+                                        >
+                                            {branch.displayName}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        ) : (
+                            <p className="text-sm font-medium py-1">
+                                {user?.employee?.branch?.displayName ?? "—"}
+                            </p>
+                        )}
                     </div>
 
                     {/* Product Search */}

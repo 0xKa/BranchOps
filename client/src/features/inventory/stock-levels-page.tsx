@@ -6,13 +6,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import {
     Table,
@@ -23,8 +16,8 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import DeleteConfirmDialog from "@/components/shared/delete-confirm-dialog";
+import BranchFilter from "@/components/shared/branch-filter";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
-import { useBranches } from "@/features/branches/hooks/use-branches";
 import {
     ChevronLeft,
     ChevronRight,
@@ -59,8 +52,6 @@ export default function StockLevelsPage() {
     const thresholdMutation = useUpdateThreshold();
     const deleteMutation = useDeleteStock();
 
-    const { data: branches } = useBranches();
-
     const [setStockOpen, setSetStockOpen] = useState(false);
     const [adjustOpen, setAdjustOpen] = useState(false);
     const [thresholdStock, setThresholdStock] = useState<BranchStock | null>(null);
@@ -85,25 +76,14 @@ export default function StockLevelsPage() {
             </PageHeader>
 
             <div className="flex items-center gap-2 pb-2">
-                <Select
+                <BranchFilter
                     value={branchId}
                     onValueChange={(v) => {
-                        setBranchId(v === "all" ? "" : v);
+                        setBranchId(v);
                         setPage(1);
                     }}
-                >
-                    <SelectTrigger className="w-55">
-                        <SelectValue placeholder="All Branches" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Branches</SelectItem>
-                        {branches?.map((b) => (
-                            <SelectItem key={b.id} value={b.id}>
-                                {b.displayName}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                    triggerClassName="w-55"
+                />
             </div>
 
             {isLoading ? (

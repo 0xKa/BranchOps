@@ -25,7 +25,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import DeleteConfirmDialog from "@/components/shared/delete-confirm-dialog";
-import { useBranches } from "@/features/branches/hooks";
+import BranchFilter from "@/components/shared/branch-filter";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
 import {
     Ban,
@@ -54,9 +54,6 @@ export default function OrderHistoryPage() {
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
     const pageSize = 20;
-
-    const { data: branchesData } = useBranches();
-    const branches = branchesData ?? [];
 
     const { data, isLoading } = useOrders({
         page,
@@ -94,25 +91,13 @@ export default function OrderHistoryPage() {
             <div className="flex flex-wrap items-end gap-3 pb-2">
                 <div className="space-y-1">
                     <Label className="text-xs">Branch</Label>
-                    <Select
+                    <BranchFilter
                         value={branchFilter}
                         onValueChange={(v) => {
-                            setBranchFilter(v === "all" ? "" : v);
+                            setBranchFilter(v);
                             setPage(1);
                         }}
-                    >
-                        <SelectTrigger className="w-44 h-8 text-xs">
-                            <SelectValue placeholder="All branches" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All branches</SelectItem>
-                            {branches.map((b) => (
-                                <SelectItem key={b.id} value={b.id}>
-                                    {b.displayName}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    />
                 </div>
                 <div className="space-y-1">
                     <Label className="text-xs">Status</Label>

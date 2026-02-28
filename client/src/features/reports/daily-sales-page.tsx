@@ -1,13 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import {
     Table,
@@ -17,7 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useBranches } from "@/features/branches/hooks/use-branches";
+import BranchFilter from "@/components/shared/branch-filter";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
 import {
     CalendarDays,
@@ -46,9 +39,6 @@ export default function DailySalesPage() {
     const [toDate, setToDate] = useState(todayDate);
     const [branchFilter, setBranchFilter] = useState("");
 
-    const { data: branchesData } = useBranches();
-    const branches = branchesData ?? [];
-
     const { data, isLoading } = useDailySales({
         fromDate: fromDate || undefined,
         toDate: toDate || undefined,
@@ -68,28 +58,11 @@ export default function DailySalesPage() {
             <div className="flex flex-wrap items-end gap-3 pb-2">
                 <div className="space-y-1">
                     <Label className="text-xs">{t("dailySales.branch")}</Label>
-                    <Select
+                    <BranchFilter
                         value={branchFilter}
-                        onValueChange={(v) =>
-                            setBranchFilter(v === "all" ? "" : v)
-                        }
-                    >
-                        <SelectTrigger className="w-44 h-8 text-xs">
-                            <SelectValue
-                                placeholder={t("dailySales.allBranches")}
-                            />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">
-                                {t("dailySales.allBranches")}
-                            </SelectItem>
-                            {branches.map((b) => (
-                                <SelectItem key={b.id} value={b.id}>
-                                    {b.displayName}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                        onValueChange={setBranchFilter}
+                        allLabel={t("dailySales.allBranches")}
+                    />
                 </div>
                 <div className="space-y-1">
                     <Label className="text-xs">{t("dailySales.from")}</Label>

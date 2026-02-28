@@ -1,4 +1,5 @@
 using BranchOps.Api.Dtos;
+using BranchOps.Api.Security;
 using BranchOps.Api.Services;
 using BranchOps.Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -8,13 +9,14 @@ namespace BranchOps.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,BranchManager")]
 public class BranchPhonesController(BranchPhoneService branchPhoneService) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<BranchPhoneDto>>> GetAll([FromQuery] Guid? branchId, CancellationToken cancellationToken)
     {
-        var phones = await branchPhoneService.GetAllAsync(branchId, cancellationToken);
+        var effectiveBranchId = User.GetEffectiveBranchId(branchId);
+        var phones = await branchPhoneService.GetAllAsync(effectiveBranchId, cancellationToken);
         return Ok(phones.Select(ToDto));
     }
 
@@ -25,9 +27,15 @@ public class BranchPhonesController(BranchPhoneService branchPhoneService) : Con
         if (phone == null)
             return NotFound(new ApiError("Branch phone not found."));
 
+        // Non-admin users can only view phones from their own branch
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && phone.BranchId != userBranchId.Value)
+            return Forbid();
+
         return Ok(ToDto(phone));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<BranchPhoneDto>> Create(BranchPhoneCreateDto dto, CancellationToken cancellationToken)
     {
@@ -39,6 +47,7 @@ public class BranchPhonesController(BranchPhoneService branchPhoneService) : Con
         return CreatedAtAction(nameof(GetById), new { id = phoneDto.Id }, phoneDto);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<ActionResult<BranchPhoneDto>> Update(Guid id, BranchPhoneUpdateDto dto, CancellationToken cancellationToken)
     {
@@ -49,6 +58,7 @@ public class BranchPhonesController(BranchPhoneService branchPhoneService) : Con
         return Ok(ToDto(result.Value!));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {

@@ -178,6 +178,15 @@ public class StockController(StockService stockService) : ControllerBase
         UpdateThresholdDto dto,
         CancellationToken cancellationToken)
     {
+        // Non-admin users can only update threshold for stock in their own branch
+        var stock = await stockService.GetByIdAsync(id, cancellationToken);
+        if (stock == null)
+            return NotFound(new ApiError("Stock record not found."));
+
+        var userBranchId = User.GetBranchId();
+        if (userBranchId.HasValue && stock.BranchId != userBranchId.Value)
+            return Forbid();
+
         var result = await stockService.UpdateThresholdAsync(id, dto, cancellationToken);
         if (!result.Success)
             return MapError(result);

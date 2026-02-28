@@ -17,7 +17,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { useBranches } from "@/features/branches/hooks/use-branches";
+import BranchFilter from "@/components/shared/branch-filter";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
 import { Crown, DollarSign, Package, ShoppingCart } from "lucide-react";
 import { useState } from "react";
@@ -42,9 +42,6 @@ export default function TopProductsPage() {
     const [period, setPeriod] = useState("30");
     const [branchFilter, setBranchFilter] = useState("");
     const [count, setCount] = useState("10");
-
-    const { data: branchesData } = useBranches();
-    const branches = branchesData ?? [];
 
     const days = period === "all" ? null : Number(period);
 
@@ -71,28 +68,11 @@ export default function TopProductsPage() {
                     <Label className="text-xs">
                         {t("topProducts.branch")}
                     </Label>
-                    <Select
+                    <BranchFilter
                         value={branchFilter}
-                        onValueChange={(v) =>
-                            setBranchFilter(v === "all" ? "" : v)
-                        }
-                    >
-                        <SelectTrigger className="w-44 h-8 text-xs">
-                            <SelectValue
-                                placeholder={t("topProducts.allBranches")}
-                            />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">
-                                {t("topProducts.allBranches")}
-                            </SelectItem>
-                            {branches.map((b) => (
-                                <SelectItem key={b.id} value={b.id}>
-                                    {b.displayName}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                        onValueChange={setBranchFilter}
+                        allLabel={t("topProducts.allBranches")}
+                    />
                 </div>
                 <div className="space-y-1">
                     <Label className="text-xs">
@@ -186,10 +166,10 @@ export default function TopProductsPage() {
                                             {idx < 3 ? (
                                                 <Crown
                                                     className={`size-4 mx-auto ${idx === 0
-                                                            ? "text-yellow-500"
-                                                            : idx === 1
-                                                                ? "text-gray-400"
-                                                                : "text-amber-700"
+                                                        ? "text-yellow-500"
+                                                        : idx === 1
+                                                            ? "text-gray-400"
+                                                            : "text-amber-700"
                                                         }`}
                                                 />
                                             ) : (

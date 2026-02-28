@@ -17,7 +17,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
-import { useBranches } from "@/features/branches/hooks/use-branches";
+import BranchFilter from "@/components/shared/branch-filter";
 import { ChevronLeft, ChevronRight, ClipboardList } from "lucide-react";
 import { useState } from "react";
 import { useStockAdjustments } from "./hooks";
@@ -48,7 +48,6 @@ export default function StockAdjustmentsPage() {
         branchId: branchId || undefined,
         type: type || undefined,
     });
-    const { data: branches } = useBranches();
 
     const items = data?.items ?? [];
     const totalPages = data?.totalPages ?? 1;
@@ -61,25 +60,14 @@ export default function StockAdjustmentsPage() {
             />
 
             <div className="flex items-center gap-2 pb-2">
-                <Select
+                <BranchFilter
                     value={branchId}
                     onValueChange={(v) => {
-                        setBranchId(v === "all" ? "" : v);
+                        setBranchId(v);
                         setPage(1);
                     }}
-                >
-                    <SelectTrigger className="w-55">
-                        <SelectValue placeholder="All Branches" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Branches</SelectItem>
-                        {branches?.map((b) => (
-                            <SelectItem key={b.id} value={b.id}>
-                                {b.displayName}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                    triggerClassName="w-55"
+                />
 
                 <Select
                     value={type ? String(type) : "all"}

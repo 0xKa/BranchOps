@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/features/auth/auth-store";
+import { USER_ROLES } from "@/features/auth/types";
 import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -11,13 +12,50 @@ export const api = axios.create({
   withCredentials: true, // include cookies in requests, backend must allow it
 });
 
-// req interceptor: automatically adds JWT access token to Authorization header
+/**
+ * API path prefixes where branchId context is relevant.
+ * The interceptor appends the user's branch as a query param for non-Admin users.
+ */
+const BRANCH_SCOPED_PREFIXES = [
+  "/Orders",
+  "/Stock",
+  "/Dashboard",
+  "/Reports",
+  "/Employees",
+  "/BranchPhones",
+  "/Branches",
+];
+
+// req interceptor: automatically adds JWT access token + branchId for non-Admin users
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = useAuthStore.getState().getAccessToken();
+    const state = useAuthStore.getState();
+    const token = state.getAccessToken();
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    // Auto-inject branchId for non-Admin users on branch-scoped endpoints
+    const user = state.user;
+    if (
+      user &&
+      user.role !== USER_ROLES.Admin &&
+      user.employee?.branch?.id &&
+      config.method?.toLowerCase() === "get"
+    ) {
+      const url = config.url ?? "";
+      const isBranchScoped = BRANCH_SCOPED_PREFIXES.some((prefix) =>
+        url.toLowerCase().startsWith(prefix.toLowerCase()),
+      );
+
+      if (isBranchScoped) {
+        config.params = config.params ?? {};
+        // Only inject if the caller didn't already set a branchId
+        if (!config.params.branchId) {
+          config.params.branchId = user.employee.branch.id;
+        }
+      }
     }
 
     return config;

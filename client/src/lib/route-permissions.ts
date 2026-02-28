@@ -64,3 +64,34 @@ export function getDefaultRouteForRole(role: UserRole): string {
             return "/dashboard";
     }
 }
+
+/**
+ * Filter an array of navigation items (and their sub-items) so that only
+ * items the given role has access to are included.
+ *
+ * An item is kept if its `url` passes `hasRouteAccess`.
+ * If an item has sub-items, only accessible sub-items are kept;
+ * the parent is hidden when no sub-items survive.
+ */
+export function filterNavByRole<
+    T extends { url: string; items?: { url: string }[] },
+>(items: T[], role: UserRole | undefined | null): T[] {
+    if (role == null) return [];
+
+    return items
+        .map((item) => {
+            // Filter sub-items first
+            if (item.items && item.items.length > 0) {
+                const filteredSubs = item.items.filter((sub) =>
+                    hasRouteAccess(sub.url, role),
+                );
+                // Hide parent when no accessible children remain
+                if (filteredSubs.length === 0) return null;
+                return { ...item, items: filteredSubs };
+            }
+
+            // Top-level item without children
+            return hasRouteAccess(item.url, role) ? item : null;
+        })
+        .filter(Boolean) as T[];
+}

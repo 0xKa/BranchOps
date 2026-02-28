@@ -1,11 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import {
     Table,
@@ -16,7 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
-import { useBranches } from "@/features/branches/hooks/use-branches";
+import BranchFilter from "@/components/shared/branch-filter";
 import { AlertTriangle } from "lucide-react";
 import { useState } from "react";
 import { useLowStockAlerts } from "./hooks";
@@ -28,7 +21,6 @@ export default function LowStockAlertsPage() {
     const { data: alerts, isLoading } = useLowStockAlerts({
         branchId: branchId || undefined,
     });
-    const { data: branches } = useBranches();
 
     return (
         <PageContainer>
@@ -38,22 +30,11 @@ export default function LowStockAlertsPage() {
             />
 
             <div className="flex items-center gap-2 pb-2">
-                <Select
+                <BranchFilter
                     value={branchId}
-                    onValueChange={(v) => setBranchId(v === "all" ? "" : v)}
-                >
-                    <SelectTrigger className="w-55">
-                        <SelectValue placeholder="All Branches" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Branches</SelectItem>
-                        {branches?.map((b) => (
-                            <SelectItem key={b.id} value={b.id}>
-                                {b.displayName}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                    onValueChange={setBranchId}
+                    triggerClassName="w-55"
+                />
             </div>
 
             {isLoading ? (
