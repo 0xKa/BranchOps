@@ -18,6 +18,7 @@ public class BranchOpsDbContext(DbContextOptions<BranchOpsDbContext> options) : 
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<BranchStock> BranchStocks { get; set; }
     public DbSet<StockAdjustment> StockAdjustments { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

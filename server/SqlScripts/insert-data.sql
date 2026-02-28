@@ -361,7 +361,34 @@ BEGIN
     --   Orders:            8
     --   OrderItems:       17
     --   StockAdjustments: 17
+    --   AuditLogs:        20
     -- ====================================================================
+
+    -- ========================================================================
+    -- 12. AUDIT LOGS
+    -- ========================================================================
+    INSERT INTO "AuditLogs" ("Id", "UserId", "Action", "EntityType", "EntityId", "Details", "Timestamp")
+    VALUES
+        (gen_random_uuid(), v_admin_user_id,       'Create', 'Branch',      v_branch1_id,  'Created branch Al Sham - Muscat City Centre',          v_now - INTERVAL '10 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Create', 'Branch',      v_branch2_id,  'Created branch Al Sham - Seeb Branch',                 v_now - INTERVAL '10 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Create', 'Branch',      v_branch3_id,  'Created branch Al Sham - Salalah Branch',              v_now - INTERVAL '10 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Create', 'User',        v_branch_mgr1_user_id,  'Registered user ahmed.manager (Branch Manager)',  v_now - INTERVAL '9 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Create', 'User',        v_branch_mgr2_user_id,  'Registered user youssef.manager (Branch Manager)', v_now - INTERVAL '9 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Create', 'User',        v_cashier1_user_id,     'Registered user fatima.cashier (Cashier)',         v_now - INTERVAL '8 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Create', 'Employee',    v_emp1_id,     'Added employee Khalid bin Saeed Al Mansoori',           v_now - INTERVAL '8 days'),
+        (gen_random_uuid(), v_branch_mgr1_user_id, 'Update', 'Branch',     v_branch1_id,  'Updated branch address for Muscat City Centre',         v_now - INTERVAL '7 days'),
+        (gen_random_uuid(), v_stock_mgr1_user_id,  'Create', 'StockAdjustment', NULL,      'Restocked 50 units of Al Sham Special Cocktail',        v_now - INTERVAL '6 days'),
+        (gen_random_uuid(), v_stock_mgr1_user_id,  'Create', 'StockAdjustment', NULL,      'Restocked 30 units of Fresh Orange Juice',              v_now - INTERVAL '6 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Create', 'Product',     v_prod_alsham_cocktail, 'Added product Al Sham Special Cocktail',       v_now - INTERVAL '5 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Update', 'Product',     v_prod_four_seasons,    'Updated price for Four Seasons Cocktail',      v_now - INTERVAL '5 days'),
+        (gen_random_uuid(), v_cashier1_user_id,    'Create', 'Order',       v_order1_id,   'Placed order (3 items, total 5.200 OMR)',               v_now - INTERVAL '3 days'),
+        (gen_random_uuid(), v_cashier2_user_id,    'Create', 'Order',       v_order2_id,   'Placed order (2 items, total 3.900 OMR)',               v_now - INTERVAL '3 days'),
+        (gen_random_uuid(), v_branch_mgr1_user_id, 'Login',  'User',       v_branch_mgr1_user_id, 'User ahmed.manager logged in',                  v_now - INTERVAL '2 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Login',  'User',        v_admin_user_id,       'User khalid.admin logged in',                   v_now - INTERVAL '2 days'),
+        (gen_random_uuid(), v_admin_user_id,       'Delete', 'Employee',    v_emp9_id,     'Deactivated employee Hassan bin Nasser Al Busaidi',     v_now - INTERVAL '1 day'),
+        (gen_random_uuid(), v_cashier3_user_id,    'Create', 'Order',       v_order5_id,   'Placed order (2 items, total 5.350 OMR)',               v_now - INTERVAL '1 day'),
+        (gen_random_uuid(), v_branch_mgr2_user_id, 'Update', 'Branch',     v_branch3_id,  'Updated Salalah branch operating hours',                v_now - INTERVAL '12 hours'),
+        (gen_random_uuid(), v_admin_user_id,       'Update', 'User',        v_cashier4_user_id,    'Updated role for hassan.cashier',               v_now - INTERVAL '6 hours');
 
     RAISE NOTICE 'Sample data inserted successfully.';
 
