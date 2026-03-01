@@ -1,4 +1,5 @@
 import DeleteConfirmDialog from "@/components/shared/delete-confirm-dialog";
+import { UserCardTrigger } from "@/components/shared/user-card-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -105,26 +106,48 @@ export default function EmployeeSalariesPage() {
                                             {salary.notes ?? "—"}
                                         </TableCell>
                                         <TableCell>
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="ghost" size="icon">
-                                                        <MoreHorizontal className="size-4" />
-                                                    </Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end">
-                                                    <DropdownMenuItem onClick={() => setEditingSalary(salary)}>
-                                                        <Pencil className="size-4 me-2" />
-                                                        Edit
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem
-                                                        variant="destructive"
-                                                        onClick={() => setDeletingSalary(salary)}
-                                                    >
-                                                        <Trash2 className="size-4 me-2" />
-                                                        Delete
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
+                                            <div className="flex items-center">
+                                                {(() => {
+                                                    const emp = employees?.find((e) => e.id === salary.employeeId);
+                                                    return emp ? (
+                                                        <UserCardTrigger
+                                                            data={{
+                                                                kind: "employee",
+                                                                fullName: emp.fullName,
+                                                                username: emp.username,
+                                                                phone: emp.phone,
+                                                                jobTitle: emp.jobTitle,
+                                                                role: emp.role,
+                                                                isActive: emp.isActive,
+                                                                hiredAt: emp.hiredAt,
+                                                                notes: emp.notes,
+                                                                createdAt: emp.createdAt,
+                                                                updatedAt: emp.updatedAt,
+                                                            }}
+                                                        />
+                                                    ) : null;
+                                                })()}
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="ghost" size="icon">
+                                                            <MoreHorizontal className="size-4" />
+                                                        </Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent align="end">
+                                                        <DropdownMenuItem onClick={() => setEditingSalary(salary)}>
+                                                            <Pencil className="size-4 me-2" />
+                                                            Edit
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            variant="destructive"
+                                                            onClick={() => setDeletingSalary(salary)}
+                                                        >
+                                                            <Trash2 className="size-4 me-2" />
+                                                            Delete
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))

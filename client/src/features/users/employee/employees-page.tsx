@@ -19,6 +19,7 @@ import {
 import { useBranches } from "@/features/branches/hooks/use-branches";
 import PageContainer, { PageHeader } from "@/layouts/page-container";
 import { MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
+import { UserCardTrigger } from "@/components/shared/user-card-dialog";
 import { useState } from "react";
 import CreateEmployeeDialog from "./components/create-employee-dialog";
 import EditEmployeeDialog from "./components/edit-employee-dialog";
@@ -166,26 +167,43 @@ function EmployeeRow({
                     : "—"}
             </TableCell>
             <TableCell>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="size-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onEdit(employee)}>
-                            <Pencil className="size-4 me-2" />
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            variant="destructive"
-                            onClick={() => onDelete(employee)}
-                        >
-                            <Trash2 className="size-4 me-2" />
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex items-center">
+                    <UserCardTrigger
+                        data={{
+                            kind: "employee",
+                            fullName: employee.fullName,
+                            username: employee.username,
+                            phone: employee.phone,
+                            jobTitle: employee.jobTitle,
+                            role: employee.role,
+                            isActive: employee.isActive,
+                            hiredAt: employee.hiredAt,
+                            notes: employee.notes,
+                            createdAt: employee.createdAt,
+                            updatedAt: employee.updatedAt,
+                        }}
+                    />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <MoreHorizontal className="size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => onEdit(employee)}>
+                                <Pencil className="size-4 me-2" />
+                                Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                variant="destructive"
+                                onClick={() => onDelete(employee)}
+                            >
+                                <Trash2 className="size-4 me-2" />
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </TableCell>
         </TableRow>
     );

@@ -19,6 +19,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import DeleteConfirmDialog from "@/components/shared/delete-confirm-dialog";
+import { UserCardTrigger } from "@/components/shared/user-card-dialog";
 import { useAdmins, useDeleteAdmin, useRegisterAdmin } from "./hooks";
 import CreateAdminDialog from "./components/create-admin-dialog";
 import type { AdminRegisterResponse } from "./hooks/use-register-admin";
@@ -122,22 +123,34 @@ function AdminRow({
             </TableCell>
             <TableCell>{new Date(admin.createdAt).toLocaleDateString()}</TableCell>
             <TableCell>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="size-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                            variant="destructive"
-                            onClick={() => onDelete(admin)}
-                        >
-                            <Trash2 className="size-4 me-2" />
-                            Delete
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex items-center">
+                    <UserCardTrigger
+                        data={{
+                            kind: "admin",
+                            fullName: admin.fullName,
+                            username: admin.username,
+                            email: admin.email,
+                            role: admin.role,
+                            createdAt: admin.createdAt,
+                        }}
+                    />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <MoreHorizontal className="size-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                                variant="destructive"
+                                onClick={() => onDelete(admin)}
+                            >
+                                <Trash2 className="size-4 me-2" />
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </TableCell>
         </TableRow>
     );
