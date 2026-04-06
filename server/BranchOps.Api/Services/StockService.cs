@@ -345,7 +345,6 @@ public class StockService(BranchOpsDbContext db)
         CancellationToken cancellationToken = default)
     {
         var stock = await db.BranchStocks
-            .Include(s => s)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
         if (stock == null)

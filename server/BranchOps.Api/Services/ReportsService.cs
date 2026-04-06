@@ -7,7 +7,6 @@ namespace BranchOps.Api.Services;
 
 public class ReportsService(BranchOpsDbContext db)
 {
-    // ── Daily Sales ────────────────────────────────────────────────
     public async Task<DailySalesReportDto> GetDailySalesAsync(
         DateTime? fromDate = null, DateTime? toDate = null,
         Guid? branchId = null, CancellationToken ct = default)
@@ -70,7 +69,7 @@ public class ReportsService(BranchOpsDbContext db)
                 rows.Add(new DailySalesRowDto(kvp.Key, 0, 0m, 0m, 0, kvp.Value));
         }
 
-        rows = rows.OrderByDescending(r => r.Date).ToList();
+        rows = [.. rows.OrderByDescending(r => r.Date)];
 
         // Resolve branch name
         string? branchName = null;
@@ -92,7 +91,6 @@ public class ReportsService(BranchOpsDbContext db)
             rows);
     }
 
-    // ── Sales by Branch ────────────────────────────────────────────
     public async Task<IReadOnlyList<BranchPerformanceDto>> GetSalesByBranchAsync(
         int? days = 30, CancellationToken ct = default, Guid? branchId = null)
     {
@@ -104,39 +102,50 @@ public class ReportsService(BranchOpsDbContext db)
             branchesQuery = branchesQuery.Where(b => b.Id == branchId.Value);
 
         var branches = await branchesQuery.ToListAsync(ct);
+        var branchIds = branches.Select(b => b.Id).ToList();
 
         DateTime? from = days.HasValue ? DateTime.UtcNow.AddDays(-days.Value) : null;
 
-        var result = new List<BranchPerformanceDto>();
+        // Batch: sales aggregation per branch
+        var ordersQuery = db.Orders.AsNoTracking()
+            .Where(o => branchIds.Contains(o.BranchId) && o.Status == OrderStatus.Paid);
+        if (from.HasValue)
+            ordersQuery = ordersQuery.Where(o => o.CreatedAt >= from.Value);
 
-        foreach (var branch in branches)
+        var salesByBranch = await ordersQuery
+            .GroupBy(o => o.BranchId)
+            .Select(g => new { BranchId = g.Key, TotalSales = g.Sum(o => o.Total), OrderCount = g.Count() })
+            .ToDictionaryAsync(x => x.BranchId, ct);
+
+        // Batch: employee counts per branch
+        var employeeCounts = await db.Employees
+            .Where(e => branchIds.Contains(e.BranchId) && e.IsActive)
+            .GroupBy(e => e.BranchId)
+            .Select(g => new { BranchId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.BranchId, x => x.Count, ct);
+
+        // Batch: low stock counts per branch
+        var lowStockCounts = await db.BranchStocks
+            .Where(s => branchIds.Contains(s.BranchId) && s.Quantity <= s.LowStockThreshold)
+            .GroupBy(s => s.BranchId)
+            .Select(g => new { BranchId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(x => x.BranchId, x => x.Count, ct);
+
+        var result = branches.Select(branch =>
         {
-            var ordersQuery = db.Orders
-                .AsNoTracking()
-                .Where(o => o.BranchId == branch.Id && o.Status == OrderStatus.Paid);
+            salesByBranch.TryGetValue(branch.Id, out var sales);
+            employeeCounts.TryGetValue(branch.Id, out var empCount);
+            lowStockCounts.TryGetValue(branch.Id, out var lowStock);
 
-            if (from.HasValue)
-                ordersQuery = ordersQuery.Where(o => o.CreatedAt >= from.Value);
-
-            var totalSales = await ordersQuery.SumAsync(o => (decimal?)o.Total, ct) ?? 0m;
-            var orderCount = await ordersQuery.CountAsync(ct);
-
-            var employeeCount = await db.Employees
-                .CountAsync(e => e.BranchId == branch.Id && e.IsActive, ct);
-
-            var lowStockItems = await db.BranchStocks
-                .CountAsync(s => s.BranchId == branch.Id && s.Quantity <= s.LowStockThreshold, ct);
-
-            result.Add(new BranchPerformanceDto(
+            return new BranchPerformanceDto(
                 branch.Id, branch.DisplayName,
-                totalSales, orderCount,
-                employeeCount, lowStockItems));
-        }
+                sales?.TotalSales ?? 0m, sales?.OrderCount ?? 0,
+                empCount, lowStock);
+        }).ToList();
 
-        return result.OrderByDescending(b => b.TotalSales).ToList();
+        return [.. result.OrderByDescending(b => b.TotalSales)];
     }
 
-    // ── Top Products ───────────────────────────────────────────────
     public async Task<IReadOnlyList<TopSellingProductDto>> GetTopProductsAsync(
         int count = 10, int? days = 30, Guid? branchId = null,
         CancellationToken ct = default)
