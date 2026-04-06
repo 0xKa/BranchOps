@@ -90,17 +90,17 @@ PostgreSQL must be running locally: `Host=localhost;Port=5432;Database=BranchOps
 
 ## Tech Stack Quick Reference
 
-| Layer              | Technology                        |
-| ------------------ | --------------------------------- |
-| Frontend framework | React 19, TypeScript, Vite 7      |
-| Routing            | React Router v7                   |
-| Server state       | TanStack React Query 5            |
-| Client state       | Zustand 5                         |
-| UI components      | shadcn/ui (Radix UI)              |
-| Styling            | Tailwind CSS 4                    |
-| Forms              | React Hook Form + Zod             |
-| Backend framework  | ASP.NET Core Web API (.NET 10)    |
-| ORM                | Entity Framework Core 10 + Npgsql |
-| Database           | PostgreSQL                        |
-| Auth               | JWT Bearer + ASP.NET Identity     |
-| API docs           | Scalar (OpenAPI) at `/scalar`     |
+| Layer              | Technology                         |
+| ------------------ | ---------------------------------- |
+| Frontend framework | React 19, TypeScript, Bun + Vite 7 |
+| Routing            | React Router v7                    |
+| Server state       | TanStack React Query 5             |
+| Client state       | Zustand 5                          |
+| UI components      | shadcn/ui (Radix UI)               |
+| Styling            | Tailwind CSS 4                     |
+| Forms              | React Hook Form + Zod              |
+| Backend framework  | ASP.NET Core Web API (.NET 10)     |
+| ORM                | Entity Framework Core 10 + Npgsql  |
+| Database           | PostgreSQL                         |
+| Auth               | JWT Bearer + ASP.NET Identity      |
+| API docs           | Scalar (OpenAPI) at `/scalar`      |

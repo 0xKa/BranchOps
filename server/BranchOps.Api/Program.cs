@@ -7,6 +7,16 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Validate required configuration
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrWhiteSpace(jwtKey))
+    throw new InvalidOperationException(
+        "JWT signing key is not configured. Set 'Jwt:Key' via user-secrets, environment variables, or appsettings.Development.json.");
+
+var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connString))
+    throw new InvalidOperationException(
+        "Database connection string is not configured. Set 'ConnectionStrings:DefaultConnection' via user-secrets, environment variables, or appsettings.Development.json.");
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
