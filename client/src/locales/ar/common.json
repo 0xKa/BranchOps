@@ -29,6 +29,9 @@
     "forecasting": "التنبؤات",
     "auditLog": "سجل المراجعة",
     "users": "المستخدمين",
+    "admins": "المسؤولين",
+    "employees": "الموظفين",
+    "salaries": "الرواتب",
     "settings": "الإعدادات"
   },
   "dashboard": {

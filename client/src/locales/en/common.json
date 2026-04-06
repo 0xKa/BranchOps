@@ -29,6 +29,9 @@
     "forecasting": "Forecasting",
     "auditLog": "Audit Log",
     "users": "Users",
+    "admins": "Admins",
+    "employees": "Employees",
+    "salaries": "Salaries",
     "settings": "Settings"
   },
   "dashboard": {

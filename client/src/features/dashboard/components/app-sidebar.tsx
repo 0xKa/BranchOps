@@ -102,17 +102,17 @@ export default function AppSidebar(props: AppSidebarProps) {
 
   const adminNavItems: NavItem[] = [
     {
-      title: "Admins",
+      title: t("nav.admins"),
       url: "/admins",
       icon: Users,
     },
     {
-      title: "Employees",
+      title: t("nav.employees"),
       url: "/employees",
       icon: Users,
     },
     {
-      title: "Salaries",
+      title: t("nav.salaries"),
       url: "/employee-salaries",
       icon: DollarSign,
     },
