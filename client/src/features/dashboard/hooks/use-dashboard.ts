@@ -1,7 +1,7 @@
 import { handleApiError } from "@/lib/error-handler";
 import { api } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
-import type { DashboardOverview, SalesChart } from "./types";
+import type { DashboardOverview, SalesChart } from "../types";
 
 const fetchOverview = async (): Promise<DashboardOverview> => {
     try {

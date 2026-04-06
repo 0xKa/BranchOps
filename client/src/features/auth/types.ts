@@ -26,7 +26,7 @@ export type User = {
   id: string;
   username: string;
   email: string | null;
-  role: number;
+  role: UserRole;
   createdAt: string;
   employee: {
     id: string;
