@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+
 import { z } from "zod";
 import { BackToHomeButton } from "@/components/shared/back-to-home-button";
 import { useLogin } from "./hooks/use-login";
@@ -88,17 +88,10 @@ export default function LoginPage() {
                 <Label htmlFor="password" className="text-xs">
                   {t("login.password")}
                 </Label>
-                {errors.password ? (
+                {errors.password && (
                   <span className="text-xs text-destructive">
                     {t(errors.password.message || "")}
                   </span>
-                ) : (
-                  <Link
-                    to="/forgot-password"
-                    className="text-xs text-primary hover:underline"
-                  >
-                    {t("login.forgotPassword")}
-                  </Link>
                 )}
               </div>
               <Input
