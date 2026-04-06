@@ -15,10 +15,6 @@ public class AuthController(Auth auth) : ControllerBase
 {
     private Guid UserId => GetAuthenticatedUserId();
 
-    [AllowAnonymous]
-    [HttpGet]
-    public IActionResult Get() => Ok($"Auth controller is working! UserId: {UserId}");
-
     [HttpGet("me")]
     public async Task<ActionResult<UserMeResponseDto>> Me()
     {
@@ -42,6 +38,7 @@ public class AuthController(Auth auth) : ControllerBase
             {
                 RegisterError.UsernameTaken => Conflict(new ApiError("Username is already taken.")),
                 RegisterError.EmailTaken => Conflict(new ApiError("Email is already registered.")),
+                RegisterError.EmployeeCreationFailed => BadRequest(new ApiError("Failed to create employee record. Ensure a branch exists.")),
                 _ => BadRequest(new ApiError("Registration failed."))
             };
         }
@@ -87,6 +84,7 @@ public class AuthController(Auth auth) : ControllerBase
         return Ok();
     }
 
+    [AllowAnonymous]
     [HttpPost("refresh-token")]
     public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto tokenRequest)
     {
@@ -117,28 +115,28 @@ public class AuthController(Auth auth) : ControllerBase
 
 #if DEBUG
     [HttpGet("auth-only")]
-    public async Task<IActionResult> AuthOnly()
+    public IActionResult AuthOnly()
     {
         return Ok("Auth controller is working!");
     }
 
     [Authorize(Roles = "Admin")]
     [HttpGet("admin-only")]
-    public async Task<IActionResult> AdminOnly()
+    public IActionResult AdminOnly()
     {
         return Ok("Admin controller is working!");
     }
 
     [Authorize(Roles = "Guest")]
     [HttpGet("guest-only")]
-    public async Task<IActionResult> GuestOnly()
+    public IActionResult GuestOnly()
     {
         return Ok("Guest controller is working!");
     }
 
-    [Authorize(Roles = "Admin,User")]
+    [Authorize(Roles = "Admin,BranchManager")]
     [HttpGet("user-and-admin")]
-    public async Task<IActionResult> UserAndAdmin()
+    public IActionResult UserAndAdmin()
     {
         return Ok("User and Admin controller is working!");
     }
