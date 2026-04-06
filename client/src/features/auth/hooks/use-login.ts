@@ -42,18 +42,20 @@ export const useLogin = () => {
         accessTokenExpiresAt: data.accessTokenExpiresAt,
       };
 
-      // Store tokens first so authenticated API calls work
+      // Store tokens temporarily so the /me call can authenticate
       useAuthStore.getState().setTokens(tokens);
-
-      toast.success(t("login.successMessage"));
 
       // Fetch full user profile then complete login
       try {
         const user = await meMutation.mutateAsync();
         login(user, tokens);
+        toast.success(t("login.successMessage"));
       } catch (error) {
-        console.error(error);
-        toast.error("Fetch User Failed", { description: error instanceof Error ? error.message : String(error) });
+        // /me failed — clear partial auth state to avoid broken session
+        useAuthStore.getState().logout();
+        toast.error(t("login.failedMessage"), {
+          description: error instanceof Error ? error.message : String(error),
+        });
       }
     },
 
