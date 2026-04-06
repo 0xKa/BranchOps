@@ -5,7 +5,8 @@ namespace BranchOps.Api.Dtos.Auth.ResultObjects;
 public enum RegisterError
 {
     UsernameTaken,
-    EmailTaken
+    EmailTaken,
+    EmployeeCreationFailed
 }
 
 public sealed record RegisterResult(bool Success, User? User, RegisterError? Error)

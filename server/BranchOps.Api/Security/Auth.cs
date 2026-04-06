@@ -23,10 +23,10 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options, Emp
         var username = userDto.Username.Trim();
         var email = userDto.Email?.Trim().ToLowerInvariant();
 
-        if (await context.Users.AnyAsync(u => u.Username == userDto.Username))
+        if (await context.Users.AnyAsync(u => u.Username == username))
             return RegisterResult.Fail(RegisterError.UsernameTaken);
 
-        if (userDto.Email is not null && await context.Users.AnyAsync(u => u.Email == userDto.Email))
+        if (email is not null && await context.Users.AnyAsync(u => u.Email == email))
             return RegisterResult.Fail(RegisterError.EmailTaken);
 
         User user = new();
@@ -42,7 +42,14 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options, Emp
         // Create employee record for non-admin users
         if (userDto.Role != UserRole.Admin)
         {
-            await employeeService.CreateEmployeeForUserAsync(user.Id, user.Role, userDto);
+            var employee = await employeeService.CreateEmployeeForUserAsync(user.Id, user.Role, userDto);
+            if (employee is null)
+            {
+                // Rollback user creation to avoid orphaned user without employee
+                context.Users.Remove(user);
+                await context.SaveChangesAsync();
+                return RegisterResult.Fail(RegisterError.EmployeeCreationFailed);
+            }
         }
 
         return RegisterResult.Ok(user);
@@ -64,7 +71,7 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options, Emp
 
     public async Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto requestDto)
     {
-        User? user = await ValidateRefreshTokecnAsync(requestDto);
+        User? user = await ValidateRefreshTokenAsync(requestDto);
         if (user is null)
             return null;
         return await CreateTokenResponse(user);
@@ -85,7 +92,7 @@ public class Auth(BranchOpsDbContext context, IOptions<JwtSettings> options, Emp
         return await context.SaveChangesAsync() > 0;
     }
 
-    private async Task<User?> ValidateRefreshTokecnAsync(RefreshTokenRequestDto requestDto)
+    private async Task<User?> ValidateRefreshTokenAsync(RefreshTokenRequestDto requestDto)
     {
         User? user = await context.Users.FirstOrDefaultAsync(u => u.Id == requestDto.UserId);
         if (user is null

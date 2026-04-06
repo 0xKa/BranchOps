@@ -62,6 +62,7 @@ public class EmployeesController(EmployeeService employeeService, Security.Auth 
             {
                 Dtos.Auth.ResultObjects.RegisterError.UsernameTaken => Conflict(new ApiError("Username is already taken.")),
                 Dtos.Auth.ResultObjects.RegisterError.EmailTaken => Conflict(new ApiError("Email is already registered.")),
+                Dtos.Auth.ResultObjects.RegisterError.EmployeeCreationFailed => BadRequest(new ApiError("Failed to create employee record. Ensure a branch exists.")),
                 _ => BadRequest(new ApiError("Registration failed."))
             };
         }
