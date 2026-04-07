@@ -48,9 +48,9 @@ export default function RecentOrdersTable({ orders }: RecentOrdersTableProps) {
     const currency = t("currency");
 
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col border-primary/10">
             <CardHeader>
-                <CardTitle>{t("dashboard.recentOrders")}</CardTitle>
+                <CardTitle className="font-display">{t("dashboard.recentOrders")}</CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0">
                 {orders.length === 0 ? (

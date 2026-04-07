@@ -74,9 +74,9 @@ export function SalesAreaChart({
     }));
 
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col border-primary/10">
             <CardHeader className="pb-2">
-                <CardTitle>{title}</CardTitle>
+                <CardTitle className="font-display">{title}</CardTitle>
                 <CardDescription>
                     {description ??
                         `${fmt(data.totalSales)} ${currency} · ${data.totalOrders} ${t("dashboard.orders")}`}
@@ -141,9 +141,9 @@ export function SalesBarChart({
     }));
 
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col border-primary/10">
             <CardHeader className="pb-2">
-                <CardTitle>{title}</CardTitle>
+                <CardTitle className="font-display">{title}</CardTitle>
                 <CardDescription>
                     {description ??
                         `${fmt(data.totalSales)} ${currency} · ${data.totalOrders} ${t("dashboard.orders")}`}

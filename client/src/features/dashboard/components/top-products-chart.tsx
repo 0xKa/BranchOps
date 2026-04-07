@@ -42,9 +42,9 @@ export default function TopProductsChart({ products }: TopProductsChartProps) {
 
     if (products.length === 0) {
         return (
-            <Card>
+            <Card className="border-primary/10">
                 <CardHeader>
-                    <CardTitle>{t("dashboard.topProducts")}</CardTitle>
+                    <CardTitle className="font-display">{t("dashboard.topProducts")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-sm text-muted-foreground">
@@ -66,9 +66,9 @@ export default function TopProductsChart({ products }: TopProductsChartProps) {
     const topRevenue = products[0];
 
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col border-primary/10">
             <CardHeader className="pb-2">
-                <CardTitle>{t("dashboard.topProducts")}</CardTitle>
+                <CardTitle className="font-display">{t("dashboard.topProducts")}</CardTitle>
                 <CardDescription>
                     {t("dashboard.topProductsDesc", {
                         name: topRevenue.productName,

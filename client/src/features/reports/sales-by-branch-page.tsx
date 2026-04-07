@@ -56,7 +56,7 @@ export default function SalesByBranchPage() {
             />
 
             {/* Filters */}
-            <div className="flex flex-wrap items-end gap-3 pb-2">
+            <div className="surface-1 flex flex-wrap items-end gap-3 rounded-xl border border-border/60 px-3 py-3">
                 <div className="space-y-1">
                     <Label className="text-xs">
                         {t("salesByBranch.period")}
@@ -83,16 +83,19 @@ export default function SalesByBranchPage() {
                         icon={<Store className="size-4" />}
                         label={t("salesByBranch.activeBranches")}
                         value={String(rows.length)}
+                        toneClass="bg-status-info-soft text-status-info"
                     />
                     <SummaryCard
                         icon={<DollarSign className="size-4" />}
                         label={t("salesByBranch.totalSales")}
                         value={`${totalSales.toFixed(3)} ${t("currency")}`}
+                        toneClass="bg-status-success-soft text-status-success"
                     />
                     <SummaryCard
                         icon={<ShoppingCart className="size-4" />}
                         label={t("salesByBranch.totalOrders")}
                         value={String(totalOrders)}
+                        toneClass="bg-chart-3/15 text-chart-3"
                     />
                 </div>
             )}
@@ -103,7 +106,7 @@ export default function SalesByBranchPage() {
                     <Spinner className="size-6" />
                 </div>
             ) : (
-                <div className="rounded-md border">
+                <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -183,15 +186,17 @@ function SummaryCard({
     icon,
     label,
     value,
+    toneClass,
 }: {
     icon: React.ReactNode;
     label: string;
     value: string;
+    toneClass: string;
 }) {
     return (
-        <Card>
+        <Card className="border-primary/10">
             <CardContent className="flex items-center gap-3 p-4">
-                <div className="rounded-md bg-muted p-2">{icon}</div>
+                <div className={`rounded-md p-2 ring-1 ${toneClass}`}>{icon}</div>
                 <div>
                     <p className="text-sm text-muted-foreground">{label}</p>
                     <p className="text-lg font-semibold">{value}</p>

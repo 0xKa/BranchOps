@@ -55,7 +55,7 @@ export default function DailySalesPage() {
             />
 
             {/* Filters */}
-            <div className="flex flex-wrap items-end gap-3 pb-2">
+            <div className="surface-1 flex flex-wrap items-end gap-3 rounded-xl border border-border/60 px-3 py-3">
                 <div className="space-y-1">
                     <Label className="text-xs">{t("dailySales.branch")}</Label>
                     <BranchFilter
@@ -91,21 +91,25 @@ export default function DailySalesPage() {
                         icon={<DollarSign className="size-4" />}
                         label={t("dailySales.totalSales")}
                         value={`${data.grandTotalSales.toFixed(3)} ${t("currency")}`}
+                        toneClass="bg-status-success-soft text-status-success"
                     />
                     <SummaryCard
                         icon={<ShoppingCart className="size-4" />}
                         label={t("dailySales.totalOrders")}
                         value={String(data.grandTotalOrders)}
+                        toneClass="bg-status-info-soft text-status-info"
                     />
                     <SummaryCard
                         icon={<Package className="size-4" />}
                         label={t("dailySales.totalItemsSold")}
                         value={String(data.grandTotalItemsSold)}
+                        toneClass="bg-chart-3/15 text-chart-3"
                     />
                     <SummaryCard
                         icon={<Ban className="size-4" />}
                         label={t("dailySales.cancelledOrders")}
                         value={String(data.grandTotalCancelled)}
+                        toneClass="bg-status-danger-soft text-status-danger"
                     />
                 </div>
             )}
@@ -116,7 +120,7 @@ export default function DailySalesPage() {
                     <Spinner className="size-6" />
                 </div>
             ) : (
-                <div className="rounded-md border">
+                <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -199,15 +203,17 @@ function SummaryCard({
     icon,
     label,
     value,
+    toneClass,
 }: {
     icon: React.ReactNode;
     label: string;
     value: string;
+    toneClass: string;
 }) {
     return (
-        <Card>
+        <Card className="border-primary/10">
             <CardContent className="flex items-center gap-3 p-4">
-                <div className="rounded-md bg-muted p-2">{icon}</div>
+                <div className={`rounded-md p-2 ring-1 ${toneClass}`}>{icon}</div>
                 <div>
                     <p className="text-sm text-muted-foreground">{label}</p>
                     <p className="text-lg font-semibold">{value}</p>

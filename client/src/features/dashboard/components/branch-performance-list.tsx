@@ -23,9 +23,9 @@ export default function BranchPerformanceList({
 
     if (branches.length === 0) {
         return (
-            <Card>
+            <Card className="border-primary/10">
                 <CardHeader>
-                    <CardTitle>{t("dashboard.branchPerformance")}</CardTitle>
+                    <CardTitle className="font-display">{t("dashboard.branchPerformance")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-sm text-muted-foreground">
@@ -39,9 +39,9 @@ export default function BranchPerformanceList({
     const maxSales = Math.max(...branches.map((b) => b.totalSales), 1);
 
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col border-primary/10">
             <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="font-display flex items-center gap-2">
                     <Building2 className="size-4" />
                     {t("dashboard.branchPerformance")}
                 </CardTitle>
@@ -52,7 +52,7 @@ export default function BranchPerformanceList({
                     return (
                         <div
                             key={branch.branchId}
-                            className="space-y-2 rounded-lg border p-3 transition-colors hover:bg-muted/30"
+                            className="surface-2 space-y-2 rounded-lg border border-border/60 p-3 transition-colors hover:bg-primary/5"
                         >
                             <div className="flex items-center justify-between">
                                 <span className="text-sm font-semibold">

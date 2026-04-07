@@ -29,12 +29,16 @@ function StatCard({
     accentClass,
 }: StatCardProps) {
     return (
-        <Card className="relative overflow-hidden transition-shadow hover:shadow-md">
+        <Card className="group relative overflow-hidden border-primary/10 transition-[border-color,box-shadow,transform] duration-300 hover:border-primary/30 hover:shadow-(--shadow-lg)">
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/45 to-transparent"
+            />
             <CardContent className="flex items-center gap-4 p-5">
                 <div
-                    className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${accentClass}`}
+                    className={`flex size-11 shrink-0 items-center justify-center rounded-xl ring-1 ${accentClass}`}
                 >
-                    <Icon className="size-5 text-white" />
+                    <Icon className="size-5" />
                 </div>
                 <div className="min-w-0 flex-1">
                     <p className="truncate text-xs font-medium text-muted-foreground">
@@ -100,40 +104,40 @@ export default function StatCards({ data }: StatCardsProps) {
             value: `${fmt(data.totalSales)} ${currency}`,
             subtitle: `${t("dashboard.todaysSales")}: ${fmt(data.totalSalesToday)} ${currency}`,
             icon: DollarSign,
-            accentClass: "bg-emerald-500",
+            accentClass: "bg-status-success-soft text-status-success ring-status-success/35",
         },
         {
             label: t("dashboard.totalOrders"),
             value: fmt(data.totalOrders),
             subtitle: `${t("dashboard.today")}: ${fmt(data.totalOrdersToday)}`,
             icon: ShoppingCart,
-            accentClass: "bg-blue-500",
+            accentClass: "bg-status-info-soft text-status-info ring-status-info/35",
         },
         {
             label: t("dashboard.totalBranches"),
             value: fmt(data.totalBranches),
             subtitle: `${t("dashboard.active")}: ${data.activeBranches}`,
             icon: Building2,
-            accentClass: "bg-violet-500",
+            accentClass: "bg-chart-2/15 text-chart-2 ring-chart-2/35",
         },
         {
             label: t("dashboard.totalProducts"),
             value: fmt(data.totalProducts),
             subtitle: `${t("dashboard.active")}: ${data.activeProducts}`,
             icon: Package,
-            accentClass: "bg-amber-500",
+            accentClass: "bg-status-warning-soft text-status-warning ring-status-warning/35",
         },
         {
             label: t("dashboard.employees"),
             value: fmt(data.totalEmployees),
             icon: Users,
-            accentClass: "bg-rose-500",
+            accentClass: "bg-chart-4/15 text-chart-4 ring-chart-4/35",
         },
         {
             label: t("dashboard.categories"),
             value: fmt(data.totalCategories),
             icon: TrendingUp,
-            accentClass: "bg-cyan-500",
+            accentClass: "bg-chart-5/15 text-chart-5 ring-chart-5/35",
         },
     ];
 

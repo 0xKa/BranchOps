@@ -20,11 +20,11 @@ function severityLevel(quantity: number, threshold: number) {
 function severityColor(level: string) {
     switch (level) {
         case "critical":
-            return "text-red-500 bg-red-500/10";
+            return "text-status-danger bg-status-danger-soft ring-status-danger/30";
         case "warning":
-            return "text-amber-500 bg-amber-500/10";
+            return "text-status-warning bg-status-warning-soft ring-status-warning/30";
         default:
-            return "text-yellow-500 bg-yellow-500/10";
+            return "text-status-info bg-status-info-soft ring-status-info/30";
     }
 }
 
@@ -36,10 +36,10 @@ export default function LowStockAlerts({ alerts }: LowStockAlertsProps) {
     const { t } = useTranslation();
 
     return (
-        <Card className="flex flex-col">
+        <Card className="flex flex-col border-primary/10">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                    <AlertTriangle className="size-4 text-amber-500" />
+                    <AlertTriangle className="size-4 text-status-warning" />
                     {t("dashboard.lowStockAlerts")}
                     {alerts.length > 0 && (
                         <Badge variant="destructive" className="ml-auto">
@@ -62,10 +62,10 @@ export default function LowStockAlerts({ alerts }: LowStockAlertsProps) {
                             return (
                                 <div
                                     key={alert.branchStockId}
-                                    className="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/30"
+                                    className="surface-2 flex items-center gap-3 rounded-lg border border-border/60 p-3 transition-colors hover:bg-primary/5"
                                 >
                                     <div
-                                        className={`flex size-8 shrink-0 items-center justify-center rounded-lg ${colorClass}`}
+                                        className={`flex size-8 shrink-0 items-center justify-center rounded-lg ring-1 ${colorClass}`}
                                     >
                                         <AlertTriangle className="size-4" />
                                     </div>
@@ -80,7 +80,7 @@ export default function LowStockAlerts({ alerts }: LowStockAlertsProps) {
                                     <div className="text-end">
                                         <p className="text-sm font-bold tabular-nums">
                                             {alert.quantity}
-                                            <span className="text-muted-foreground font-normal">
+                                            <span className="font-normal text-muted-foreground">
                                                 /{alert.lowStockThreshold}
                                             </span>
                                         </p>
