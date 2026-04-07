@@ -22,7 +22,7 @@ export function CtaSection() {
           {/* Background glow */}
           <div
             className="pointer-events-none absolute top-[-50%] start-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full opacity-15 blur-[100px]"
-            style={{ background: "radial-gradient(circle, #00FF88 0%, transparent 70%)" }}
+            style={{ background: "radial-gradient(circle, var(--neon) 0%, transparent 70%)" }}
           />
 
           <div className="relative z-10">

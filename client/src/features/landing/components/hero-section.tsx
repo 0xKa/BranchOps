@@ -17,12 +17,12 @@ export function HeroSection() {
         {/* Main neon glow — top center */}
         <div
           className="absolute top-[-20%] start-1/2 -translate-x-1/2 h-[600px] w-[800px] rounded-full opacity-20 blur-[120px]"
-          style={{ background: "radial-gradient(circle, #00FF88 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, var(--neon) 0%, transparent 70%)" }}
         />
         {/* Secondary glow — bottom left */}
         <div
           className="absolute bottom-[-10%] start-[-10%] h-[400px] w-[400px] rounded-full opacity-10 blur-[100px]"
-          style={{ background: "radial-gradient(circle, #00FF88 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, var(--neon) 0%, transparent 70%)" }}
         />
         {/* Subtle grid overlay */}
         <div
@@ -44,7 +44,11 @@ export function HeroSection() {
           variant="outline"
           className="mb-6 border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary stagger-1"
         >
-          <span className="me-1.5 inline-block size-1.5 rounded-full bg-[#00FF88] animate-pulse" />
+          <span
+            aria-hidden="true"
+            className="me-1.5 inline-block size-1.5 rounded-full animate-pulse"
+            style={{ backgroundColor: "var(--neon)" }}
+          />
           {t("landing.badge")}
         </Badge>
 

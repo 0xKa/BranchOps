@@ -44,7 +44,7 @@ export function StatsSection() {
       <div className="pointer-events-none absolute inset-0">
         <div
           className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[600px] rounded-full opacity-10 blur-[100px]"
-          style={{ background: "radial-gradient(circle, #00FF88 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(circle, var(--neon) 0%, transparent 70%)" }}
         />
       </div>
 

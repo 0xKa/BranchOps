@@ -22,15 +22,31 @@ function FeatureCard({
 }) {
   const ref = useScrollAnimation(0.15);
 
+  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    event.currentTarget.style.setProperty("--mouse-x", `${x}px`);
+    event.currentTarget.style.setProperty("--mouse-y", `${y}px`);
+  };
+
+  const resetMousePosition = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.currentTarget.style.setProperty("--mouse-x", "50%");
+    event.currentTarget.style.setProperty("--mouse-y", "50%");
+  };
+
   return (
     <div
       ref={ref}
       className={`animate-on-scroll stagger-${index + 1} group relative overflow-hidden rounded-2xl glass p-6 transition-all duration-300 hover:border-primary/20`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={resetMousePosition}
     >
       {/* Hover glow effect */}
       <div className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         style={{
-          background: "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0,255,136,0.04), transparent 40%)",
+          background: "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgb(var(--neon-rgb) / 0.08), transparent 40%)",
         }}
       />
 

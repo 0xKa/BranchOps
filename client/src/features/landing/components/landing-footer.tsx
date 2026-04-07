@@ -7,7 +7,7 @@ export function LandingFooter() {
     <footer className="relative border-t border-border/50">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-8 sm:flex-row">
         <div className="flex items-center gap-2.5">
-          <img src="/avocado.svg" alt="" className="size-5" />
+          <img src="/avocado.svg" alt={t("appName")} className="size-5" />
           <span className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} {t("appName")}
           </span>

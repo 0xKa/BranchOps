@@ -50,6 +50,7 @@
 
   /* ── Neon Green Token ── */
   --neon: #00FF88;
+  --neon-rgb: 0 255 136;
   --neon-oklch: oklch(0.87 0.24 155);
   --neon-glow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 60px rgba(0, 255, 136, 0.1);
   --neon-glow-strong: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.2), 0 0 100px rgba(0, 255, 136, 0.1);
@@ -269,10 +270,38 @@ html[dir="rtl"] {
 
   /* Gradient text utility */
   .text-gradient-neon {
-    background: linear-gradient(135deg, #00FF88, #00CC6A, #00FF88);
+    background: linear-gradient(135deg, var(--neon), var(--primary), var(--neon));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate-on-scroll,
+  .animate-fade-up {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .stagger-1,
+  .stagger-2,
+  .stagger-3,
+  .stagger-4,
+  .stagger-5,
+  .stagger-6 {
+    transition-delay: 0ms !important;
   }
 }
 
