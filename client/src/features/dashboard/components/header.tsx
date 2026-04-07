@@ -44,7 +44,7 @@ export default function Header({ title }: HeaderProps) {
       <div className="surface-1 flex h-14 shrink-0 items-center gap-2 rounded-xl border border-border/60 px-3 shadow-(--shadow-sm) supports-backdrop-filter:backdrop-blur-(--glass-blur) transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-10">
         <div className="flex min-w-0 items-center gap-2">
           <SidebarTrigger
-            className={`${isRTL ? "-mr-0.5 rotate-180" : "-ml-0.5"} h-8 w-8 rounded-md border border-border/60 bg-background/40 supports-backdrop-filter:backdrop-blur-xs`}
+            className={`${isRTL ? "-mr-0.5 rotate-180" : "-ml-0.5"} h-8 w-8 rounded-lg border border-border/60 bg-surface-2/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-colors hover:bg-primary/12 supports-backdrop-filter:backdrop-blur-xs`}
           />
           <Separator orientation="vertical" className="mx-1 h-6" />
           <Breadcrumb>
@@ -78,7 +78,7 @@ export default function Header({ title }: HeaderProps) {
           </Breadcrumb>
         </div>
         <div
-          className={`flex items-center gap-2 rounded-md border border-border/60 bg-background/40 px-2 py-1 supports-backdrop-filter:backdrop-blur-xs ${isRTL ? "mr-auto" : "ml-auto"}`}
+          className={`flex items-center gap-2 rounded-lg border border-border/60 bg-surface-2/85 px-2 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] supports-backdrop-filter:backdrop-blur-xs ${isRTL ? "mr-auto" : "ml-auto"}`}
         >
           <LanguageToggle size="lg" />
           <ModeToggle size="lg" />
