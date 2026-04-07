@@ -1,4 +1,5 @@
 using BranchOps.Api;
+using BranchOps.Api.Seed;
 using BranchOps.Api.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -78,5 +79,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+await SeedImporter.RunAsync(app.Services);
 
 app.Run();

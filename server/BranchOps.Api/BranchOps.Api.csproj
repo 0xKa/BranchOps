@@ -24,4 +24,10 @@
     <ProjectReference Include="..\BranchOps.Domain\BranchOps.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="../Seed/init.json" Link="Seed/init.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
