@@ -44,17 +44,17 @@ export default function LoginPage() {
   return (
     <div className="relative isolate min-h-svh overflow-hidden bg-background p-4 sm:p-6">
       <div className="pointer-events-none absolute inset-0">
-          <Aurora
-            colorStops={["#001a0d", "#00FF88", "#003322"]}
-            amplitude={2.5}
-            blend={0.6}
-            speed={0.4}
-          />
-                </div>
+        <Aurora
+          colorStops={["#001a0d", "#00FF88", "#003322"]}
+          amplitude={0.5}
+          blend={0.6}
+          speed={0.4}
+        />
+      </div>
 
       <div className="relative mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-5xl flex-col items-center justify-center">
         <div className="mb-5 flex items-center gap-3 rounded-full px-2 py-2 ltr:flex-row-reverse sm:absolute sm:right-0 sm:top-0 sm:mb-0">
-          <BackToHomeButton className="h-10 w-30 bg-primary/20 text-primary/80 hover:bg-accent" />
+          <BackToHomeButton className="h-10 w-30 bg-accent/15 text-secondary-foreground hover:bg-accent" />
           <LanguageToggle className="h-10 w-20" />
           <ModeToggle className="h-10 w-10" />
         </div>
@@ -62,7 +62,11 @@ export default function LoginPage() {
         <Card className="surface-1 w-full max-w-md border-border/60 shadow-glow-subtle">
           <CardHeader className="space-y-3 text-center">
             <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary shadow-[0_0_30px_hsl(var(--primary)/0.35)]">
-              <img src="/avocado.svg" alt="BranchOps logo" className="size-10" />
+              <img
+                src="/avocado.svg"
+                alt="BranchOps logo"
+                className="size-10"
+              />
             </div>
             <div className="space-y-1">
               <CardTitle className="font-display text-3xl">
