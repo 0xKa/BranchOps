@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
 import { useScrollAnimation } from "../hooks/use-scroll-animation";
+import Aurora from "./aurora";
 
 export function HeroSection() {
   const { t } = useTranslation();
@@ -12,18 +13,17 @@ export function HeroSection() {
 
   return (
     <section className="relative flex min-h-svh items-center justify-center overflow-hidden">
-      {/* Background: gradient orbs */}
+      {/* Background: Aurora animation */}
       <div className="pointer-events-none absolute inset-0">
-        {/* Main neon glow — top center */}
-        <div
-          className="absolute top-[-20%] start-1/2 -translate-x-1/2 h-[600px] w-[800px] rounded-full opacity-20 blur-[120px]"
-          style={{ background: "radial-gradient(circle, var(--neon) 0%, transparent 70%)" }}
-        />
-        {/* Secondary glow — bottom left */}
-        <div
-          className="absolute bottom-[-10%] start-[-10%] h-[400px] w-[400px] rounded-full opacity-10 blur-[100px]"
-          style={{ background: "radial-gradient(circle, var(--neon) 0%, transparent 70%)" }}
-        />
+        {/* Aurora — spans the full hero, anchored to the top half */}
+        <div className="absolute inset-x-0 top-0 h-[75%] opacity-60">
+          <Aurora
+            colorStops={["#001a0d", "#00FF88", "#003322"]}
+            amplitude={2.5}
+            blend={0.6}
+            speed={0.4}
+          />
+        </div>
         {/* Subtle grid overlay */}
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -42,13 +42,8 @@ export function HeroSection() {
       >
         <Badge
           variant="outline"
-          className="mb-6 border-primary/30 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary stagger-1"
+          className=" mb-6 border-primary/30 bg-primary/5 px-4 py-3.5 text-xs font-medium text-primary stagger-1"
         >
-          <span
-            aria-hidden="true"
-            className="me-1.5 inline-block size-1.5 rounded-full animate-pulse"
-            style={{ backgroundColor: "var(--neon)" }}
-          />
           {t("landing.badge")}
         </Badge>
 
@@ -85,7 +80,7 @@ export function HeroSection() {
       </div>
 
       {/* Bottom fade */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-background to-transparent" />
     </section>
   );
 }
