@@ -36,9 +36,13 @@ export default function NavMain({ items, label }: NavMainProps) {
   const location = useLocation();
 
   return (
-    <SidebarGroup>
-      {label && <SidebarGroupLabel>{label}</SidebarGroupLabel>}
-      <SidebarMenu>
+    <SidebarGroup className="py-1.5">
+      {label && (
+        <SidebarGroupLabel className="font-display text-[0.62rem] uppercase tracking-[0.14em] text-sidebar-foreground/55">
+          {label}
+        </SidebarGroupLabel>
+      )}
+      <SidebarMenu className="gap-1">
         {items.map((item) => {
           const isActive =
             location.pathname === item.url ||
@@ -51,6 +55,7 @@ export default function NavMain({ items, label }: NavMainProps) {
                 <SidebarMenuButton
                   asChild
                   isActive={isActive}
+                  className="border border-transparent data-[active=true]:border-primary/35 data-[active=true]:shadow-(--neon-glow)"
                   tooltip={item.title}
                 >
                   <Link to={item.url}>
@@ -72,7 +77,11 @@ export default function NavMain({ items, label }: NavMainProps) {
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton tooltip={item.title} isActive={isActive}>
+                  <SidebarMenuButton
+                    className="border border-transparent data-[active=true]:border-primary/35 data-[active=true]:shadow-(--neon-glow)"
+                    tooltip={item.title}
+                    isActive={isActive}
+                  >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                     <ChevronRight className="ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -85,6 +94,7 @@ export default function NavMain({ items, label }: NavMainProps) {
                         <SidebarMenuSubButton
                           asChild
                           isActive={location.pathname === subItem.url}
+                          className="data-[active=true]:text-primary"
                         >
                           <Link to={subItem.url}>
                             <span>{subItem.title}</span>

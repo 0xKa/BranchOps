@@ -49,7 +49,7 @@ export function NavUser({ user }: NavUserProps) {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="border border-transparent data-[state=open]:border-primary/35 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground data-[state=open]:shadow-(--neon-glow)"
             >
               <ProfilePicture fullName={user.name} imageUrl={user.avatar} />
               <div className="grid flex-1 text-start text-sm leading-tight">
@@ -62,7 +62,7 @@ export function NavUser({ user }: NavUserProps) {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+            className="glass-strong w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg border border-border/60"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
@@ -97,7 +97,7 @@ export function NavUser({ user }: NavUserProps) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              className="text-destructive"
+              className="text-action-delete"
               onClick={() => logout("/")}
               disabled={isPending}
             >

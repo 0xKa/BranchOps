@@ -40,13 +40,13 @@ export default function Header({ title }: HeaderProps) {
   };
 
   return (
-    <>
-      <header className="flex h-14 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-10">
-        <div className="flex items-center gap-2 px-4">
+    <header className="sticky top-0 z-20 px-4 pt-3 md:px-6">
+      <div className="surface-1 flex h-14 shrink-0 items-center gap-2 rounded-xl border border-border/60 px-3 shadow-(--shadow-sm) supports-backdrop-filter:backdrop-blur-(--glass-blur) transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-10">
+        <div className="flex min-w-0 items-center gap-2">
           <SidebarTrigger
-            className={isRTL ? "-mr-1.5 rotate-180" : "-ml-1.5"}
+            className={`${isRTL ? "-mr-0.5 rotate-180" : "-ml-0.5"} h-8 w-8 rounded-md border border-border/60 bg-background/40 supports-backdrop-filter:backdrop-blur-xs`}
           />
-          <Separator orientation="vertical" className="mx-2 h-6" />
+          <Separator orientation="vertical" className="mx-1 h-6" />
           <Breadcrumb>
             <BreadcrumbList>
               {pathSegments.map((segment, index) => {
@@ -55,14 +55,16 @@ export default function Header({ title }: HeaderProps) {
 
                 return (
                   <Fragment key={href}>
-                    <BreadcrumbItem className={isLast ? "" : "hidden md:block"}>
+                    <BreadcrumbItem className={isLast ? "max-w-[18rem] truncate" : "hidden md:block"}>
                       {isLast ? (
-                        <BreadcrumbPage>
+                        <BreadcrumbPage className="font-display text-sm tracking-tight text-foreground">
                           {title || getTranslatedSegment(segment)}
                         </BreadcrumbPage>
                       ) : (
                         <BreadcrumbLink asChild>
-                          <Link to={href}>{getTranslatedSegment(segment)}</Link>
+                          <Link className="text-muted-foreground transition-colors hover:text-foreground" to={href}>
+                            {getTranslatedSegment(segment)}
+                          </Link>
                         </BreadcrumbLink>
                       )}
                     </BreadcrumbItem>
@@ -76,15 +78,12 @@ export default function Header({ title }: HeaderProps) {
           </Breadcrumb>
         </div>
         <div
-          className={`flex items-center gap-3 ${isRTL ? "mr-auto ml-4" : "ml-auto mr-4"}`}
+          className={`flex items-center gap-2 rounded-md border border-border/60 bg-background/40 px-2 py-1 supports-backdrop-filter:backdrop-blur-xs ${isRTL ? "mr-auto" : "ml-auto"}`}
         >
           <LanguageToggle size="lg" />
           <ModeToggle size="lg" />
         </div>
-      </header>
-      <div className="w-[98%] flex mx-auto">
-        <Separator className="mb-4" />
       </div>
-    </>
+    </header>
   );
 }

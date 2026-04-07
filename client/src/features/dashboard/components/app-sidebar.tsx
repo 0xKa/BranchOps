@@ -28,7 +28,7 @@ import { useUser } from "@/features/auth/auth-store";
 import { USER_ROLE_KEYS } from "@/features/auth/types";
 import { filterNavByRole } from "@/lib/route-permissions";
 
-interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> { }
+type AppSidebarProps = React.ComponentProps<typeof Sidebar>;
 
 export default function AppSidebar(props: AppSidebarProps) {
   const user = useUser();
@@ -137,11 +137,16 @@ export default function AppSidebar(props: AppSidebarProps) {
   };
 
   return (
-    <Sidebar collapsible="icon" side={isRTL ? "right" : "left"} {...props}>
-      <SidebarHeader>
+    <Sidebar
+      className="bg-sidebar/85 supports-backdrop-filter:backdrop-blur-sm"
+      collapsible="icon"
+      side={isRTL ? "right" : "left"}
+      {...props}
+    >
+      <SidebarHeader className="border-b border-sidebar-border/70 pb-2">
         <AppSidebarHeader />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-1 py-1">
         <NavMain items={filteredMain} label={t("nav.main")} />
         {filteredAnalytics.length > 0 && (
           <NavMain items={filteredAnalytics} label={t("nav.analytics")} />
@@ -150,7 +155,7 @@ export default function AppSidebar(props: AppSidebarProps) {
           <NavMain items={filteredAdmin} label={t("nav.administration")} />
         )}
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="border-t border-sidebar-border/70 pt-2">
         <NavUser user={currentUser} />
       </SidebarFooter>
       <SidebarRail />
