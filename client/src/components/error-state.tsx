@@ -138,10 +138,19 @@ export default function ErrorState({
   const handleGoHome = () => navigate("/");
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-muted-foreground/10">
+    <div className="relative isolate flex min-h-svh items-center justify-center overflow-hidden bg-background p-4">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-24 -top-16 h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
+        <div className="absolute -bottom-32 -right-8 h-80 w-80 rounded-full bg-neon-cyan/15 blur-3xl" />
+      </div>
+
+      <Card className="surface-1 relative w-full max-w-lg border-border/60 shadow-glow-subtle">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">{errorDetails.icon}</div>
+          <div className="mb-4 flex justify-center">
+            <div className="rounded-2xl border border-destructive/35 bg-destructive/12 p-4">
+              {errorDetails.icon}
+            </div>
+          </div>
           <CardTitle className="text-2xl">
             {errorStatus && (
               <span className="text-destructive">{errorStatus}</span>
@@ -166,7 +175,7 @@ export default function ErrorState({
               onClick={handleGoHome}
               variant="default"
               size="lg"
-              className="w-full sm:w-auto"
+              className="neon-glow w-full sm:w-auto"
             >
               <Home className="mr-2" />
               Go Home

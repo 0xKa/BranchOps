@@ -43,75 +43,85 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-svh flex items-center justify-center bg-muted/10 p-4">
-      <div className="absolute top-4 right-4 flex items-center gap-3 ltr:flex-row-reverse ">
-        <BackToHomeButton />
-        <LanguageToggle className="h-10 w-20" />
-        <ModeToggle className="h-10 w-10" />
+    <div className="relative isolate min-h-svh overflow-hidden bg-background p-4 sm:p-6">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-28 top-0 h-88 w-88 rounded-full bg-primary/20 blur-3xl" />
+        <div className="absolute -bottom-28 -right-12 h-96 w-96 rounded-full bg-neon-cyan/20 blur-3xl" />
       </div>
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Building2 className="size-6" />
-          </div>
-          <CardTitle className="text-2xl">{t("login.title")}</CardTitle>
-          <CardDescription>{t("login.description")}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {isError && (
-              <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-                {error?.message}
-              </div>
-            )}
-            <div className="space-y-2 ">
-              <div className="flex items-end justify-between">
-                <Label htmlFor="username" className="text-xs">
-                  {t("login.username")}
-                </Label>
-                {errors.username && (
-                  <span className="text-xs text-destructive">
-                    {t(errors.username.message || "")}
-                  </span>
-                )}
-              </div>
-              <Input
-                id="username"
-                type="text"
-                placeholder={t("login.usernamePlaceholder")}
-                {...register("username")}
-                aria-invalid={errors.username ? "true" : "false"}
-              />
+
+      <div className="relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-5xl items-center justify-center">
+        <div className="absolute right-0 top-0 flex items-center gap-3 rounded-full border border-border/60 bg-background/40 px-2 py-2 backdrop-blur-xl ltr:flex-row-reverse">
+          <BackToHomeButton />
+          <LanguageToggle className="h-10 w-20" />
+          <ModeToggle className="h-10 w-10" />
+        </div>
+
+        <Card className="surface-1 w-full max-w-md border-border/60 shadow-glow-subtle">
+          <CardHeader className="space-y-3 text-center">
+            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-primary/35 bg-primary/15 text-primary shadow-[0_0_30px_hsl(var(--primary)/0.35)]">
+              <Building2 className="size-7" />
             </div>
-            <div className="space-y-2">
-              <div className="flex items-end justify-between">
-                <Label htmlFor="password" className="text-xs">
-                  {t("login.password")}
-                </Label>
-                {errors.password && (
-                  <span className="text-xs text-destructive">
-                    {t(errors.password.message || "")}
-                  </span>
-                )}
-              </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder={t("login.passwordPlaceholder")}
-                {...register("password")}
-                aria-invalid={errors.password ? "true" : "false"}
-              />
+            <div className="space-y-1">
+              <CardTitle className="font-display text-3xl">{t("login.title")}</CardTitle>
+              <CardDescription>{t("login.description")}</CardDescription>
             </div>
-            <Button
-              type="submit"
-              className="w-full h-8 mt-4"
-              disabled={isPending}
-            >
-              {isPending ? t("login.loggingIn") : t("login.logIn")}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              {isError && (
+                <div className="rounded-xl border border-destructive/40 bg-destructive/12 px-3 py-3 text-sm text-destructive">
+                  {error?.message}
+                </div>
+              )}
+              <div className="space-y-2 ">
+                <div className="flex items-end justify-between">
+                  <Label htmlFor="username" className="text-xs">
+                    {t("login.username")}
+                  </Label>
+                  {errors.username && (
+                    <span className="text-xs text-destructive">
+                      {t(errors.username.message || "")}
+                    </span>
+                  )}
+                </div>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder={t("login.usernamePlaceholder")}
+                  {...register("username")}
+                  aria-invalid={errors.username ? "true" : "false"}
+                />
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-end justify-between">
+                  <Label htmlFor="password" className="text-xs">
+                    {t("login.password")}
+                  </Label>
+                  {errors.password && (
+                    <span className="text-xs text-destructive">
+                      {t(errors.password.message || "")}
+                    </span>
+                  )}
+                </div>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder={t("login.passwordPlaceholder")}
+                  {...register("password")}
+                  aria-invalid={errors.password ? "true" : "false"}
+                />
+              </div>
+              <Button
+                type="submit"
+                className="neon-glow mt-4 h-10 w-full"
+                disabled={isPending}
+              >
+                {isPending ? t("login.loggingIn") : t("login.logIn")}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

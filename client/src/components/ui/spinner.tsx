@@ -14,12 +14,12 @@ function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
 
 function CustomSpinner({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
+    <div className="flex min-h-svh items-center justify-center bg-background">
       <div
         role="status"
         aria-label="Loading"
         className={cn(
-          "animate-spin rounded-full size-20 border-b-2 border-primary",
+          "size-20 animate-spin rounded-full border-2 border-primary/25 border-t-primary shadow-[0_0_30px_hsl(var(--primary)/0.45)]",
           className,
         )}
         {...props}
