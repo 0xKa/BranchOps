@@ -38,7 +38,7 @@ export default function OrderDetailDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
+            <DialogContent className="surface-1 max-h-[85vh] max-w-2xl overflow-y-auto border-border/60 shadow-glow-subtle">
                 <DialogHeader>
                     <DialogTitle>Order Details</DialogTitle>
                     <DialogDescription>
@@ -98,10 +98,10 @@ export default function OrderDetailDialog({
                             </div>
                         </div>
 
-                        <Separator />
+                        <Separator className="bg-border/70" />
 
                         {/* Items Table */}
-                        <div className="rounded-md border">
+                        <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                             <Table>
                                 <TableHeader>
                                     <TableRow>
@@ -139,7 +139,7 @@ export default function OrderDetailDialog({
                         </div>
 
                         {/* Totals */}
-                        <div className="space-y-1 text-sm ms-auto max-w-xs">
+                        <div className="surface-1 ms-auto max-w-xs space-y-1 rounded-lg border border-border/60 px-3 py-2 text-sm">
                             <div className="flex justify-between">
                                 <span className="text-muted-foreground">
                                     Subtotal
@@ -164,7 +164,7 @@ export default function OrderDetailDialog({
                                     <span>+{order.tax.toFixed(3)}</span>
                                 </div>
                             )}
-                            <Separator />
+                            <Separator className="bg-border/70" />
                             <div className="flex justify-between font-bold">
                                 <span>Total</span>
                                 <span>{order.total.toFixed(3)}</span>
@@ -180,7 +180,7 @@ export default function OrderDetailDialog({
                         {/* Notes */}
                         {order.notes && (
                             <>
-                                <Separator />
+                                <Separator className="bg-border/70" />
                                 <div>
                                     <span className="text-sm text-muted-foreground">
                                         Notes
@@ -195,8 +195,8 @@ export default function OrderDetailDialog({
                         {/* Cancellation Info */}
                         {order.cancelledByUserName && (
                             <>
-                                <Separator />
-                                <div className="text-sm text-destructive">
+                                <Separator className="bg-border/70" />
+                                <div className="rounded-lg border border-destructive/35 bg-destructive/12 px-3 py-2 text-sm text-destructive">
                                     Cancelled by {order.cancelledByUserName}
                                 </div>
                             </>

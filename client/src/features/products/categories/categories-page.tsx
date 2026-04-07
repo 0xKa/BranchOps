@@ -47,7 +47,7 @@ export default function CategoriesPage() {
                 title="Categories"
                 description="Manage product categories"
             >
-                <Button onClick={() => setCreateOpen(true)}>
+                <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
                     <Plus className="size-4 me-2" />
                     Add Category
                 </Button>
@@ -58,7 +58,7 @@ export default function CategoriesPage() {
                     <Spinner className="size-6" />
                 </div>
             ) : (
-                <div className="rounded-md border">
+                <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                     <Table>
                         <TableHeader>
                             <TableRow>
