@@ -134,7 +134,7 @@ export default function SettingsPage() {
                 {/* ── Top row: Profile overview + Profile info ── */}
                 <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
                     {/* Profile overview */}
-                    <Card className="h-full flex items-center justify-center">
+                    <Card className="surface-1 h-full border-border/60 shadow-glow-subtle flex items-center justify-center">
                         <CardContent className="flex flex-col items-center justify-center gap-4 ">
                             <ProfilePicture fullName={displayName} size={20} />
                             <div className="text-center">
@@ -155,7 +155,7 @@ export default function SettingsPage() {
                     </Card>
 
                     {/* Profile information form */}
-                    <Card>
+                    <Card className="surface-1 border-border/60 shadow-glow-subtle">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <User className="size-4 text-muted-foreground" />
@@ -240,11 +240,12 @@ export default function SettingsPage() {
                                 </div>
                             </form>
                         </CardContent>
-                        <Separator />
+                        <Separator className="bg-border/70" />
                         <CardFooter className="justify-end pt-1">
                             <Button
                                 type="submit"
                                 form="profile-form"
+                                className="neon-glow"
                                 disabled={updateProfile.isPending}
                             >
                                 {updateProfile.isPending ? "Saving..." : "Save Changes"}
@@ -254,7 +255,7 @@ export default function SettingsPage() {
                 </div>
 
                 {/* ── Bottom row: Change password ── */}
-                <Card>
+                <Card className="surface-1 border-border/60 shadow-glow-subtle">
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <KeyRound className="size-4 text-muted-foreground" />
@@ -316,11 +317,12 @@ export default function SettingsPage() {
                             </div>
                         </form>
                     </CardContent>
-                    <Separator />
+                    <Separator className="bg-border/70" />
                     <CardFooter className="justify-end pt-1">
                         <Button
                             type="submit"
                             form="password-form"
+                            className="neon-glow"
                             disabled={changePassword.isPending}
                         >
                             {changePassword.isPending ? "Changing..." : "Change Password"}

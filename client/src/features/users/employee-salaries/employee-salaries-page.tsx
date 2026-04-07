@@ -55,7 +55,7 @@ export default function EmployeeSalariesPage() {
     return (
         <PageContainer>
             <PageHeader title="Employee Salaries" description="Manage employee salary records">
-                <Button onClick={() => setCreateOpen(true)}>
+                <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
                     <Plus className="size-4 me-2" />
                     Add Salary
                 </Button>
@@ -66,7 +66,7 @@ export default function EmployeeSalariesPage() {
                     <Spinner className="size-6" />
                 </div>
             ) : (
-                <div className="rounded-md border">
+                <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                     <Table>
                         <TableHeader>
                             <TableRow>

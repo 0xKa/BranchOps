@@ -35,10 +35,10 @@ import { useTranslation } from "react-i18next";
 import { useAuditLogs, useAuditActions, useAuditEntityTypes } from "./hooks";
 
 const ACTION_ICON: Record<string, React.ReactNode> = {
-    Create: <Plus className="size-3.5 text-green-600" />,
-    Update: <Pencil className="size-3.5 text-blue-600" />,
-    Delete: <Trash2 className="size-3.5 text-red-600" />,
-    Login: <LogIn className="size-3.5 text-violet-600" />,
+    Create: <Plus className="size-3.5 text-action-create" />,
+    Update: <Pencil className="size-3.5 text-action-update" />,
+    Delete: <Trash2 className="size-3.5 text-action-delete" />,
+    Login: <LogIn className="size-3.5 text-action-login" />,
 };
 
 const ACTION_VARIANT: Record<
@@ -83,7 +83,7 @@ export default function AuditLogPage() {
             />
 
             {/* Filters */}
-            <div className="flex flex-wrap items-end gap-3 pb-2">
+            <div className="surface-1 flex flex-wrap items-end gap-3 rounded-xl border border-border/60 px-3 py-3">
                 <div className="space-y-1">
                     <Label className="text-xs">{t("auditLog.action")}</Label>
                     <Select
@@ -174,7 +174,7 @@ export default function AuditLogPage() {
                 </div>
             ) : (
                 <>
-                    <div className="rounded-md border">
+                    <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                         <Table>
                             <TableHeader>
                                 <TableRow>

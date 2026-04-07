@@ -58,15 +58,15 @@ export default function ProductsPage() {
     return (
         <PageContainer>
             <PageHeader title="Products" description="Manage your product catalog">
-                <Button onClick={() => setCreateOpen(true)}>
+                <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
                     <Plus className="size-4 me-2" />
                     Add Product
                 </Button>
             </PageHeader>
 
-            <div className="flex items-center gap-2 pb-2">
+            <div className="surface-1 flex items-center gap-2 rounded-xl border border-border/60 px-3 py-3">
                 <div className="relative max-w-sm">
-                    <Search className="absolute start-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <Search className="absolute inset-s-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     <Input
                         placeholder="Search products..."
                         value={search}
@@ -85,7 +85,7 @@ export default function ProductsPage() {
                 </div>
             ) : (
                 <>
-                    <div className="rounded-md border">
+                    <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                         <Table>
                             <TableHeader>
                                 <TableRow>

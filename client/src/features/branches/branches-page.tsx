@@ -42,7 +42,7 @@ export default function BranchesPage() {
   return (
     <PageContainer>
       <PageHeader title="Branches" description="Manage branch locations">
-        <Button onClick={() => setCreateOpen(true)}>
+        <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
           <Plus className="size-4 me-2" />
           Add Branch
         </Button>
@@ -53,7 +53,7 @@ export default function BranchesPage() {
           <Spinner className="size-6" />
         </div>
       ) : (
-        <div className="rounded-md border">
+        <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
           <Table>
             <TableHeader>
               <TableRow>
