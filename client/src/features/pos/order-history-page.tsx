@@ -88,7 +88,7 @@ export default function OrderHistoryPage() {
             />
 
             {/* Filters */}
-            <div className="flex flex-wrap items-end gap-3 pb-2">
+            <div className="surface-1 flex flex-wrap items-end gap-3 rounded-xl border border-border/60 px-3 py-3">
                 <div className="space-y-1">
                     <Label className="text-xs">Branch</Label>
                     <BranchFilter
@@ -159,7 +159,7 @@ export default function OrderHistoryPage() {
                 </div>
             ) : (
                 <>
-                    <div className="rounded-md border">
+                    <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                         <Table>
                             <TableHeader>
                                 <TableRow>

@@ -29,7 +29,7 @@ export default function LowStockAlertsPage() {
                 description="Products that are below their low stock threshold"
             />
 
-            <div className="flex items-center gap-2 pb-2">
+            <div className="surface-1 flex items-center gap-2 rounded-xl border border-border/60 px-3 py-3">
                 <BranchFilter
                     value={branchId}
                     onValueChange={setBranchId}
@@ -42,7 +42,7 @@ export default function LowStockAlertsPage() {
                     <Spinner className="size-6" />
                 </div>
             ) : (
-                <div className="rounded-md border">
+                <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -87,7 +87,7 @@ function AlertRow({ alert }: { alert: LowStockAlert }) {
                 <Badge variant="destructive">{alert.quantity}</Badge>
             </TableCell>
             <TableCell className="text-center">{alert.lowStockThreshold}</TableCell>
-            <TableCell className="text-center font-mono text-red-600">
+            <TableCell className="text-center font-mono text-status-danger">
                 -{deficit}
             </TableCell>
         </TableRow>

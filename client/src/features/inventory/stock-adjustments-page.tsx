@@ -59,7 +59,7 @@ export default function StockAdjustmentsPage() {
                 description="View the history of all stock changes"
             />
 
-            <div className="flex items-center gap-2 pb-2">
+            <div className="surface-1 flex items-center gap-2 rounded-xl border border-border/60 px-3 py-3">
                 <BranchFilter
                     value={branchId}
                     onValueChange={(v) => {
@@ -96,7 +96,7 @@ export default function StockAdjustmentsPage() {
                 </div>
             ) : (
                 <>
-                    <div className="rounded-md border">
+                    <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -178,9 +178,9 @@ function AdjustmentRow({ adjustment }: { adjustment: StockAdjustment }) {
                 <span
                     className={
                         adjustment.quantityChange > 0
-                            ? "text-green-600"
+                            ? "text-status-success"
                             : adjustment.quantityChange < 0
-                                ? "text-red-600"
+                                ? "text-status-danger"
                                 : ""
                     }
                 >

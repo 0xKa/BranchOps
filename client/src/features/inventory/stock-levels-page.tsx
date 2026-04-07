@@ -68,14 +68,14 @@ export default function StockLevelsPage() {
                         <SlidersHorizontal className="size-4 me-2" />
                         Adjust Stock
                     </Button>
-                    <Button onClick={() => setSetStockOpen(true)}>
+                    <Button className="neon-glow" onClick={() => setSetStockOpen(true)}>
                         <Plus className="size-4 me-2" />
                         Set Stock
                     </Button>
                 </div>
             </PageHeader>
 
-            <div className="flex items-center gap-2 pb-2">
+            <div className="surface-1 flex items-center gap-2 rounded-xl border border-border/60 px-3 py-3">
                 <BranchFilter
                     value={branchId}
                     onValueChange={(v) => {
@@ -92,7 +92,7 @@ export default function StockLevelsPage() {
                 </div>
             ) : (
                 <>
-                    <div className="rounded-md border">
+                    <div className="surface-1 overflow-hidden rounded-xl border border-border/60">
                         <Table>
                             <TableHeader>
                                 <TableRow>

@@ -174,7 +174,7 @@ export default function NewOrderPage() {
                 {/* Left: Product Selection */}
                 <div className="lg:col-span-2 space-y-4">
                     {/* Branch Selection */}
-                    <div className="space-y-1">
+                    <div className="surface-1 max-w-xl space-y-1 rounded-xl border border-border/60 p-3">
                         <Label>Branch</Label>
                         {isAdmin ? (
                             <Select
@@ -203,8 +203,8 @@ export default function NewOrderPage() {
                     </div>
 
                     {/* Product Search */}
-                    <div className="relative max-w-sm">
-                        <Search className="absolute start-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    <div className="surface-1 relative max-w-sm rounded-xl border border-border/60 p-2">
+                        <Search className="absolute inset-s-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                         <Input
                             placeholder="Search products..."
                             value={search}
@@ -232,7 +232,7 @@ export default function NewOrderPage() {
                                                 price: product.price,
                                             })
                                         }
-                                        className="rounded-lg border bg-card p-3 text-start hover:bg-accent transition-colors cursor-pointer"
+                                        className="surface-2 cursor-pointer rounded-lg border border-border/60 p-3 text-start transition-[border-color,box-shadow,transform] duration-200 hover:border-primary/40 hover:shadow-(--shadow-sm)"
                                     >
                                         <p className="font-medium text-sm truncate">
                                             {product.name}
@@ -256,7 +256,7 @@ export default function NewOrderPage() {
 
                 {/* Right: Cart & Checkout */}
                 <div className="space-y-4">
-                    <Card>
+                    <Card className="border-primary/10">
                         <CardHeader className="pb-3">
                             <CardTitle className="flex items-center justify-between">
                                 <span className="flex items-center gap-2">
@@ -511,7 +511,7 @@ export default function NewOrderPage() {
                                     </div>
 
                                     <Button
-                                        className="w-full"
+                                        className="w-full neon-glow"
                                         size="lg"
                                         disabled={
                                             !branchId ||
