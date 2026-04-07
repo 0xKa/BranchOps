@@ -122,8 +122,10 @@
     "headline": "Manage all your branches from one place",
     "subheadline": "Streamline operations across branches with real-time POS, inventory tracking, and centralized reporting.",
     "getStarted": "Get Started",
+    "learnMore": "Learn More",
     "backToHome": "Back to Home",
     "featuresHeading": "Everything you need to run your branches",
+    "featuresSubheading": "Powerful tools designed for multi-branch retail operations",
     "features": [
       {
         "title": "Multi-Branch Management",
@@ -142,7 +144,20 @@
         "description": "Make data-driven decisions with sales reports, forecasting, and audit logs."
       }
     ],
-    "rights": "All rights reserved."
+    "stats": {
+      "heading": "Built for scale",
+      "branches": "Branches Managed",
+      "transactions": "Daily Transactions",
+      "uptime": "Uptime",
+      "reports": "Reports Generated"
+    },
+    "cta": {
+      "heading": "Ready to streamline your operations?",
+      "subheading": "Get started with BranchOps today and take control of every branch from a single dashboard.",
+      "button": "Start Now"
+    },
+    "rights": "All rights reserved.",
+    "footerTagline": "Multi-branch retail management, simplified."
   },
   "errors": {
     "networkError": "Unable to connect to server.",
