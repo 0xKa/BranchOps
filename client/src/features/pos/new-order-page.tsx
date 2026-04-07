@@ -511,7 +511,7 @@ export default function NewOrderPage() {
                                     </div>
 
                                     <Button
-                                        className="w-full neon-glow"
+                                        className="w-full"
                                         size="lg"
                                         disabled={
                                             !branchId ||

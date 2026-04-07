@@ -58,7 +58,7 @@ export default function ProductsPage() {
     return (
         <PageContainer>
             <PageHeader title="Products" description="Manage your product catalog">
-                <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
+                <Button onClick={() => setCreateOpen(true)}>
                     <Plus className="size-4 me-2" />
                     Add Product
                 </Button>

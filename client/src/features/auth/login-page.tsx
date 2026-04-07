@@ -113,7 +113,7 @@ export default function LoginPage() {
               </div>
               <Button
                 type="submit"
-                className="neon-glow mt-4 h-10 w-full"
+                className="mt-4 h-10 w-full"
                 disabled={isPending}
               >
                 {isPending ? t("login.loggingIn") : t("login.logIn")}

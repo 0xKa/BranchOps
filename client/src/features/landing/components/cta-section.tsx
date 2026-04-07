@@ -35,7 +35,7 @@ export function CtaSection() {
             <Button
               size="lg"
               onClick={() => navigate("/login")}
-              className="mt-8 h-12 px-8 text-sm font-semibold neon-glow"
+              className="mt-8 h-12 px-8 text-sm font-semibold"
             >
               {t("landing.cta.button")}
               <ArrowRight className="ms-2 size-4" />

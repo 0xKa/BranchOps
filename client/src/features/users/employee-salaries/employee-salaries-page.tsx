@@ -55,7 +55,7 @@ export default function EmployeeSalariesPage() {
     return (
         <PageContainer>
             <PageHeader title="Employee Salaries" description="Manage employee salary records">
-                <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
+                <Button onClick={() => setCreateOpen(true)}>
                     <Plus className="size-4 me-2" />
                     Add Salary
                 </Button>

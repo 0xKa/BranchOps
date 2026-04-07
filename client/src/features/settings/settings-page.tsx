@@ -245,7 +245,7 @@ export default function SettingsPage() {
                             <Button
                                 type="submit"
                                 form="profile-form"
-                                className="neon-glow"
+                                className=""
                                 disabled={updateProfile.isPending}
                             >
                                 {updateProfile.isPending ? "Saving..." : "Save Changes"}
@@ -322,7 +322,7 @@ export default function SettingsPage() {
                         <Button
                             type="submit"
                             form="password-form"
-                            className="neon-glow"
+                            className=""
                             disabled={changePassword.isPending}
                         >
                             {changePassword.isPending ? "Changing..." : "Change Password"}

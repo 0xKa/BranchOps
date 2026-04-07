@@ -175,7 +175,7 @@ export default function ErrorState({
               onClick={handleGoHome}
               variant="default"
               size="lg"
-              className="neon-glow w-full sm:w-auto"
+              className="w-full sm:w-auto"
             >
               <Home className="mr-2" />
               Go Home

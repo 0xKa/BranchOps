@@ -47,7 +47,7 @@ export default function EmployeesPage() {
     return (
         <PageContainer>
             <PageHeader title="Employees" description="Manage employee accounts">
-                <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
+                <Button onClick={() => setCreateOpen(true)}>
                     <Plus className="size-4 me-2" />
                     Add Employee
                 </Button>

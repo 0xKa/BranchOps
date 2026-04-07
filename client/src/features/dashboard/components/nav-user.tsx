@@ -49,7 +49,7 @@ export function NavUser({ user }: NavUserProps) {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="border border-transparent data-[state=open]:border-primary/35 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground data-[state=open]:shadow-(--neon-glow)"
+              className="border border-transparent data-[state=open]:border-primary/35 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <ProfilePicture fullName={user.name} imageUrl={user.avatar} />
               <div className="grid flex-1 text-start text-sm leading-tight">

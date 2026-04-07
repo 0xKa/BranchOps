@@ -55,7 +55,7 @@ export default function NavMain({ items, label }: NavMainProps) {
                 <SidebarMenuButton
                   asChild
                   isActive={isActive}
-                  className="border border-transparent data-[active=true]:border-primary/35 data-[active=true]:shadow-(--neon-glow)"
+                  className="border border-transparent data-[active=true]:border-primary/35"
                   tooltip={item.title}
                 >
                   <Link to={item.url}>
@@ -78,7 +78,7 @@ export default function NavMain({ items, label }: NavMainProps) {
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton
-                    className="border border-transparent data-[active=true]:border-primary/35 data-[active=true]:shadow-(--neon-glow)"
+                    className="border border-transparent data-[active=true]:border-primary/35"
                     tooltip={item.title}
                     isActive={isActive}
                   >

@@ -47,7 +47,7 @@ export default function CategoriesPage() {
                 title="Categories"
                 description="Manage product categories"
             >
-                <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
+                <Button onClick={() => setCreateOpen(true)}>
                     <Plus className="size-4 me-2" />
                     Add Category
                 </Button>

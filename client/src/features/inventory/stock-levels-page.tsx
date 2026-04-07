@@ -68,7 +68,7 @@ export default function StockLevelsPage() {
                         <SlidersHorizontal className="size-4 me-2" />
                         Adjust Stock
                     </Button>
-                    <Button className="neon-glow" onClick={() => setSetStockOpen(true)}>
+                    <Button onClick={() => setSetStockOpen(true)}>
                         <Plus className="size-4 me-2" />
                         Set Stock
                     </Button>

@@ -42,7 +42,7 @@ export default function BranchesPage() {
   return (
     <PageContainer>
       <PageHeader title="Branches" description="Manage branch locations">
-        <Button className="neon-glow" onClick={() => setCreateOpen(true)}>
+        <Button onClick={() => setCreateOpen(true)}>
           <Plus className="size-4 me-2" />
           Add Branch
         </Button>

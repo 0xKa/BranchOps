@@ -52,8 +52,6 @@
   --neon: #00FF88;
   --neon-rgb: 0 255 136;
   --neon-oklch: oklch(0.87 0.24 155);
-  --neon-glow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 60px rgba(0, 255, 136, 0.1);
-  --neon-glow-strong: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.2), 0 0 100px rgba(0, 255, 136, 0.1);
   --neon-text-glow: 0 0 20px rgba(0, 255, 136, 0.5), 0 0 40px rgba(0, 255, 136, 0.2);
 
   /* ── Semantic Status Tokens ── */
@@ -153,8 +151,6 @@
   --sidebar-ring: oklch(0.82 0.22 155);
 
   /* ── Neon (enhanced for dark) ── */
-  --neon-glow: 0 0 20px rgba(0, 255, 136, 0.35), 0 0 60px rgba(0, 255, 136, 0.15);
-  --neon-glow-strong: 0 0 20px rgba(0, 255, 136, 0.5), 0 0 60px rgba(0, 255, 136, 0.25), 0 0 120px rgba(0, 255, 136, 0.1);
   --neon-text-glow: 0 0 20px rgba(0, 255, 136, 0.62), 0 0 40px rgba(0, 255, 136, 0.28);
 
   /* ── Semantic Status Tokens (dark) ── */
@@ -336,14 +332,6 @@ html[dir="rtl"] {
     background-color: var(--surface-3);
   }
 
-  /* Neon box glow */
-  .neon-glow {
-    box-shadow: var(--neon-glow);
-  }
-
-  .neon-glow-strong {
-    box-shadow: var(--neon-glow-strong);
-  }
 
   /* Scroll-triggered animations */
   .animate-on-scroll {

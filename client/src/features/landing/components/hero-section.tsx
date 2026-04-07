@@ -59,7 +59,7 @@ export function HeroSection() {
           <Button
             size="lg"
             onClick={() => navigate("/login")}
-            className="h-12 px-8 text-sm font-semibold neon-glow"
+            className="h-12 px-8 text-sm font-semibold"
           >
             {t("landing.getStarted")}
             <ArrowRight className="ms-2 size-4" />

@@ -11,7 +11,7 @@ export default function AppSidebarHeader() {
       <SidebarMenuItem>
         <SidebarMenuButton size="lg" asChild>
           <Link to="/dashboard">
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/15 text-primary shadow-(--neon-glow)">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg border border-primary/35 bg-primary/15 text-primary">
               <img src="/avocado.svg" alt="BranchOps logo" className="size-5" />
             </div>
             <div className="grid flex-1 text-start text-sm leading-tight">

@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-[var(--neon-glow)]",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
         outline: "border-border/70 bg-background/40 supports-backdrop-filter:backdrop-blur-xs hover:bg-muted/40 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         secondary: "border-border/60 bg-surface-2 text-secondary-foreground hover:bg-surface-1 aria-expanded:bg-surface-1 aria-expanded:text-secondary-foreground",
         ghost: "hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground",
