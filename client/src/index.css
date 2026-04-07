@@ -54,13 +54,39 @@
   --neon-oklch: oklch(0.87 0.24 155);
   --neon-glow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 60px rgba(0, 255, 136, 0.1);
   --neon-glow-strong: 0 0 20px rgba(0, 255, 136, 0.4), 0 0 60px rgba(0, 255, 136, 0.2), 0 0 100px rgba(0, 255, 136, 0.1);
+  --neon-text-glow: 0 0 20px rgba(0, 255, 136, 0.5), 0 0 40px rgba(0, 255, 136, 0.2);
+
+  /* ── Semantic Status Tokens ── */
+  --status-success: oklch(0.62 0.17 154);
+  --status-success-soft: oklch(0.90 0.08 154);
+  --status-warning: oklch(0.68 0.16 83);
+  --status-warning-soft: oklch(0.93 0.06 83);
+  --status-danger: oklch(0.60 0.22 28);
+  --status-danger-soft: oklch(0.92 0.08 28);
+  --status-info: oklch(0.62 0.15 248);
+  --status-info-soft: oklch(0.92 0.05 248);
+
+  /* ── Action Aliases ── */
+  --action-create: var(--status-success);
+  --action-update: var(--status-info);
+  --action-delete: var(--status-danger);
+  --action-login: oklch(0.58 0.15 296);
 
   /* ── Glass Tokens ── */
   --glass-bg: rgba(255, 255, 255, 0.6);
   --glass-border: rgba(255, 255, 255, 0.3);
   --glass-blur: 16px;
+  --glass-strong-bg: rgba(255, 255, 255, 0.75);
+  --glass-strong-border: rgba(255, 255, 255, 0.38);
+  --glass-strong-blur: 24px;
+
+  /* ── Layer Surface Tokens ── */
+  --surface-1: oklch(1 0 0 / 85%);
+  --surface-2: oklch(0.98 0.002 240 / 92%);
+  --surface-3: oklch(0.95 0.005 260 / 96%);
 
   /* ── Motion Tokens ── */
+  --duration-instant: 0ms;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
@@ -68,6 +94,22 @@
   --duration-normal: 300ms;
   --duration-slow: 500ms;
   --duration-slower: 700ms;
+  --motion-offset-sm: 16px;
+  --motion-offset-md: 24px;
+  --motion-offset-lg: 32px;
+
+  /* ── Spacing Scale (4px Grid) ── */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
 
   /* ── Elevation / Shadows ── */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -113,10 +155,34 @@
   /* ── Neon (enhanced for dark) ── */
   --neon-glow: 0 0 20px rgba(0, 255, 136, 0.35), 0 0 60px rgba(0, 255, 136, 0.15);
   --neon-glow-strong: 0 0 20px rgba(0, 255, 136, 0.5), 0 0 60px rgba(0, 255, 136, 0.25), 0 0 120px rgba(0, 255, 136, 0.1);
+  --neon-text-glow: 0 0 20px rgba(0, 255, 136, 0.62), 0 0 40px rgba(0, 255, 136, 0.28);
+
+  /* ── Semantic Status Tokens (dark) ── */
+  --status-success: oklch(0.75 0.2 154);
+  --status-success-soft: oklch(0.32 0.09 154);
+  --status-warning: oklch(0.80 0.17 83);
+  --status-warning-soft: oklch(0.34 0.08 83);
+  --status-danger: oklch(0.74 0.21 28);
+  --status-danger-soft: oklch(0.33 0.09 28);
+  --status-info: oklch(0.78 0.16 248);
+  --status-info-soft: oklch(0.32 0.08 248);
+
+  /* ── Action Aliases (dark) ── */
+  --action-create: var(--status-success);
+  --action-update: var(--status-info);
+  --action-delete: var(--status-danger);
+  --action-login: oklch(0.74 0.16 296);
 
   /* ── Glass (dark variant) ── */
   --glass-bg: rgba(255, 255, 255, 0.04);
   --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-strong-bg: rgba(255, 255, 255, 0.08);
+  --glass-strong-border: rgba(255, 255, 255, 0.12);
+
+  /* ── Layer Surface Tokens (dark) ── */
+  --surface-1: oklch(0.17 0.015 260 / 80%);
+  --surface-2: oklch(0.14 0.015 260 / 88%);
+  --surface-3: oklch(0.11 0.015 260 / 94%);
 
   /* ── Shadows (dark variant) ── */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -140,6 +206,21 @@ html[dir="rtl"] {
   --font-sans: var(--app-font-sans);
   --font-display: var(--font-display);
   --color-neon: var(--neon);
+  --color-status-success: var(--status-success);
+  --color-status-success-soft: var(--status-success-soft);
+  --color-status-warning: var(--status-warning);
+  --color-status-warning-soft: var(--status-warning-soft);
+  --color-status-danger: var(--status-danger);
+  --color-status-danger-soft: var(--status-danger-soft);
+  --color-status-info: var(--status-info);
+  --color-status-info-soft: var(--status-info-soft);
+  --color-action-create: var(--action-create);
+  --color-action-update: var(--action-update);
+  --color-action-delete: var(--action-delete);
+  --color-action-login: var(--action-login);
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -212,15 +293,47 @@ html[dir="rtl"] {
   }
 
   .glass-strong {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--glass-strong-bg);
+    backdrop-filter: blur(var(--glass-strong-blur));
+    -webkit-backdrop-filter: blur(var(--glass-strong-blur));
+    border: 1px solid var(--glass-strong-border);
   }
 
   /* Neon text glow */
   .text-glow {
-    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5), 0 0 40px rgba(0, 255, 136, 0.2);
+    text-shadow: var(--neon-text-glow);
+  }
+
+  .status-success {
+    color: var(--status-success);
+    background-color: var(--status-success-soft);
+  }
+
+  .status-warning {
+    color: var(--status-warning);
+    background-color: var(--status-warning-soft);
+  }
+
+  .status-danger {
+    color: var(--status-danger);
+    background-color: var(--status-danger-soft);
+  }
+
+  .status-info {
+    color: var(--status-info);
+    background-color: var(--status-info-soft);
+  }
+
+  .surface-1 {
+    background-color: var(--surface-1);
+  }
+
+  .surface-2 {
+    background-color: var(--surface-2);
+  }
+
+  .surface-3 {
+    background-color: var(--surface-3);
   }
 
   /* Neon box glow */
@@ -235,7 +348,7 @@ html[dir="rtl"] {
   /* Scroll-triggered animations */
   .animate-on-scroll {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(var(--motion-offset-md));
     transition:
       opacity var(--duration-slower) var(--ease-out-expo),
       transform var(--duration-slower) var(--ease-out-expo);
@@ -257,7 +370,7 @@ html[dir="rtl"] {
   /* Fade in from different directions */
   .animate-fade-up {
     opacity: 0;
-    transform: translateY(32px);
+    transform: translateY(var(--motion-offset-lg));
     transition:
       opacity var(--duration-slower) var(--ease-out-expo),
       transform var(--duration-slower) var(--ease-out-expo);
