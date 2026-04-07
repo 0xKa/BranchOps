@@ -46,14 +46,14 @@ export default function DashboardPage() {
         description={t("dashboard.overview")}
       />
 
-      {/* ── Stat Cards ──────────────────────────────────────── */}
+      {/* Stat Cards */}
       {isLoading || !data ? (
         <StatCardsSkeleton />
       ) : (
         <StatCards data={data.summary} />
       )}
 
-      {/* ── Sales Charts Row ────────────────────────────────── */}
+      {/* Sales Charts Row */}
       <div className="grid gap-4 lg:grid-cols-3">
         {isLoading || !data ? (
           <>
@@ -79,7 +79,7 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* ── Middle Row: Top Products + Branch Performance ──── */}
+      {/* Middle Row: Top Products + Branch Performance */}
       <div className="grid gap-4 lg:grid-cols-2">
         {isLoading || !data ? (
           <>
@@ -94,7 +94,7 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* ── Bottom Row: Recent Orders + Low Stock Alerts ───── */}
+      {/* Bottom Row: Recent Orders + Low Stock Alerts */}
       <div className="grid gap-4 lg:grid-cols-[1fr_380px]">
         {isLoading || !data ? (
           <>

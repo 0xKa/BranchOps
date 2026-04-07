@@ -78,10 +78,10 @@ export default function Header({ title }: HeaderProps) {
           </Breadcrumb>
         </div>
         <div
-          className={`flex items-center gap-2 rounded-lg border border-border/60 bg-surface-2/85 px-2 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] supports-backdrop-filter:backdrop-blur-xs ${isRTL ? "mr-auto" : "ml-auto"}`}
+          className={`flex items-center gap-2 rounded-lg px-2 py-1  ${isRTL ? "mr-auto" : "ml-auto"}`}
         >
-          <LanguageToggle size="lg" />
-          <ModeToggle size="lg" />
+          <LanguageToggle className="h-9 w-15" />
+          <ModeToggle className="size-9" />
         </div>
       </div>
     </header>
