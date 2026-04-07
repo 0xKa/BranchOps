@@ -32,6 +32,7 @@
     "admins": "Admins",
     "employees": "Employees",
     "salaries": "Salaries",
+    "exportSales": "Export Sales",
     "settings": "Settings"
   },
   "dashboard": {
@@ -112,6 +113,7 @@
     "daily-sales": "Daily Sales",
     "sales-by-branch": "Sales by Branch",
     "top-products": "Top Products",
+    "export-sales": "Export Sales",
     "forecasting": "Forecasting",
     "audit-log": "Audit Log",
     "users": "Users",
@@ -222,6 +224,30 @@
     "qtySold": "Qty Sold",
     "revenue": "Revenue",
     "noData": "No product data for the selected period."
+  },
+  "exportSales": {
+    "title": "Export Sales",
+    "description": "Download sales data as a CSV file for a chosen period.",
+    "dateRange": "Date Range",
+    "from": "From",
+    "to": "To",
+    "filters": "Filters",
+    "branch": "Branch",
+    "allBranches": "All branches",
+    "status": "Order Status",
+    "allStatuses": "All statuses",
+    "paid": "Paid",
+    "cancelled": "Cancelled",
+    "format": "Export Format",
+    "orderSummary": "Order Summary",
+    "orderSummaryDesc": "One row per order with totals, payment method, and status.",
+    "itemDetail": "Item Detail",
+    "itemDetailDesc": "One row per product sold, including cost and profit breakdown.",
+    "exportCsv": "Export CSV",
+    "exporting": "Exporting...",
+    "exportSuccess": "Sales data exported successfully.",
+    "exportFailed": "Failed to export sales data.",
+    "invalidRange": "Start date must be before end date (max 366 days)."
   },
   "common": {
     "search": "Search",
