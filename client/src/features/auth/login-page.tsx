@@ -1,3 +1,4 @@
+import Aurora from "@/components/shared/aurora";
 import { BackToHomeButton } from "@/components/shared/back-to-home-button";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LanguageToggle } from "@/locales/language-toggle";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Building2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -44,9 +44,13 @@ export default function LoginPage() {
   return (
     <div className="relative isolate min-h-svh overflow-hidden bg-background p-4 sm:p-6">
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-28 top-0 h-88 w-88 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute -bottom-28 -right-12 h-96 w-96 rounded-full bg-neon-cyan/20 blur-3xl" />
-      </div>
+          <Aurora
+            colorStops={["#001a0d", "#00FF88", "#003322"]}
+            amplitude={2.5}
+            blend={0.6}
+            speed={0.4}
+          />
+                </div>
 
       <div className="relative mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-5xl flex-col items-center justify-center">
         <div className="mb-5 flex items-center gap-3 rounded-full px-2 py-2 ltr:flex-row-reverse sm:absolute sm:right-0 sm:top-0 sm:mb-0">

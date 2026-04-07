@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
 import { useScrollAnimation } from "../hooks/use-scroll-animation";
-import Aurora from "./aurora";
+import Aurora from "@/components/shared/aurora";
 
 export function HeroSection() {
   const { t } = useTranslation();
