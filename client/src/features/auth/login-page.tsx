@@ -1,3 +1,4 @@
+import { BackToHomeButton } from "@/components/shared/back-to-home-button";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Building2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-
 import { z } from "zod";
-import { BackToHomeButton } from "@/components/shared/back-to-home-button";
 import { useLogin } from "./hooks/use-login";
 
 const loginSchema = z.object({
@@ -49,20 +48,22 @@ export default function LoginPage() {
         <div className="absolute -bottom-28 -right-12 h-96 w-96 rounded-full bg-neon-cyan/20 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-5xl flex-col items-center justify-center">
-        <div className="mb-5 flex items-center gap-3 rounded-full border border-border/60 bg-background/40 px-2 py-2 backdrop-blur-xl ltr:flex-row-reverse sm:absolute sm:right-0 sm:top-0 sm:mb-0">
-          <BackToHomeButton />
+      <div className="relative mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-5xl flex-col items-center justify-center">
+        <div className="mb-5 flex items-center gap-3 rounded-full px-2 py-2 ltr:flex-row-reverse sm:absolute sm:right-0 sm:top-0 sm:mb-0">
+          <BackToHomeButton className="h-10 w-30 bg-primary/20 text-primary/80 hover:bg-accent" />
           <LanguageToggle className="h-10 w-20" />
           <ModeToggle className="h-10 w-10" />
         </div>
 
         <Card className="surface-1 w-full max-w-md border-border/60 shadow-glow-subtle">
           <CardHeader className="space-y-3 text-center">
-            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-primary/35 bg-primary/15 text-primary shadow-[0_0_30px_hsl(var(--primary)/0.35)]">
-              <Building2 className="size-7" />
+            <div className="mx-auto flex size-14 items-center justify-center rounded-2xl border border-primary/20 bg-primary/10 text-primary shadow-[0_0_30px_hsl(var(--primary)/0.35)]">
+              <img src="/avocado.svg" alt="BranchOps logo" className="size-10" />
             </div>
             <div className="space-y-1">
-              <CardTitle className="font-display text-3xl">{t("login.title")}</CardTitle>
+              <CardTitle className="font-display text-3xl">
+                {t("login.title")}
+              </CardTitle>
               <CardDescription>{t("login.description")}</CardDescription>
             </div>
           </CardHeader>
@@ -90,6 +91,7 @@ export default function LoginPage() {
                   placeholder={t("login.usernamePlaceholder")}
                   {...register("username")}
                   aria-invalid={errors.username ? "true" : "false"}
+                  className="h-8.5"
                 />
               </div>
               <div className="space-y-2">
@@ -109,6 +111,7 @@ export default function LoginPage() {
                   placeholder={t("login.passwordPlaceholder")}
                   {...register("password")}
                   aria-invalid={errors.password ? "true" : "false"}
+                  className="h-8.5"
                 />
               </div>
               <Button
