@@ -49,8 +49,8 @@ export default function LoginPage() {
         <div className="absolute -bottom-28 -right-12 h-96 w-96 rounded-full bg-neon-cyan/20 blur-3xl" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-5xl items-center justify-center">
-        <div className="absolute right-0 top-0 flex items-center gap-3 rounded-full border border-border/60 bg-background/40 px-2 py-2 backdrop-blur-xl ltr:flex-row-reverse">
+      <div className="relative mx-auto flex min-h-[calc(100svh-2rem)] w-full max-w-5xl flex-col items-center justify-center">
+        <div className="mb-5 flex items-center gap-3 rounded-full border border-border/60 bg-background/40 px-2 py-2 backdrop-blur-xl ltr:flex-row-reverse sm:absolute sm:right-0 sm:top-0 sm:mb-0">
           <BackToHomeButton />
           <LanguageToggle className="h-10 w-20" />
           <ModeToggle className="h-10 w-10" />
