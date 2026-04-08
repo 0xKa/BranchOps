@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
 import { useScrollAnimation } from "../hooks/use-scroll-animation";
-import Aurora from "@/components/shared/aurora";
-
 export function HeroSection() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -13,17 +11,7 @@ export function HeroSection() {
 
   return (
     <section className="relative flex min-h-svh items-center justify-center overflow-hidden">
-      {/* Background: Aurora animation */}
       <div className="pointer-events-none absolute inset-0">
-        {/* Aurora — spans the full hero, anchored to the top half */}
-        <div className="absolute inset-x-0 top-0 h-[75%] opacity-60">
-          <Aurora
-            colorStops={["#001a0d", "#00FF88", "#003322"]}
-            amplitude={2.5}
-            blend={0.6}
-            speed={0.4}
-          />
-        </div>
         {/* Subtle grid overlay */}
         <div
           className="absolute inset-0 opacity-[0.03]"
@@ -79,8 +67,6 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Bottom fade */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-background to-transparent" />
     </section>
   );
 }

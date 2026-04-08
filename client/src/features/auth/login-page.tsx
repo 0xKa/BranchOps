@@ -1,4 +1,4 @@
-import Aurora from "@/components/shared/aurora";
+import SoftAurora from "@/components/SoftAurora";
 import { BackToHomeButton } from "@/components/shared/back-to-home-button";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import { Button } from "@/components/ui/button";
@@ -44,11 +44,15 @@ export default function LoginPage() {
   return (
     <div className="relative isolate min-h-svh overflow-hidden bg-background p-4 sm:p-6">
       <div className="pointer-events-none absolute inset-0">
-        <Aurora
-          colorStops={["#001a0d", "#00FF88", "#003322"]}
-          amplitude={0.5}
-          blend={0.6}
-          speed={0.4}
+        <SoftAurora
+          color1="#00FF88"
+          color2="#000000"
+          speed={1.5}
+          brightness={0.8}
+          scale={1.5}
+          bandHeight={0.55}
+          bandSpread={1.3}
+          enableMouseInteraction={false}
         />
       </div>
 
