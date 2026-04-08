@@ -1,0 +1,168 @@
+erDiagram
+    User {
+        uuid Id PK
+        string Username
+        string PasswordHash
+        string Email
+        int Role "0=Admin 1=StockManager 2=BranchManager 3=Cashier 4=Guest"
+        string RefreshToken
+        datetime RefreshTokenExpiryTime
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    Branch {
+        uuid Id PK
+        string Code
+        string DisplayName
+        string AddressLine1
+        string AddressLine2
+        string City
+        string Country
+        bool IsActive
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    BranchPhone {
+        uuid Id PK
+        uuid BranchId FK
+        string Number
+        string Label
+        bool IsPrimary
+        bool IsActive
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    Employee {
+        uuid Id PK
+        uuid UserId FK
+        uuid BranchId FK
+        string FullName
+        string Phone
+        string JobTitle
+        string Notes
+        bool IsActive
+        datetime HiredAt
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    EmployeeSalary {
+        uuid Id PK
+        uuid EmployeeId FK
+        decimal Amount
+        string Currency
+        datetime EffectiveFrom
+        datetime EffectiveTo
+        string Notes
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    ProductCategory {
+        uuid Id PK
+        string Name
+        bool IsActive
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    Product {
+        uuid Id PK
+        uuid CategoryId FK
+        string Name
+        decimal Price
+        decimal Cost
+        bool IsActive
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    Order {
+        uuid Id PK
+        uuid BranchId FK
+        uuid CreatedByUserId FK
+        uuid CancelledByUserId FK
+        int Status "1=Paid 2=Cancelled"
+        decimal Subtotal
+        decimal Discount
+        decimal Tax
+        decimal Total
+        int PaymentMethod "1=Cash 2=Card 3=Mixed"
+        decimal AmountPaid
+        datetime PaidAtUtc
+        string Notes
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    OrderItem {
+        uuid Id PK
+        uuid OrderId FK
+        uuid ProductId FK
+        int Quantity
+        decimal UnitPrice
+        decimal LineTotal
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    BranchStock {
+        uuid Id PK
+        uuid BranchId FK
+        uuid ProductId FK
+        int Quantity
+        int LowStockThreshold
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    StockAdjustment {
+        uuid Id PK
+        uuid BranchStockId FK
+        uuid BranchId FK
+        uuid ProductId FK
+        uuid PerformedByUserId FK
+        int Type "1=Restock 2=Sale 3=Return 4=Damage 5=ManualAdjustment 6=Transfer"
+        int QuantityChange
+        int QuantityAfter
+        string Notes
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+    AuditLog {
+        uuid Id PK
+        uuid UserId FK
+        string Action
+        string EntityType
+        uuid EntityId
+        string Details
+        datetime Timestamp
+    }
+
+    Branch ||--o{ BranchPhone : "has"
+    Branch ||--o{ Employee : "employs"
+    Branch ||--o{ BranchStock : "stocks"
+    Branch ||--o{ Order : "receives"
+    Branch ||--o{ StockAdjustment : "recorded at"
+
+    User ||--o| Employee : "is"
+    User ||--o{ Order : "creates"
+    User ||--o{ Order : "cancels"
+    User ||--o{ StockAdjustment : "performs"
+    User ||--o{ AuditLog : "generates"
+
+    Employee ||--o{ EmployeeSalary : "earns"
+
+    ProductCategory ||--o{ Product : "categorizes"
+
+    Product ||--o{ OrderItem : "appears in"
+    Product ||--o{ BranchStock : "tracked by"
+    Product ||--o{ StockAdjustment : "adjusted in"
+
+    Order ||--|{ OrderItem : "contains"
+
+    BranchStock ||--o{ StockAdjustment : "adjusted via"

@@ -1,0 +1,202 @@
+classDiagram
+    class BaseDomainObject {
+        +Guid Id
+        +DateTime CreatedAt
+        +DateTime UpdatedAt
+    }
+
+    class User {
+        +string Username
+        +string PasswordHash
+        +string? Email
+        +UserRole Role
+        +string? RefreshToken
+        +DateTime? RefreshTokenExpiryTime
+    }
+
+    class UserRole {
+        <<enumeration>>
+        Admin
+        StockManager
+        BranchManager
+        Cashier
+        Guest
+    }
+
+    class Branch {
+        +string Code
+        +string DisplayName
+        +string? AddressLine1
+        +string? AddressLine2
+        +string? City
+        +string? Country
+        +bool IsActive
+    }
+
+    class BranchPhone {
+        +Guid BranchId
+        +string Number
+        +string? Label
+        +bool IsPrimary
+        +bool IsActive
+    }
+
+    class Employee {
+        +Guid UserId
+        +Guid BranchId
+        +string FullName
+        +string? Phone
+        +string? JobTitle
+        +string? Notes
+        +bool IsActive
+        +DateTime? HiredAt
+    }
+
+    class EmployeeSalary {
+        +Guid EmployeeId
+        +decimal Amount
+        +string Currency
+        +DateTime EffectiveFrom
+        +DateTime? EffectiveTo
+        +string? Notes
+    }
+
+    class Order {
+        +Guid BranchId
+        +Guid CreatedByUserId
+        +OrderStatus Status
+        +decimal Subtotal
+        +decimal Discount
+        +decimal Tax
+        +decimal Total
+        +PaymentMethod PaymentMethod
+        +decimal AmountPaid
+        +DateTime? PaidAtUtc
+        +Guid? CancelledByUserId
+        +string? Notes
+    }
+
+    class OrderStatus {
+        <<enumeration>>
+        Paid
+        Cancelled
+    }
+
+    class PaymentMethod {
+        <<enumeration>>
+        Cash
+        Card
+        Mixed
+    }
+
+    class OrderItem {
+        +Guid OrderId
+        +Guid ProductId
+        +int Quantity
+        +decimal UnitPrice
+        +decimal LineTotal
+    }
+
+    class Product {
+        +string Name
+        +Guid CategoryId
+        +decimal Price
+        +decimal? Cost
+        +bool IsActive
+    }
+
+    class ProductCategory {
+        +string Name
+        +bool IsActive
+    }
+
+    class BranchStock {
+        +Guid BranchId
+        +Guid ProductId
+        +int Quantity
+        +int LowStockThreshold
+        +bool IsLowStock
+    }
+
+    class StockAdjustment {
+        +Guid BranchStockId
+        +Guid BranchId
+        +Guid ProductId
+        +StockAdjustmentType Type
+        +int QuantityChange
+        +int QuantityAfter
+        +Guid? PerformedByUserId
+        +string? Notes
+    }
+
+    class StockAdjustmentType {
+        <<enumeration>>
+        Restock
+        Sale
+        Return
+        Damage
+        ManualAdjustment
+        Transfer
+    }
+
+    class AuditLog {
+        +Guid Id
+        +Guid? UserId
+        +string Action
+        +string EntityType
+        +Guid? EntityId
+        +string Details
+        +DateTime Timestamp
+    }
+
+    %% Inheritance
+    BaseDomainObject <|-- User
+    BaseDomainObject <|-- Branch
+    BaseDomainObject <|-- BranchPhone
+    BaseDomainObject <|-- Employee
+    BaseDomainObject <|-- EmployeeSalary
+    BaseDomainObject <|-- Order
+    BaseDomainObject <|-- OrderItem
+    BaseDomainObject <|-- Product
+    BaseDomainObject <|-- ProductCategory
+    BaseDomainObject <|-- BranchStock
+    BaseDomainObject <|-- StockAdjustment
+
+    %% User
+    User --> UserRole : has role
+
+    %% Branch
+    Branch "1" *-- "0..*" BranchPhone : has phones
+    Branch "1" *-- "0..*" Employee : employs
+
+    %% Employee
+    Employee "0..*" --> "1" User : linked account
+    Employee "1" *-- "0..*" EmployeeSalary : has salaries
+
+    %% Order
+    Order "0..*" --> "1" Branch : placed at
+    Order "0..*" --> "1" User : created by
+    Order "0..*" --> "0..1" User : cancelled by
+    Order --> OrderStatus : status
+    Order --> PaymentMethod : payment
+    Order "1" *-- "1..*" OrderItem : contains
+
+    %% OrderItem
+    OrderItem "0..*" --> "1" Product : references
+
+    %% Product
+    Product "0..*" --> "1" ProductCategory : belongs to
+
+    %% Inventory
+    BranchStock "0..*" --> "1" Branch : stocked at
+    BranchStock "0..*" --> "1" Product : tracks
+
+    %% StockAdjustment
+    StockAdjustment "0..*" --> "1" BranchStock : adjusts
+    StockAdjustment "0..*" --> "1" Branch
+    StockAdjustment "0..*" --> "1" Product
+    StockAdjustment "0..*" --> "0..1" User : performed by
+    StockAdjustment --> StockAdjustmentType : type
+
+    %% AuditLog
+    AuditLog "0..*" --> "0..1" User : performed by

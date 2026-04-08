@@ -1,0 +1,101 @@
+flowchart TD
+    START((" "))
+    STOP((" "))
+
+    START --> OpenApp["Open BranchOps App"]
+
+    %% ── Authentication ────────────────────────────────────────────────────────
+    OpenApp --> CheckAuth{"Authenticated?"}
+    CheckAuth -- "No" --> ShowLogin["Show Login Page"]
+    CheckAuth -- "Yes" --> CheckToken{"Access Tokend Expired?"}
+
+    CheckToken -- "No" --> RouteByRole
+    CheckToken -- "Yes" --> TryRefresh["POST /api/auth/refresh"]
+    TryRefresh --> RefreshValid{"Refresh Tokend Valid?"}
+    RefreshValid -- "Yes" --> RouteByRole
+    RefreshValid -- "No" --> ShowLogin
+
+    ShowLogin --> EnterCreds["Enter Username & Password"]
+    EnterCreds --> ValidateForm{"Form Valid?d (Zod)"}
+    ValidateForm -- "No" --> EnterCreds
+    ValidateForm -- "Yes" --> PostLogin["POST /api/auth/login"]
+    PostLogin --> AuthOk{"Credentialsd Valid?"}
+    AuthOk -- "No" --> ShowLoginErr["Show Error Message"]
+    ShowLoginErr --> EnterCreds
+    AuthOk -- "Yes" --> IssueJWT["Issue JWT + Refresh Tokend (role & branchId claims)"]
+    IssueJWT --> StoreTokens["Persist Tokensd (Zustand + localStorage)"]
+    StoreTokens --> LogLogin["Log Audit: Login"]
+    LogLogin --> RouteByRole
+
+    %% ── Role-Based Routing ────────────────────────────────────────────────────
+    RouteByRole{"Route by Role"}
+    RouteByRole -- "Admin /d BranchManager" --> Dashboard
+    RouteByRole -- "StockManager" --> Inventory
+    RouteByRole -- "Cashier" --> POS
+
+    %% ── Dashboard & Reports ───────────────────────────────────────────────────
+    Dashboard["View Dashboardd (Sales Charts & Stats)"]
+    Dashboard --> WantReports{"View Reports?"}
+    WantReports -- "No" --> PostDash
+    WantReports -- "Yes" --> PickReport["Select Report Typed (Daily / Branch / Top Products)"]
+    PickReport --> GenReport["GET /api/reportsd Fetch filtered data"]
+    GenReport --> WantExport{"Export to CSV?"}
+    WantExport -- "Yes" --> DownloadCSV["Download CSV Export"]
+    DownloadCSV --> PostDash
+    WantExport -- "No" --> PostDash
+    PostDash{"Continue?"}
+    PostDash -- "Yes" --> Dashboard
+    PostDash -- "No" --> Logout
+
+    %% ── POS Order Flow ────────────────────────────────────────────────────────
+    POS["Open New Order"]
+    POS --> LoadProds["GET /api/productsd Load Product Catalogue"]
+    LoadProds --> AddItem["Add Item to Cart"]
+    AddItem --> MoreItems{"Add More Items?"}
+    MoreItems -- "Yes" --> AddItem
+    MoreItems -- "No" --> SetPayment["Select Payment Methodd (Cash / Card / Mixed)"]
+    SetPayment --> ConfirmOrder["Confirm Order"]
+    ConfirmOrder --> SubmitOrder["POST /api/orders"]
+    SubmitOrder --> StockOk{"Stockd Available?"}
+    StockOk -- "No" --> OutOfStock["Show Out-of-Stock Warning"]
+    OutOfStock --> AddItem
+    StockOk -- "Yes" --> CreateOrder["INSERT Order + OrderItems"]
+    CreateOrder --> DeductStock["UPDATE BranchStockd INSERT StockAdjustment (Sale)"]
+    DeductStock --> LogOrder["Log Audit: Order Created"]
+    LogOrder --> ShowReceipt["Show Receipt & Confirmation"]
+    ShowReceipt --> AnotherOrder{"New Order?"}
+    AnotherOrder -- "Yes" --> POS
+    AnotherOrder -- "No" --> Logout
+
+    %% ── Inventory Management Flow ─────────────────────────────────────────────
+    Inventory["View Stock Levelsd & Low-Stock Alerts"]
+    Inventory --> NeedsAdj{"Adjustmentd Needed?"}
+    NeedsAdj -- "No" --> Logout
+    NeedsAdj -- "Yes" --> PickAdjType["Select Adjustment Typed (Restock / Damage / Return / Transfer)"]
+    PickAdjType --> SubmitAdj["PUT /api/stock/{id}/adjust"]
+    SubmitAdj --> UpdateStock["UPDATE BranchStock.Quantityd INSERT StockAdjustment"]
+    UpdateStock --> LogAdj["Log Audit: Stock Adjusted"]
+    LogAdj --> CheckAlert{"Low-Stockd Alert Triggered?"}
+    CheckAlert -- "Yes" --> ShowAlert["Show Low-Stock Notification"]
+    ShowAlert --> Inventory
+    CheckAlert -- "No" --> Inventory
+
+    %% ── Logout ────────────────────────────────────────────────────────────────
+    Logout["Clear Tokensd (Zustand + localStorage)"]
+    Logout --> LogLogout["Log Audit: Logout"]
+    LogLogout --> STOP
+
+    %% ── Styling ───────────────────────────────────────────────────────────────
+    classDef startStop fill:#1e293b,stroke:#1e293b,color:#fff,font-size:18px
+    classDef auth    fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f
+    classDef pos     fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef inv     fill:#fef9c3,stroke:#eab308,color:#713f12
+    classDef rep     fill:#f3e8ff,stroke:#a855f7,color:#3b0764
+    classDef decision fill:#fff7ed,stroke:#f97316,color:#431407
+
+    class START,STOP startStop
+    class ShowLogin,EnterCreds,ValidateForm,PostLogin,AuthOk,ShowLoginErr,IssueJWT,StoreTokens,LogLogin,CheckToken,TryRefresh,RefreshValid auth
+    class POS,LoadProds,AddItem,SetPayment,ConfirmOrder,SubmitOrder,StockOk,OutOfStock,CreateOrder,DeductStock,LogOrder,ShowReceipt,AnotherOrder pos
+    class Inventory,NeedsAdj,PickAdjType,SubmitAdj,UpdateStock,LogAdj,CheckAlert,ShowAlert inv
+    class Dashboard,WantReports,PickReport,GenReport,WantExport,DownloadCSV,PostDash rep
+    class RouteByRole,CheckAuth,MoreItems decision

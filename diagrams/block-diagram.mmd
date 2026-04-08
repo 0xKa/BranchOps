@@ -1,0 +1,71 @@
+block
+  columns 4
+
+  %% ── Client Layer ───────────────────────────────────────────────────────────
+  CLIENT["Client — React 19 + TypeScript (Vite / Bun)"]:4
+    fe_auth(["Auth & Login"])
+    fe_dash(["Dashboard & Charts"])
+    fe_pos(["Point of Sale"])
+    fe_inv(["Inventory & Stock"])
+    fe_prod(["Product Catalogue"])
+    fe_rep(["Reports & Export"])
+    fe_branch(["Branch Management"])
+    fe_emp(["Employees & Salaries"])
+    fe_audit(["Audit Log"])
+    fe_set(["Account Settings"])
+    fe_land(["Landing Page"])
+    space
+
+  %% ── Frontend Infrastructure ────────────────────────────────────────────────
+  FE_INFRA["Frontend Infrastructure"]:4
+    router["React Router v7\nRoute Guards"]
+    query["TanStack Query 5\nServer State"]
+    zustand["Zustand 5\nAuth State"]
+    axios["Axios\nJWT Interceptor"]
+    shadcn["shadcn/ui\nRadix + Tailwind 4"]
+    i18n["i18next\nEN / AR + RTL"]
+    space
+    space
+
+  %% ── API Layer ───────────────────────────────────────────────────────────────
+  API["API — ASP.NET Core Web API (.NET 10)"]:4
+    c_auth["Auth"]
+    c_branch["Branches"]
+    c_emp["Employees"]
+    c_sal["Salaries"]
+    c_prod["Products"]
+    c_cat["Categories"]
+    c_order["Orders"]
+    c_stock["Stock"]
+    c_rep["Reports"]
+    c_audit["Audit Log"]
+    c_dash["Dashboard"]
+    c_set["Account Settings"]
+
+  %% ── Backend Infrastructure ─────────────────────────────────────────────────
+  BE_INFRA["Backend Infrastructure"]:4
+    jwt["JWT Bearer\nAuth + Refresh"]
+    ef["EF Core 10\n+ Npgsql"]
+    audit_svc["Audit Log\nService"]
+    di["Dependency\nInjection"]
+    scalar["Scalar\nOpenAPI Docs"]
+    identity["ASP.NET\nIdentity"]
+    space
+    space
+
+  %% ── Data Layer ──────────────────────────────────────────────────────────────
+  DATA["Data Layer — PostgreSQL"]:4
+    db_user[("Users & Roles")]
+    db_branch[("Branches & Phones")]
+    db_emp[("Employees & Salaries")]
+    db_prod[("Products & Categories")]
+    db_order[("Orders & Items")]
+    db_stock[("Branch Stock")]
+    db_adj[("Stock Adjustments")]
+    db_audit[("Audit Logs")]
+
+  %% ── Connections ─────────────────────────────────────────────────────────────
+  FE_INFRA -->|"powers"| CLIENT
+  CLIENT   -->|"REST / HTTPS"| API
+  BE_INFRA -->|"supports"| API
+  API      -->|"queries"| DATA

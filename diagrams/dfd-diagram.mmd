@@ -1,0 +1,95 @@
+flowchart TD
+    %% ── External Entities ─────────────────────────────────────────────────────
+    Admin["Admin"]
+    BM["Branch Manager"]
+    SM["Stock Manager"]
+    CA["Cashier"]
+
+    %% ── Processes ─────────────────────────────────────────────────────────────
+    P1(["1.0 Authenticate & Authorize"])
+    P2(["2.0 Manage Branches & Employees"])
+    P3(["3.0 Manage Product Catalogue"])
+    P4(["4.0 Process POS Orders"])
+    P5(["5.0 Manage Inventory"])
+    P6(["6.0 Generate Reports"])
+    P7(["7.0 Record Audit Trail"])
+
+    %% ── Data Stores ───────────────────────────────────────────────────────────
+    DS1[("DS1 Users & Roles")]
+    DS2[("DS2 Branches & Phones")]
+    DS3[("DS3 Employees & Salaries")]
+    DS4[("DS4 Products & Categories")]
+    DS5[("DS5 Orders & Items")]
+    DS6[("DS6 Branch Stock & Adjustments")]
+    DS7[("DS7 Audit Logs")]
+
+    %% ── 1.0 Authentication ────────────────────────────────────────────────────
+    Admin  -->|"Credentials"| P1
+    BM     -->|"Credentials"| P1
+    SM     -->|"Credentials"| P1
+    CA     -->|"Credentials"| P1
+    P1     -->|"JWT + Role + BranchId"| Admin
+    P1     -->|"JWT + Role + BranchId"| BM
+    P1     -->|"JWT + Role + BranchId"| SM
+    P1     -->|"JWT + Role + BranchId"| CA
+    P1    <-->|"User record / Refresh token"| DS1
+
+    %% ── 2.0 Branch & Employee Management ─────────────────────────────────────
+    Admin  -->|"Branch / employee data"| P2
+    BM     -->|"Employee / salary data"| P2
+    P2     -->|"Confirmation"| Admin
+    P2     -->|"Confirmation"| BM
+    P2    <-->|"Branch records"| DS2
+    P2    <-->|"Employee & salary records"| DS3
+    P2     -->|"Action event"| P7
+
+    %% ── 3.0 Product Catalogue Management ─────────────────────────────────────
+    Admin  -->|"Product / category data"| P3
+    SM     -->|"Product / category data"| P3
+    P3     -->|"Confirmation"| Admin
+    P3     -->|"Confirmation"| SM
+    P3    <-->|"Product & category records"| DS4
+    P3     -->|"Product list"| P4
+    P3     -->|"Product list"| P5
+    P3     -->|"Action event"| P7
+
+    %% ── 4.0 POS Order Processing ──────────────────────────────────────────────
+    CA     -->|"Cart items + payment method"| P4
+    BM     -->|"Cart items + payment method"| P4
+    P4     -->|"Receipt / order confirmation"| CA
+    P4     -->|"Receipt / order confirmation"| BM
+    P4    <-->|"Order & item records"| DS5
+    P4     -->|"Stock deduction (Sale adjustment)"| P5
+    P4     -->|"Action event"| P7
+
+    %% ── 5.0 Inventory Management ──────────────────────────────────────────────
+    Admin  -->|"Adjustment details"| P5
+    SM     -->|"Adjustment details"| P5
+    P5     -->|"Updated stock levels"| Admin
+    P5     -->|"Updated stock levels"| SM
+    P5    <-->|"Stock levels & adjustment records"| DS6
+    P5     -->|"Action event"| P7
+
+    %% ── 6.0 Report Generation ─────────────────────────────────────────────────
+    Admin  -->|"Report request / filters"| P6
+    BM     -->|"Report request / filters"| P6
+    P6     -->|"Report data / CSV export"| Admin
+    P6     -->|"Report data / CSV export"| BM
+    P6    <-->|"Order data"| DS5
+    P6    <-->|"Stock data"| DS6
+    P6    <-->|"Branch data"| DS2
+    P6    <-->|"Product data"| DS4
+
+    %% ── 7.0 Audit Trail ───────────────────────────────────────────────────────
+    P7     -->|"Log entry"| DS7
+    Admin  -->|"Audit log query"| P7
+    P7     -->|"Log entries"| Admin
+
+    %% ── Styling ───────────────────────────────────────────────────────────────
+    classDef entity  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f,font-weight:bold
+    classDef process fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef store   fill:#fef9c3,stroke:#eab308,color:#713f12
+
+    class Admin,BM,SM,CA entity
+    class P1,P2,P3,P4,P5,P6,P7 process
+    class DS1,DS2,DS3,DS4,DS5,DS6,DS7 store

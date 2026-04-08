@@ -1,0 +1,107 @@
+sequenceDiagram
+    autonumber
+
+    actor User
+    participant App as React App
+    participant Axios as Axios Interceptor
+    participant Auth as AuthController
+    participant Orders as OrdersController
+    participant Stock as StockController
+    participant Svc as Business Services
+    participant DB as PostgreSQL
+    participant Audit as Audit Service
+
+    %% ── 1. Login ──────────────────────────────────────────────────────────────
+    rect rgb(220, 235, 255)
+        Note over User,Auth: 1 — Login & JWT Issuance
+        User->>App: Submit username + password
+        App->>Auth: POST /api/auth/login
+        Auth->>DB: Lookup user by username
+        DB-->>Auth: User record
+        Auth->>Auth: Verify password hash
+        Auth->>Auth: Generate JWT (role, branchId claims)
+        Auth->>Auth: Generate refresh token
+        Auth->>DB: Persist refresh token + expiry
+        DB-->>Auth: Saved
+        Auth-->>App: 200 OK { accessToken, refreshToken, user }
+        App->>App: Persist tokens in Zustand + localStorage
+        App->>Audit: POST /api/audit (Login event)
+        Audit->>DB: Insert AuditLog record
+        App-->>User: Redirect to role-based default route
+    end
+
+    %% ── 2. Authenticated Request ──────────────────────────────────────────────
+    rect rgb(220, 255, 235)
+        Note over App,DB: 2 — Normal Authenticated Request
+        User->>App: Navigate to Inventory page
+        App->>Axios: GET /api/stock
+        Axios->>Axios: Attach Authorization Bearer accessToken
+        Axios->>Stock: GET /api/stock
+        Stock->>Stock: Validate JWT signature + expiry
+        Stock->>Stock: Extract branchId claim (non-Admin)
+        Stock->>DB: Query BranchStock WHERE BranchId = claim
+        DB-->>Stock: Stock level records
+        Stock-->>Axios: 200 OK + stock data
+        Axios-->>App: Response data
+        App-->>User: Render stock levels table
+    end
+
+    %% ── 3. Token Expiry + Silent Refresh ──────────────────────────────────────
+    rect rgb(255, 248, 220)
+        Note over App,Auth: 3 — Access Token Expiry & Silent Refresh
+        App->>Axios: Any API request (expired token)
+        Axios->>Stock: Request with expired JWT
+        Stock-->>Axios: 401 Unauthorized
+        Axios->>Axios: Intercept 401 — pause queue
+        Axios->>Auth: POST /api/auth/refresh { refreshToken }
+        Auth->>DB: Validate refresh token + expiry
+        DB-->>Auth: Token record
+        Auth->>Auth: Issue new accessToken + refreshToken
+        Auth->>DB: Rotate refresh token
+        Auth-->>Axios: 200 OK { accessToken, refreshToken }
+        Axios->>Axios: Update tokens in Zustand + localStorage
+        Axios->>Stock: Retry original request with new JWT
+        Stock-->>Axios: 200 OK + data
+        Axios-->>App: Transparent response (caller unaware of refresh)
+    end
+
+    %% ── 4. Create POS Order ───────────────────────────────────────────────────
+    rect rgb(255, 225, 225)
+        Note over User,Audit: 4 — Cashier Creates a POS Order
+        User->>App: Add items to cart + confirm order
+        App->>Axios: POST /api/orders { items, paymentMethod }
+        Axios->>Orders: POST /api/orders (JWT: Cashier role + branchId)
+        Orders->>Orders: Enforce branchId from JWT claim
+        Orders->>Svc: CreateOrderAsync(dto, branchId)
+        Svc->>DB: BEGIN transaction
+        Svc->>DB: INSERT Order
+        loop For each item in cart
+            Svc->>DB: INSERT OrderItem
+            Svc->>DB: UPDATE BranchStock SET Quantity = Quantity - n
+            Svc->>DB: INSERT StockAdjustment (Type = Sale)
+        end
+        Svc->>DB: COMMIT transaction
+        Svc->>Audit: LogAsync("Create", "Order", orderId)
+        Audit->>DB: INSERT AuditLog
+        Orders-->>Axios: 201 Created + order details
+        Axios-->>App: Order response
+        App-->>User: Show receipt + clear cart
+    end
+
+    %% ── 5. Manual Stock Adjustment ────────────────────────────────────────────
+    rect rgb(235, 220, 255)
+        Note over User,Audit: 5 — Stock Manager Adjusts Stock
+        User->>App: Open Adjust Stock dialog + submit
+        App->>Axios: PUT /api/stock/{id}/adjust { quantityChange, type, notes }
+        Axios->>Stock: PUT /api/stock/{id}/adjust (JWT: StockManager)
+        Stock->>Svc: AdjustStockAsync(branchStockId, dto)
+        Svc->>DB: SELECT BranchStock by id
+        DB-->>Svc: Current stock record
+        Svc->>DB: UPDATE BranchStock.Quantity
+        Svc->>DB: INSERT StockAdjustment (Type = ManualAdjustment)
+        Svc->>Audit: LogAsync("Adjust", "BranchStock", id)
+        Audit->>DB: INSERT AuditLog
+        Stock-->>Axios: 200 OK + updated stock
+        Axios-->>App: Updated stock data
+        App-->>User: Reflect new quantity in UI
+    end

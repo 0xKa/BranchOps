@@ -1,0 +1,67 @@
+flowchart LR
+    Admin(["Admin"])
+    BM(["Branch Manager"])
+    SM(["Stock Manager"])
+    CA(["Cashier"])
+    GU(["Guest"])
+
+    subgraph AUTH ["Authentication"]
+        login(["Login"])
+        logout(["Logout"])
+    end
+
+    subgraph DASH ["Dashboard"]
+        viewDash(["View Dashboard"])
+        viewStats(["View Sales Stats and Charts"])
+        lowStockDash(["View Low-Stock Alerts"])
+    end
+
+    subgraph ADM ["Admin Management"]
+        manageAdmins(["Manage Admin Accounts"])
+    end
+
+    subgraph BR ["Branch Management"]
+        manageBranch(["Manage Branches"])
+        branchPhones(["Manage Branch Phone Numbers"])
+    end
+
+    subgraph EMP ["Employee Management"]
+        manageEmp(["Manage Employees"])
+        manageSal(["Manage Employee Salaries"])
+    end
+
+    subgraph PROD ["Product Management"]
+        manageProd(["Manage Products"])
+        manageCat(["Manage Product Categories"])
+    end
+
+    subgraph INV ["Inventory"]
+        viewStock(["View Stock Levels"])
+        adjustStock(["Adjust Stock"])
+        viewAdj(["View Stock Adjustments"])
+        stockAlerts(["View Low-Stock Alerts"])
+    end
+
+    subgraph POS ["Point of Sale"]
+        newOrder(["Create New Order"])
+        viewOrders(["View Order History"])
+        cancelOrder(["Cancel Order"])
+    end
+
+    subgraph REP ["Reports"]
+        dailySales(["View Daily Sales"])
+        branchSales(["View Sales by Branch"])
+        topProd(["View Top Products"])
+        exportSales(["Export Sales Data"])
+    end
+
+    subgraph AUD ["Audit and Settings"]
+        viewAudit(["View Audit Log"])
+        settings(["Manage Account Settings"])
+    end
+
+    Admin --- AUTH & DASH & ADM & BR & EMP & PROD & INV & POS & REP & AUD
+    BM --- AUTH & DASH & BR & EMP & PROD & INV & POS & REP & settings
+    SM --- AUTH & DASH & PROD & INV & settings
+    CA --- AUTH & PROD & INV & POS & settings
+    GU --- login
