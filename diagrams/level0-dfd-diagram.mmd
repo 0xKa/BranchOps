@@ -1,0 +1,37 @@
+flowchart LR
+    %% ── External Entities ─────────────────────────────────────────────────────
+    Admin["Admin"]
+    BM["Branch Manager"]
+    SM["Stock Manager"]
+    CA["Cashier"]
+    GU["Guest"]
+
+    %% ── Level-0 Process (System as black box) ─────────────────────────────────
+    SYS(["0.0 BranchOps POS & Branch Management System"])
+
+    %% ── Admin ─────────────────────────────────────────────────────────────────
+    Admin -->|"Credentials / user & branch data product & inventory data / config"| SYS
+    SYS   -->|"JWT token / dashboards / reports CSV exports / audit logs / confirmations"| Admin
+
+    %% ── Branch Manager ────────────────────────────────────────────────────────
+    BM  -->|"Credentials / branch & employee data salary records / POS orders / report filters"| SYS
+    SYS -->|"JWT token / branch dashboard employee confirmations / sales reports & CSV"| BM
+
+    %% ── Stock Manager ─────────────────────────────────────────────────────────
+    SM  -->|"Credentials / product & category data stock adjustment details"| SYS
+    SYS -->|"JWT token / stock levels low-stock alerts / adjustment confirmations"| SM
+
+    %% ── Cashier ───────────────────────────────────────────────────────────────
+    CA  -->|"Credentials / cart items payment method"| SYS
+    SYS -->|"JWT token / product catalogue order receipt & confirmation"| CA
+
+    %% ── Guest ─────────────────────────────────────────────────────────────────
+    GU  -->|"Page visit"| SYS
+    SYS -->|"Landing page content"| GU
+
+    %% ── Styling ───────────────────────────────────────────────────────────────
+    classDef entity fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f,font-weight:bold
+    classDef system fill:#dcfce7,stroke:#22c55e,color:#14532d,font-weight:bold
+
+    class Admin,BM,SM,CA,GU entity
+    class SYS system

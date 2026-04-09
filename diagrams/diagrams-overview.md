@@ -39,10 +39,10 @@ Illustrates the runtime message flow between actors and system components across
 
 ---
 
-## Data Flow Diagram
-**File:** [`diagrams/dfd-diagram.mmd`](./diagrams/dfd-diagram.mmd)
+## Level 0 DFD
+**File:** [`diagrams/level0-dfd-diagram.mmd`](./diagrams/level0-dfd-diagram.mmd)
 
-A Level-1 DFD showing how data moves between the four external actors and seven internal processes. Each process (Authentication, Branch & Employee Management, Product Catalogue, POS Orders, Inventory, Reports, Audit Trail) is connected to the data stores it reads from or writes to. Color coding distinguishes external entities (blue), processes (green), and data stores (yellow) for quick visual scanning.
+A Level-0 DFD (context diagram) that treats BranchOps as a single black-box process surrounded by its five external actors. The diagram is laid out left-to-right, with actors on either side of the central system node. Each actor's inbound data flows — credentials, form submissions, cart items, adjustment details — and outbound data flows — JWT tokens, confirmations, reports, page content — are labeled on the arrows. It defines the system boundary and establishes the complete set of external interactions before decomposing into more detailed diagrams.
 
 ---
 
