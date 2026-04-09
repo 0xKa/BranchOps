@@ -1,0 +1,137 @@
+flowchart LR
+    %% ── External Entities (left) ──────────────────────────────────────────────
+    Admin["Admin"]
+    BM["Branch Manager"]
+    SM["Stock Manager"]
+    CA["Cashier"]
+
+    %% ── Processes (centre) ────────────────────────────────────────────────────
+    P1(["1.1 Validate Credentials"])
+    P2(["1.2 Issue & Rotate Tokens"])
+    P3(["2.1 Manage Branches"])
+    P4(["2.2 Manage Employees"])
+    P5(["2.3 Manage Salaries"])
+    P6(["3.1 Manage Products"])
+    P7(["3.2 Manage Categories"])
+    P8(["4.1 Build & Submit Order"])
+    P9(["4.2 Deduct Stock"])
+    P10(["5.1 View Stock Levels"])
+    P11(["5.2 Record Stock Adjustment"])
+    P12(["6.1 Aggregate Report Data"])
+    P13(["6.2 Export to CSV"])
+    P14(["7.1 Write Audit Entry"])
+    P15(["7.2 Query Audit Log"])
+
+    %% ── Data Stores (right) ───────────────────────────────────────────────────
+    DS1[("DS1 Users & Roles")]
+    DS2[("DS2 Branches & Phones")]
+    DS3[("DS3 Employees & Salaries")]
+    DS4[("DS4 Products & Categories")]
+    DS5[("DS5 Orders & Items")]
+    DS6[("DS6 Branch Stock & Adjustments")]
+    DS7[("DS7 Audit Logs")]
+
+    %% ── 1.x Authentication ────────────────────────────────────────────────────
+    Admin -->|"Credentials"| P1
+    BM    -->|"Credentials"| P1
+    SM    -->|"Credentials"| P1
+    CA    -->|"Credentials"| P1
+    P1    -->|"User record"| P2
+    P1   <-->|"Lookup / verify password hash"| DS1
+    P2    -->|"JWT + Role + BranchId claim"| Admin
+    P2    -->|"JWT + Role + BranchId claim"| BM
+    P2    -->|"JWT + Role + BranchId claim"| SM
+    P2    -->|"JWT + Role + BranchId claim"| CA
+    P2   <-->|"Store / rotate refresh token"| DS1
+
+    %% ── 2.x Branch & Employee Management ─────────────────────────────────────
+    Admin -->|"Branch data"| P3
+    BM    -->|"Branch data"| P3
+    P3   <-->|"Branch records"| DS2
+    P3    -->|"Confirmation"| Admin
+    P3    -->|"Confirmation"| BM
+    P3    -->|"Action event"| P14
+
+    Admin -->|"Employee data"| P4
+    BM    -->|"Employee data"| P4
+    P4   <-->|"Employee records"| DS3
+    P4    -->|"Confirmation"| Admin
+    P4    -->|"Confirmation"| BM
+    P4    -->|"Action event"| P14
+
+    Admin -->|"Salary data"| P5
+    BM    -->|"Salary data"| P5
+    P5   <-->|"Salary records"| DS3
+    P5    -->|"Confirmation"| Admin
+    P5    -->|"Confirmation"| BM
+    P5    -->|"Action event"| P14
+
+    %% ── 3.x Product Catalogue ─────────────────────────────────────────────────
+    Admin -->|"Product data"| P6
+    SM    -->|"Product data"| P6
+    P6   <-->|"Product records"| DS4
+    P6    -->|"Confirmation"| Admin
+    P6    -->|"Confirmation"| SM
+    P6    -->|"Action event"| P14
+
+    Admin -->|"Category data"| P7
+    SM    -->|"Category data"| P7
+    P7   <-->|"Category records"| DS4
+    P7    -->|"Confirmation"| Admin
+    P7    -->|"Confirmation"| SM
+    P7    -->|"Action event"| P14
+
+    %% ── 4.x POS Order Processing ──────────────────────────────────────────────
+    CA    -->|"Cart items + payment method"| P8
+    BM    -->|"Cart items + payment method"| P8
+    P8   <-->|"Read product prices"| DS4
+    P8    -->|"Write order & items"| DS5
+    P8    -->|"Deduction request"| P9
+    P8    -->|"Receipt"| CA
+    P8    -->|"Receipt"| BM
+    P8    -->|"Action event"| P14
+
+    P9   <-->|"Update quantity & write adjustment"| DS6
+    P9    -->|"Action event"| P14
+
+    %% ── 5.x Inventory Management ──────────────────────────────────────────────
+    Admin -->|"View request"| P10
+    SM    -->|"View request"| P10
+    P10  <-->|"Read stock levels"| DS6
+    P10   -->|"Stock levels + low-stock alerts"| Admin
+    P10   -->|"Stock levels + low-stock alerts"| SM
+
+    Admin -->|"Adjustment details"| P11
+    SM    -->|"Adjustment details"| P11
+    P11  <-->|"Update stock & write adjustment"| DS6
+    P11   -->|"Confirmation"| Admin
+    P11   -->|"Confirmation"| SM
+    P11   -->|"Action event"| P14
+
+    %% ── 6.x Report Generation ─────────────────────────────────────────────────
+    Admin -->|"Report request + filters"| P12
+    BM    -->|"Report request + filters"| P12
+    P12  <-->|"Order data"| DS5
+    P12  <-->|"Stock data"| DS6
+    P12  <-->|"Branch data"| DS2
+    P12  <-->|"Product data"| DS4
+    P12   -->|"Aggregated report data"| P13
+    P12   -->|"Report view"| Admin
+    P12   -->|"Report view"| BM
+    P13   -->|"CSV file"| Admin
+    P13   -->|"CSV file"| BM
+
+    %% ── 7.x Audit Trail ───────────────────────────────────────────────────────
+    P14   -->|"Log entry"| DS7
+    Admin -->|"Audit query + filters"| P15
+    P15  <-->|"Read log entries"| DS7
+    P15   -->|"Filtered log entries"| Admin
+
+    %% ── Styling ───────────────────────────────────────────────────────────────
+    classDef entity  fill:#dbeafe,stroke:#3b82f6,color:#1e3a5f,font-weight:bold
+    classDef process fill:#dcfce7,stroke:#22c55e,color:#14532d
+    classDef store   fill:#fef9c3,stroke:#eab308,color:#713f12
+
+    class Admin,BM,SM,CA entity
+    class P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,P11,P12,P13,P14,P15 process
+    class DS1,DS2,DS3,DS4,DS5,DS6,DS7 store

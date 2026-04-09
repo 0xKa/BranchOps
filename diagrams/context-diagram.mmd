@@ -7,23 +7,23 @@ flowchart TD
     GU["Guest"]
 
     %% ── System (Level-0 Process) ──────────────────────────────────────────────
-    SYS(["BranchOps\nPOS & Branch\nManagement System"])
+    SYS(["BranchOps POS & Branch Management System"])
 
     %% ── Admin ─────────────────────────────────────────────────────────────────
-    Admin -->|"Credentials / system config /\nuser & branch data /\nproduct & inventory data"| SYS
-    SYS   -->|"JWT token / dashboards /\nreports & CSV exports /\naudit logs / confirmations"| Admin
+    Admin -->|"Credentials / system config / user & branch data / product & inventory data"| SYS
+    SYS   -->|"JWT token / dashboards / reports & CSV exports / audit logs / confirmations"| Admin
 
     %% ── Branch Manager ────────────────────────────────────────────────────────
-    BM  -->|"Credentials / branch & employee data /\nsalary records / POS orders"| SYS
-    SYS -->|"JWT token / branch dashboard /\nemployee confirmations /\nsales reports & CSV exports"| BM
+    BM  -->|"Credentials / branch & employee data / salary records / POS orders"| SYS
+    SYS -->|"JWT token / branch dashboard / employee confirmations / sales reports & CSV exports"| BM
 
     %% ── Stock Manager ─────────────────────────────────────────────────────────
-    SM  -->|"Credentials / product & category data /\nstock adjustment details"| SYS
-    SYS -->|"JWT token / stock levels /\nlow-stock alerts /\nadjustment confirmations"| SM
+    SM  -->|"Credentials / product & category data / stock adjustment details"| SYS
+    SYS -->|"JWT token / stock levels / low-stock alerts / adjustment confirmations"| SM
 
     %% ── Cashier ───────────────────────────────────────────────────────────────
-    CA  -->|"Credentials / cart items /\npayment method"| SYS
-    SYS -->|"JWT token / product catalogue /\norder receipt & confirmation"| CA
+    CA  -->|"Credentials / cart items / payment method"| SYS
+    SYS -->|"JWT token / product catalogue / order receipt & confirmation"| CA
 
     %% ── Guest ─────────────────────────────────────────────────────────────────
     GU  -->|"Page visit"| SYS
