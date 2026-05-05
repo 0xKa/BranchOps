@@ -22,7 +22,7 @@ export default function Root() {
       <QueryClientProvider client={queryClient}>
         <DirectionProvider direction={dir} key={dir} dir={dir}>
           <RouterProvider router={router} />
-          {/* {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />} */}
+          {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
           <Toaster position="top-center" duration={4000} />
         </DirectionProvider>
       </QueryClientProvider>

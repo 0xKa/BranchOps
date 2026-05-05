@@ -40,19 +40,21 @@ PostgreSQL must be running locally: `Host=localhost;Port=5432;Database=BranchOps
 
 **Feature-based organization** under `client/src/features/` — each feature owns its components, hooks, and API calls. Features: `auth`, `dashboard`, `users`, `branches`, `products`, `pos`, `inventory`, `reports`, `audit-log`, `settings`, `landing`.
 
-**Routing** (`client/src/router.tsx`): Three-tier route guards:
+**Routing** (`client/src/router.tsx`): Three route guards in `client/src/layouts/`:
 
 1. `ProtectedRoute` — requires authentication
-2. `RoleRoute` — restricts to specific roles
-3. Role-to-route mapping lives in `client/src/lib/route-permissions.ts`
+2. `PublicOnlyRoute` — redirects authenticated users away from login/home
+3. `RoleRoute` — restricts to specific roles (composed inside `ProtectedRoute`)
 
-**Auth flow** (`client/src/features/auth/auth-store.ts`): Zustand store persists `user`, `accessToken`, `refreshToken` to localStorage. Roles: `Admin (0)`, `StockManager (1)`, `BranchManager (2)`, `Cashier (3)`, `Guest (4)`.
+The route-to-allowed-roles map in `client/src/lib/route-permissions.ts` is **not** a router guard — it's the source of truth used by the sidebar to filter nav items and by helpers like `hasRouteAccess` / `getDefaultRouteForRole`. Keep it in sync with the `<RoleRoute allowedRoles={...}>` blocks in `router.tsx`.
+
+**Auth flow** (`client/src/features/auth/auth-store.ts`): Zustand store persists `user` and a `tokens` object (`accessToken`, `refreshToken`, `accessTokenExpiresAt`) plus `isAuthenticated` to localStorage under key `auth-storage`. Exposes `isTokenExpired()` (30 s skew) and an `isHydrated` flag for gating routing on first load. Roles: `Admin (0)`, `StockManager (1)`, `BranchManager (2)`, `Cashier (3)`, `Guest (4)`.
 
 **API layer** (`client/src/services/api.ts`): Axios instance with two interceptors:
 
 - Attaches JWT `Authorization` header on every request
-- On 401, auto-refreshes the access token and retries the original request
-- For non-Admin users, automatically injects `branchId` query param on branch-scoped endpoints (Orders, Stock, Dashboard, Reports, etc.)
+- On 401, auto-refreshes the access token via `POST /Auth/refresh-token` (queueing concurrent failed requests) and retries the original; refresh failure triggers `logout()`
+- For non-Admin users, automatically injects `branchId` query param on **GET** requests to branch-scoped endpoints. Current `BRANCH_SCOPED_PREFIXES`: `Orders`, `Stock`, `Dashboard`, `Reports`, `Employees`, `BranchPhones`, `Branches`. Caller-provided `branchId` is preserved.
 
 **State management**: Zustand for auth state; TanStack React Query for all server state (caching, background refetch).
 
@@ -64,15 +66,18 @@ PostgreSQL must be running locally: `Host=localhost;Port=5432;Database=BranchOps
 
 **Layered architecture** inside `server/BranchOps.Api/`:
 
-- `Controllers/` — 13 REST controllers; role-based `[Authorize]` attributes enforce access
-- `Services/` — business logic registered via `DependencyInjection.cs`
+- `Controllers/` — 13 REST controllers (`AccountSettings`, `AuditLog`, `Auth`, `Branches`, `BranchPhones`, `Dashboard`, `EmployeeSalaries`, `Employees`, `Orders`, `ProductCategories`, `Products`, `Reports`, `Stock`); role-based `[Authorize]` attributes enforce access
+- `Services/` — business logic registered via `DependencyInjection.cs`; service methods return `ServiceResult<T>` for uniform error handling
 - `Data/BranchOpsDbContext.cs` — EF Core DbContext; automatically sets `CreatedAt`/`UpdatedAt` on `SaveChanges`
 - `Data/Configuration/` — Fluent API entity configurations
-- `Security/Auth.cs` — JWT generation and refresh token logic; JWT includes a `BranchId` claim for non-Admin users
+- `Security/Auth.cs` — JWT generation and refresh token logic; JWT includes a `BranchId` claim for non-Admin users. `UserContextExtensions.cs` provides `ClaimsPrincipal` helpers used by controllers
 - `Dtos/` — request/response DTOs
 - `Migrations/` — EF Core migration history
+- `Seed/` — `SeedImporter.RunAsync` is invoked from `Program.cs` on startup to import fixture data
 
-**Domain** (`server/BranchOps.Domain/`): Plain C# entities. All inherit from `BaseDomainObject` (adds `CreatedAt`, `UpdatedAt`). Key entities: `User`, `Branch`, `Employee`, `EmployeeSalary`, `Product`, `ProductCategory`, `Order`, `OrderItem`, `BranchStock`, `StockAdjustment`, `AuditLog`.
+CORS in `Program.cs` allows `http(s)://localhost:5173` only (development origin).
+
+**Domain** (`server/BranchOps.Domain/`): Plain C# entities. All inherit from `BaseDomainObject` (adds `CreatedAt`, `UpdatedAt`). `User` and `UserRole` live under `Auth/`; the rest are at the project root. Key entities: `User`, `Branch`, `BranchPhone`, `Employee`, `EmployeeSalary`, `Product`, `ProductCategory`, `Order`, `OrderItem`, `BranchStock`, `StockAdjustment`, `AuditLog`.
 
 **Branch-scoping pattern**: Non-Admin users have a `BranchId` JWT claim. Controllers accept an optional `branchId` query param; for non-Admin users the claim value is enforced, overriding any param the client sends.
 
