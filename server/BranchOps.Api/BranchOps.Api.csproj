@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BranchOps.Domain\BranchOps.Domain.csproj" />
+    <ProjectReference Include="..\BranchOps.Ai\BranchOps.Ai.csproj" />
   </ItemGroup>
 
   <ItemGroup>
