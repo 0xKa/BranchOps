@@ -1,4 +1,5 @@
 ﻿using BranchOps.Domain;
+using BranchOps.Domain.Ai;
 using BranchOps.Domain.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -19,6 +20,10 @@ public class BranchOpsDbContext(DbContextOptions<BranchOpsDbContext> options) : 
     public DbSet<BranchStock> BranchStocks { get; set; }
     public DbSet<StockAdjustment> StockAdjustments { get; set; }
     public DbSet<AuditLog> AuditLogs { get; set; }
+
+    // ── AI / Replenishment Advisor ────────────────────────────────
+    public DbSet<ReplenishmentRun> ReplenishmentRuns { get; set; }
+    public DbSet<ReplenishmentRecommendation> ReplenishmentRecommendations { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
