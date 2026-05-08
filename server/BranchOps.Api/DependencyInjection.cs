@@ -1,4 +1,7 @@
-﻿using BranchOps.Api.Data;
+using BranchOps.Ai;
+using BranchOps.Ai.Abstractions;
+using BranchOps.Api.Ai.Adapters;
+using BranchOps.Api.Data;
 using BranchOps.Api.Security;
 using BranchOps.Api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +33,12 @@ public static class DependencyInjection
         services.AddScoped<ReportsService>();
         services.AddScoped<SalesExportService>();
         services.AddScoped<AuditLogService>();
+
+        services.AddBranchOpsAi(configuration);
+        services.AddScoped<IInventoryReadModel, InventoryReadModelAdapter>();
+        services.AddScoped<ISalesReadModel, SalesReadModelAdapter>();
+        services.AddScoped<IProductReadModel, ProductReadModelAdapter>();
+        services.AddScoped<IReplenishmentAuditWriter, AuditLogWriterAdapter>();
 
         return services;
     }
