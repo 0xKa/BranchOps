@@ -7,6 +7,10 @@ namespace BranchOps.Api.Services;
 
 public class AuditLogService(BranchOpsDbContext db)
 {
+    private const int MaxActionLength = 50;
+    private const int MaxEntityTypeLength = 50;
+    private const int MaxDetailsLength = 500;
+
     // ── Query ──────────────────────────────────────────────────────
     public async Task<PagedResult<AuditLogDto>> GetAllAsync(
         PaginationQuery pagination,
@@ -73,10 +77,10 @@ public class AuditLogService(BranchOpsDbContext db)
         {
             Id = Guid.NewGuid(),
             UserId = userId,
-            Action = action,
-            EntityType = entityType,
+            Action = Truncate(action, MaxActionLength),
+            EntityType = Truncate(entityType, MaxEntityTypeLength),
             EntityId = entityId,
-            Details = details,
+            Details = Truncate(details, MaxDetailsLength),
             Timestamp = DateTime.UtcNow,
         });
         await db.SaveChangesAsync(ct);
@@ -88,4 +92,12 @@ public class AuditLogService(BranchOpsDbContext db)
 
     public async Task<IReadOnlyList<string>> GetDistinctEntityTypesAsync(CancellationToken ct)
         => await db.AuditLogs.Select(a => a.EntityType).Distinct().OrderBy(e => e).ToListAsync(ct);
+
+    private static string Truncate(string? value, int maxLength)
+    {
+        if (string.IsNullOrEmpty(value))
+            return string.Empty;
+
+        return value.Length <= maxLength ? value : value[..maxLength];
+    }
 }

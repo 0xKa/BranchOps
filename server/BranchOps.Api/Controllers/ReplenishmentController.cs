@@ -12,7 +12,9 @@ namespace BranchOps.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles = "Admin,StockManager,BranchManager")]
-public class ReplenishmentController(ReplenishmentRunOrchestrator orchestrator) : ControllerBase
+public class ReplenishmentController(
+    ReplenishmentRunOrchestrator orchestrator,
+    ILogger<ReplenishmentController> logger) : ControllerBase
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
@@ -56,7 +58,20 @@ public class ReplenishmentController(ReplenishmentRunOrchestrator orchestrator) 
             await WriteSseAsync(payload.Type, payload, cancellationToken);
         }
 
-        await stream.Completion;
+        try
+        {
+            await stream.Completion;
+        }
+        catch (OperationCanceledException)
+        {
+            // The orchestrator already marks the run and completes the SSE channel.
+        }
+        catch (Exception ex)
+        {
+            // Avoid tearing down an already-started SSE response with an HTTP/2 stream reset.
+            logger.LogError(ex, "Replenishment run stream completion failed after the SSE response started.");
+        }
+
         return new EmptyResult();
     }
 

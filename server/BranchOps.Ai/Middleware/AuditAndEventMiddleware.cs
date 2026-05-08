@@ -16,6 +16,8 @@ public sealed class AuditAndEventMiddleware(
     IRunContext runContext,
     IOptions<AiOptions> options)
 {
+    private const int MaxAuditDetailsLength = 500;
+    private const int MaxResultPreviewLength = 300;
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
     public async ValueTask<object?> HandleAsync(
@@ -81,7 +83,7 @@ public sealed class AuditAndEventMiddleware(
     private static string ToPreviewJson(object? value)
     {
         var json = JsonSerializer.Serialize(value, JsonOptions);
-        return json.Length <= 1000 ? json : json[..1000];
+        return json.Length <= MaxResultPreviewLength ? json : json[..MaxResultPreviewLength];
     }
 
     private static string BuildAuditDetails(
@@ -91,7 +93,8 @@ public sealed class AuditAndEventMiddleware(
         string resultJsonPreview,
         bool failed,
         string? error)
-        => JsonSerializer.Serialize(new
+    {
+        var details = JsonSerializer.Serialize(new
         {
             toolName,
             toolCallId,
@@ -100,4 +103,9 @@ public sealed class AuditAndEventMiddleware(
             failed,
             error
         }, JsonOptions);
+
+        return details.Length <= MaxAuditDetailsLength
+            ? details
+            : details[..MaxAuditDetailsLength];
+    }
 }
