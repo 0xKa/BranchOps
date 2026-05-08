@@ -8,7 +8,7 @@ import {
   Users,
   Settings,
   FileText,
-  TrendingUp,
+  MessagesSquare,
   DollarSign,
 } from "lucide-react";
 
@@ -88,13 +88,12 @@ export default function AppSidebar(props: AppSidebarProps) {
         { title: t("nav.salesByBranch"), url: "/reports/branch-sales" },
         { title: t("nav.topProducts"), url: "/reports/top-products" },
         { title: t("nav.exportSales"), url: "/reports/export" },
-        { title: "Ask BranchOps", url: "/reports/ask-branchops" },
       ],
     },
     {
-      title: t("nav.forecasting"),
-      url: "/forecasting",
-      icon: TrendingUp,
+      title: "BranchOps Agent",
+      url: "/reports/branchops-agent",
+      icon: MessagesSquare,
     },
     {
       title: t("nav.auditLog"),

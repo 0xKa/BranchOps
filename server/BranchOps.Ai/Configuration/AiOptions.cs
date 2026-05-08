@@ -8,7 +8,7 @@ public sealed class AiOptions
 {
     public OpenAiSection OpenAI { get; set; } = new();
     public ReplenishmentSection Replenishment { get; set; } = new();
-    public AskBranchOpsSection AskBranchOps { get; set; } = new();
+    public BranchOpsAgentSection BranchOpsAgent { get; set; } = new();
 
     public sealed class OpenAiSection
     {
@@ -34,7 +34,7 @@ public sealed class AiOptions
         public int MaxProductsPerRun { get; set; } = 25;
     }
 
-    public sealed class AskBranchOpsSection
+    public sealed class BranchOpsAgentSection
     {
         public int MaxToolIterations { get; set; } = 8;
         public int DefaultLookbackDays { get; set; } = 30;

@@ -81,8 +81,8 @@ public sealed class AuditAndEventMiddleware(
     }
 
     private int GetMaxToolIterations()
-        => string.Equals(runContext.EntityType, "AskBranchOps", StringComparison.OrdinalIgnoreCase)
-            ? options.Value.AskBranchOps.MaxToolIterations
+        => string.Equals(runContext.EntityType, "BranchOpsAgent", StringComparison.OrdinalIgnoreCase)
+            ? options.Value.BranchOpsAgent.MaxToolIterations
             : options.Value.Replenishment.MaxToolIterations;
 
     private static string ToPreviewJson(object? value)

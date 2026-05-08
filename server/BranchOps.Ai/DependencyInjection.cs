@@ -23,13 +23,13 @@ public static class DependencyInjection
         services.AddScoped<AgentEventChannel>();
         services.AddScoped<AuditAndEventMiddleware>();
         services.AddScoped<ReplenishmentAdvisorAgent>();
-        services.AddScoped<AskBranchOpsAgent>();
+        services.AddScoped<BranchOpsAgent>();
 
         services.AddScoped<InventoryTools>();
         services.AddScoped<SalesAnalyticsTools>();
         services.AddScoped<ProductTools>();
         services.AddScoped<RecommendationDraftTools>();
-        services.AddScoped<AskBranchOpsTools>();
+        services.AddScoped<BranchOpsAgentTools>();
         services.AddScoped(sp => new ToolBundle(
             sp.GetRequiredService<InventoryTools>(),
             sp.GetRequiredService<SalesAnalyticsTools>(),

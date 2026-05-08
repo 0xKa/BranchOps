@@ -10,14 +10,14 @@ using OpenAI.Chat;
 
 namespace BranchOps.Ai.Agents;
 
-public sealed class AskBranchOpsAgent(
+public sealed class BranchOpsAgent(
     IOptions<AiOptions> options,
     AuditAndEventMiddleware audit,
     ILoggerFactory loggerFactory,
     IServiceProvider services)
 {
     private const string Instructions = """
-        You are Ask BranchOps, a read-only operations analyst for a multi-branch retail business.
+        You are BranchOps Agent, a read-only operations analyst for a multi-branch retail business.
         Answer only from tool results. If the tools do not provide enough data, say what is unavailable.
         Always mention the branch scope and date range or as-of date used.
         Keep answers concise and practical for managers.
@@ -26,7 +26,7 @@ public sealed class AskBranchOpsAgent(
         Do not invent product, branch, sales, stock, or order facts.
         """;
 
-    public AIAgent Build(Guid? branchId, string branchScope, AskBranchOpsTools tools)
+    public AIAgent Build(Guid? branchId, string branchScope, BranchOpsAgentTools tools)
     {
         tools.BindScope(branchId, branchScope);
 
@@ -39,7 +39,7 @@ public sealed class AskBranchOpsAgent(
 
         var agent = chatClient.AsAIAgent(
             Instructions,
-            "AskBranchOps",
+            "BranchOpsAgent",
             "Answers read-only operational questions using BranchOps report, dashboard, stock, and branch tools.",
             [
                 AIFunctionFactory.Create(tools.GetCurrentBranchScope),

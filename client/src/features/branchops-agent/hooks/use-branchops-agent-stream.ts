@@ -2,25 +2,25 @@ import { useAuthStore } from "@/features/auth/auth-store";
 import { USER_ROLES } from "@/features/auth/types";
 import { useCallback, useRef, useState } from "react";
 import type {
-  AskBranchOpsHistoryMessage,
-  AskBranchOpsMessage,
-  AskBranchOpsRequest,
-  AskStreamEvent,
-  AskToolCallEvent,
+  BranchOpsAgentHistoryMessage,
+  BranchOpsAgentMessage,
+  BranchOpsAgentRequest,
+  BranchOpsAgentStreamEvent,
+  BranchOpsAgentToolCallEvent,
 } from "../types";
 
 interface StartArgs {
   message: string;
   branchId?: string;
-  history: AskBranchOpsHistoryMessage[];
+  history: BranchOpsAgentHistoryMessage[];
 }
 
-export function useAskBranchOpsStream() {
+export function useBranchOpsAgentStream() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [isCancelled, setIsCancelled] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [messages, setMessages] = useState<AskBranchOpsMessage[]>([]);
-  const [tools, setTools] = useState<AskToolCallEvent[]>([]);
+  const [messages, setMessages] = useState<BranchOpsAgentMessage[]>([]);
+  const [tools, setTools] = useState<BranchOpsAgentToolCallEvent[]>([]);
   const abortRef = useRef<AbortController | null>(null);
   const assistantIdRef = useRef<string | null>(null);
 
@@ -56,7 +56,7 @@ export function useAskBranchOpsStream() {
     );
   }, []);
 
-  const markAssistant = useCallback((status: AskBranchOpsMessage["status"]) => {
+  const markAssistant = useCallback((status: BranchOpsAgentMessage["status"]) => {
     const assistantId = assistantIdRef.current;
     if (!assistantId) return;
 
@@ -68,7 +68,7 @@ export function useAskBranchOpsStream() {
   }, []);
 
   const handleEvent = useCallback(
-    (evt: AskStreamEvent) => {
+    (evt: BranchOpsAgentStreamEvent) => {
       if (evt.type === "text-delta") {
         appendAssistantText(String(evt.data.text ?? ""));
         return;
@@ -110,7 +110,7 @@ export function useAskBranchOpsStream() {
       }
 
       if (evt.type === "answer-failed") {
-        const message = String(evt.data.error ?? "Ask BranchOps failed.");
+        const message = String(evt.data.error ?? "BranchOps Agent failed.");
         setError(message);
         markAssistant("failed");
       }
@@ -140,13 +140,13 @@ export function useAskBranchOpsStream() {
       reset();
       setIsStreaming(true);
 
-      const userMessage: AskBranchOpsMessage = {
+      const userMessage: BranchOpsAgentMessage = {
         id: crypto.randomUUID(),
         role: "user",
         content: trimmed,
         status: "completed",
       };
-      const assistantMessage: AskBranchOpsMessage = {
+      const assistantMessage: BranchOpsAgentMessage = {
         id: crypto.randomUUID(),
         role: "assistant",
         content: "",
@@ -160,13 +160,13 @@ export function useAskBranchOpsStream() {
 
       try {
         const baseUrl = import.meta.env.VITE_API_BASE_URL;
-        const payload: AskBranchOpsRequest = {
+        const payload: BranchOpsAgentRequest = {
           message: trimmed,
           branchId: effectiveBranchId,
           history: history.slice(-6),
         };
 
-        const response = await fetch(`${baseUrl}/AskBranchOps/stream`, {
+        const response = await fetch(`${baseUrl}/BranchOpsAgent/stream`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -211,7 +211,7 @@ export function useAskBranchOpsStream() {
 
 async function readSse(
   body: ReadableStream<Uint8Array>,
-  onEvent: (evt: AskStreamEvent) => void,
+  onEvent: (evt: BranchOpsAgentStreamEvent) => void,
 ) {
   const reader = body.getReader();
   const decoder = new TextDecoder();
@@ -231,7 +231,7 @@ async function readSse(
         .find((line) => line.startsWith("data: "));
 
       if (!dataLine) continue;
-      onEvent(JSON.parse(dataLine.slice(6)) as AskStreamEvent);
+      onEvent(JSON.parse(dataLine.slice(6)) as BranchOpsAgentStreamEvent);
     }
   }
 }

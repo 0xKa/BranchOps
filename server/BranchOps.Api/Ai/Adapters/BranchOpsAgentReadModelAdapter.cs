@@ -4,21 +4,21 @@ using BranchOps.Api.Services;
 
 namespace BranchOps.Api.Ai.Adapters;
 
-public sealed class AskBranchOpsReadModelAdapter(
+public sealed class BranchOpsAgentReadModelAdapter(
     ReportsService reports,
     DashboardService dashboard,
     StockService stock,
-    BranchService branches) : IAskBranchOpsReadModel
+    BranchService branches) : IBranchOpsAgentReadModel
 {
-    public async Task<AskBranchInfo?> GetBranchAsync(Guid branchId, CancellationToken ct)
+    public async Task<BranchOpsAgentBranchInfo?> GetBranchAsync(Guid branchId, CancellationToken ct)
     {
         var branch = await branches.GetByIdAsync(branchId, ct);
         return branch is null
             ? null
-            : new AskBranchInfo(branch.Id, branch.DisplayName, branch.City, branch.IsActive);
+            : new BranchOpsAgentBranchInfo(branch.Id, branch.DisplayName, branch.City, branch.IsActive);
     }
 
-    public async Task<IReadOnlyList<AskBranchInfo>> ListBranchesAsync(Guid? branchId, int max, CancellationToken ct)
+    public async Task<IReadOnlyList<BranchOpsAgentBranchInfo>> ListBranchesAsync(Guid? branchId, int max, CancellationToken ct)
     {
         var rows = await branches.GetAllAsync(ct);
         if (branchId.HasValue)
@@ -27,14 +27,14 @@ public sealed class AskBranchOpsReadModelAdapter(
         return rows
             .Where(branch => branch.IsActive)
             .Take(max)
-            .Select(branch => new AskBranchInfo(branch.Id, branch.DisplayName, branch.City, branch.IsActive))
+            .Select(branch => new BranchOpsAgentBranchInfo(branch.Id, branch.DisplayName, branch.City, branch.IsActive))
             .ToList();
     }
 
-    public async Task<AskDashboardSummary> GetDashboardSummaryAsync(Guid? branchId, CancellationToken ct)
+    public async Task<BranchOpsAgentDashboardSummary> GetDashboardSummaryAsync(Guid? branchId, CancellationToken ct)
     {
         var summary = await dashboard.GetSummaryAsync(ct, branchId);
-        return new AskDashboardSummary(
+        return new BranchOpsAgentDashboardSummary(
             await GetScopeAsync(branchId, ct),
             DateTime.UtcNow,
             summary.TotalSales,
@@ -49,13 +49,13 @@ public sealed class AskBranchOpsReadModelAdapter(
             summary.TotalCategories);
     }
 
-    public async Task<AskSalesChart> GetSalesChartAsync(string period, Guid? branchId, CancellationToken ct)
+    public async Task<BranchOpsAgentSalesChart> GetSalesChartAsync(string period, Guid? branchId, CancellationToken ct)
     {
         var normalized = NormalizePeriod(period);
         var chart = await dashboard.GetSalesChartAsync(normalized, branchId, ct);
         var now = DateTime.UtcNow;
 
-        return new AskSalesChart(
+        return new BranchOpsAgentSalesChart(
             await GetScopeAsync(branchId, ct),
             chart.Period,
             GetPeriodStartUtc(normalized, now),
@@ -63,11 +63,11 @@ public sealed class AskBranchOpsReadModelAdapter(
             chart.TotalSales,
             chart.TotalOrders,
             chart.DataPoints
-                .Select(row => new AskSalesDataPoint(row.Date, row.TotalSales, row.OrderCount))
+                .Select(row => new BranchOpsAgentSalesDataPoint(row.Date, row.TotalSales, row.OrderCount))
                 .ToList());
     }
 
-    public async Task<AskDailySalesReport> GetDailySalesAsync(
+    public async Task<BranchOpsAgentDailySalesReport> GetDailySalesAsync(
         DateTime fromDate,
         DateTime toDate,
         Guid? branchId,
@@ -80,7 +80,7 @@ public sealed class AskBranchOpsReadModelAdapter(
             (from, to) = (to, from);
 
         var report = await reports.GetDailySalesAsync(from, to, branchId, ct);
-        return new AskDailySalesReport(
+        return new BranchOpsAgentDailySalesReport(
             await GetScopeAsync(branchId, ct),
             report.FromDate,
             report.ToDate,
@@ -90,7 +90,7 @@ public sealed class AskBranchOpsReadModelAdapter(
             report.GrandTotalCancelled,
             report.Rows
                 .Take(maxRows)
-                .Select(row => new AskDailySalesRow(
+                .Select(row => new BranchOpsAgentDailySalesRow(
                     row.Date,
                     row.OrderCount,
                     row.TotalSales,
@@ -100,7 +100,7 @@ public sealed class AskBranchOpsReadModelAdapter(
                 .ToList());
     }
 
-    public async Task<AskTopProductsReport> GetTopProductsAsync(
+    public async Task<BranchOpsAgentTopProductsReport> GetTopProductsAsync(
         int count,
         int days,
         Guid? branchId,
@@ -108,12 +108,12 @@ public sealed class AskBranchOpsReadModelAdapter(
     {
         var rows = await reports.GetTopProductsAsync(count, days, branchId, ct);
         var now = DateTime.UtcNow;
-        return new AskTopProductsReport(
+        return new BranchOpsAgentTopProductsReport(
             await GetScopeAsync(branchId, ct),
             days,
             now.AddDays(-days),
             now,
-            rows.Select(row => new AskTopProductRow(
+            rows.Select(row => new BranchOpsAgentTopProductRow(
                     row.ProductId,
                     row.ProductName,
                     row.CategoryName,
@@ -122,7 +122,7 @@ public sealed class AskBranchOpsReadModelAdapter(
                 .ToList());
     }
 
-    public async Task<AskBranchPerformanceReport> GetSalesByBranchAsync(
+    public async Task<BranchOpsAgentBranchPerformanceReport> GetSalesByBranchAsync(
         int days,
         Guid? branchId,
         int maxRows,
@@ -130,13 +130,13 @@ public sealed class AskBranchOpsReadModelAdapter(
     {
         var rows = await reports.GetSalesByBranchAsync(days, ct, branchId);
         var now = DateTime.UtcNow;
-        return new AskBranchPerformanceReport(
+        return new BranchOpsAgentBranchPerformanceReport(
             await GetScopeAsync(branchId, ct),
             days,
             now.AddDays(-days),
             now,
             rows.Take(maxRows)
-                .Select(row => new AskBranchPerformanceRow(
+                .Select(row => new BranchOpsAgentBranchPerformanceRow(
                     row.BranchId,
                     row.BranchName,
                     row.TotalSales,
@@ -146,14 +146,14 @@ public sealed class AskBranchOpsReadModelAdapter(
                 .ToList());
     }
 
-    public async Task<AskLowStockReport> GetLowStockAlertsAsync(Guid? branchId, int maxRows, CancellationToken ct)
+    public async Task<BranchOpsAgentLowStockReport> GetLowStockAlertsAsync(Guid? branchId, int maxRows, CancellationToken ct)
     {
         var rows = await stock.GetLowStockAlertsAsync(branchId, ct);
-        return new AskLowStockReport(
+        return new BranchOpsAgentLowStockReport(
             await GetScopeAsync(branchId, ct),
             DateTime.UtcNow,
             rows.Take(maxRows)
-                .Select(row => new AskLowStockAlert(
+                .Select(row => new BranchOpsAgentLowStockAlert(
                     row.BranchId,
                     row.Branch.DisplayName,
                     row.ProductId,
@@ -163,13 +163,13 @@ public sealed class AskBranchOpsReadModelAdapter(
                 .ToList());
     }
 
-    public async Task<AskRecentOrdersReport> GetRecentOrdersAsync(int count, Guid? branchId, CancellationToken ct)
+    public async Task<BranchOpsAgentRecentOrdersReport> GetRecentOrdersAsync(int count, Guid? branchId, CancellationToken ct)
     {
         var rows = await dashboard.GetRecentOrdersAsync(count, branchId, ct);
-        return new AskRecentOrdersReport(
+        return new BranchOpsAgentRecentOrdersReport(
             await GetScopeAsync(branchId, ct),
             DateTime.UtcNow,
-            rows.Select(row => new AskRecentOrder(
+            rows.Select(row => new BranchOpsAgentRecentOrder(
                     row.Id,
                     row.BranchId,
                     row.BranchName,
@@ -182,13 +182,13 @@ public sealed class AskBranchOpsReadModelAdapter(
                 .ToList());
     }
 
-    private async Task<AskScopeInfo> GetScopeAsync(Guid? branchId, CancellationToken ct)
+    private async Task<BranchOpsAgentScopeInfo> GetScopeAsync(Guid? branchId, CancellationToken ct)
     {
         if (!branchId.HasValue)
-            return new AskScopeInfo(null, "All accessible branches");
+            return new BranchOpsAgentScopeInfo(null, "All accessible branches");
 
         var branch = await branches.GetByIdAsync(branchId.Value, ct);
-        return new AskScopeInfo(branchId, branch?.DisplayName ?? "Selected branch");
+        return new BranchOpsAgentScopeInfo(branchId, branch?.DisplayName ?? "Selected branch");
     }
 
     private static string NormalizePeriod(string period)

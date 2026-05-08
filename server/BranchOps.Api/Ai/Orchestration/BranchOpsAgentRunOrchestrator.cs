@@ -12,21 +12,21 @@ using Microsoft.Extensions.Options;
 
 namespace BranchOps.Api.Ai.Orchestration;
 
-public sealed class AskBranchOpsRunOrchestrator(
-    AskBranchOpsAgent agentFactory,
-    AskBranchOpsTools tools,
+public sealed class BranchOpsAgentRunOrchestrator(
+    BranchOpsAgent agentFactory,
+    BranchOpsAgentTools tools,
     AgentEventChannel events,
     ISequenceCounter sequence,
     IRunContext runContext,
-    IAskBranchOpsReadModel readModel,
+    IBranchOpsAgentReadModel readModel,
     IOptions<AiOptions> options,
-    ILogger<AskBranchOpsRunOrchestrator> logger)
+    ILogger<BranchOpsAgentRunOrchestrator> logger)
 {
-    public async Task<AskBranchOpsRunStream> StartAsync(
+    public async Task<BranchOpsAgentRunStream> StartAsync(
         Guid userId,
         Guid? branchId,
         string message,
-        IReadOnlyList<AskBranchOpsHistoryMessage>? history,
+        IReadOnlyList<BranchOpsAgentHistoryMessage>? history,
         CancellationToken cancellationToken)
     {
         var correlationId = Guid.NewGuid();
@@ -36,15 +36,15 @@ public sealed class AskBranchOpsRunOrchestrator(
         {
             var branch = await readModel.GetBranchAsync(branchId.Value, cancellationToken);
             if (branch is null || !branch.IsActive)
-                throw new AskBranchOpsRunException("Branch not found or inactive.");
+                throw new BranchOpsAgentRunException("Branch not found or inactive.");
 
             branchScope = branch.DisplayName;
         }
 
-        runContext.Set(correlationId, userId, branchId, "AskBranchOps");
+        runContext.Set(correlationId, userId, branchId, "BranchOpsAgent");
 
         var task = ExecuteAsync(correlationId, branchId, branchScope, message, history, cancellationToken);
-        return new AskBranchOpsRunStream(correlationId, events.Reader, task);
+        return new BranchOpsAgentRunStream(correlationId, events.Reader, task);
     }
 
     private async Task ExecuteAsync(
@@ -52,7 +52,7 @@ public sealed class AskBranchOpsRunOrchestrator(
         Guid? branchId,
         string branchScope,
         string message,
-        IReadOnlyList<AskBranchOpsHistoryMessage>? history,
+        IReadOnlyList<BranchOpsAgentHistoryMessage>? history,
         CancellationToken cancellationToken)
     {
         var sw = Stopwatch.StartNew();
@@ -93,9 +93,9 @@ public sealed class AskBranchOpsRunOrchestrator(
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Ask BranchOps answer {CorrelationId} failed.", correlationId);
+            logger.LogError(ex, "BranchOps Agent answer {CorrelationId} failed.", correlationId);
             await events.Writer.WriteAsync(
-                new RunFailedEvent(sequence.Next(), correlationId, "Ask BranchOps failed. Please retry later."),
+                new RunFailedEvent(sequence.Next(), correlationId, "BranchOps Agent failed. Please retry later."),
                 CancellationToken.None);
         }
         finally
@@ -106,10 +106,10 @@ public sealed class AskBranchOpsRunOrchestrator(
 
     private IReadOnlyList<ChatMessage> BuildMessages(
         string message,
-        IReadOnlyList<AskBranchOpsHistoryMessage>? history)
+        IReadOnlyList<BranchOpsAgentHistoryMessage>? history)
     {
-        var maxHistory = Math.Clamp(options.Value.AskBranchOps.MaxHistoryMessages, 0, 20);
-        var maxLength = Math.Clamp(options.Value.AskBranchOps.MaxMessageLength, 100, 4000);
+        var maxHistory = Math.Clamp(options.Value.BranchOpsAgent.MaxHistoryMessages, 0, 20);
+        var maxLength = Math.Clamp(options.Value.BranchOpsAgent.MaxMessageLength, 100, 4000);
         var messages = new List<ChatMessage>();
 
         foreach (var item in (history ?? []).TakeLast(maxHistory))
@@ -139,9 +139,9 @@ public sealed class AskBranchOpsRunOrchestrator(
     }
 }
 
-public sealed record AskBranchOpsRunStream(
+public sealed record BranchOpsAgentRunStream(
     Guid CorrelationId,
     ChannelReader<AgentEvent> Events,
     Task Completion);
 
-public sealed class AskBranchOpsRunException(string message) : Exception(message);
+public sealed class BranchOpsAgentRunException(string message) : Exception(message);

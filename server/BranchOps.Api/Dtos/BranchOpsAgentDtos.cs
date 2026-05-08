@@ -2,21 +2,21 @@ using BranchOps.Ai.Streaming;
 
 namespace BranchOps.Api.Dtos;
 
-public sealed record AskBranchOpsRequest(
+public sealed record BranchOpsAgentRequest(
     string? Message,
     Guid? BranchId,
-    IReadOnlyList<AskBranchOpsHistoryMessage>? History);
+    IReadOnlyList<BranchOpsAgentHistoryMessage>? History);
 
-public sealed record AskBranchOpsHistoryMessage(
+public sealed record BranchOpsAgentHistoryMessage(
     string Role,
     string Content);
 
-public sealed record AskBranchOpsSsePayload(
+public sealed record BranchOpsAgentSsePayload(
     int Sequence,
     string Type,
     object Data)
 {
-    public static AskBranchOpsSsePayload FromEvent(AgentEvent evt)
+    public static BranchOpsAgentSsePayload FromEvent(AgentEvent evt)
         => evt switch
         {
             TextDeltaEvent e => new(e.Sequence, "text-delta", new { e.Text }),

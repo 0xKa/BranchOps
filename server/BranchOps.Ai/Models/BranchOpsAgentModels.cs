@@ -1,17 +1,17 @@
 namespace BranchOps.Ai.Models;
 
-public sealed record AskBranchInfo(
+public sealed record BranchOpsAgentBranchInfo(
     Guid Id,
     string DisplayName,
     string? City,
     bool IsActive);
 
-public sealed record AskScopeInfo(
+public sealed record BranchOpsAgentScopeInfo(
     Guid? BranchId,
     string BranchScope);
 
-public sealed record AskDashboardSummary(
-    AskScopeInfo Scope,
+public sealed record BranchOpsAgentDashboardSummary(
+    BranchOpsAgentScopeInfo Scope,
     DateTime AsOfUtc,
     decimal TotalSales,
     decimal TotalSalesToday,
@@ -24,31 +24,31 @@ public sealed record AskDashboardSummary(
     int TotalEmployees,
     int TotalCategories);
 
-public sealed record AskSalesDataPoint(
+public sealed record BranchOpsAgentSalesDataPoint(
     DateTime Date,
     decimal TotalSales,
     int OrderCount);
 
-public sealed record AskSalesChart(
-    AskScopeInfo Scope,
+public sealed record BranchOpsAgentSalesChart(
+    BranchOpsAgentScopeInfo Scope,
     string Period,
     DateTime FromUtc,
     DateTime ToUtc,
     decimal TotalSales,
     int TotalOrders,
-    IReadOnlyList<AskSalesDataPoint> DataPoints);
+    IReadOnlyList<BranchOpsAgentSalesDataPoint> DataPoints);
 
-public sealed record AskDailySalesReport(
-    AskScopeInfo Scope,
+public sealed record BranchOpsAgentDailySalesReport(
+    BranchOpsAgentScopeInfo Scope,
     DateTime FromDate,
     DateTime ToDate,
     decimal GrandTotalSales,
     int GrandTotalOrders,
     int GrandTotalItemsSold,
     int GrandTotalCancelled,
-    IReadOnlyList<AskDailySalesRow> Rows);
+    IReadOnlyList<BranchOpsAgentDailySalesRow> Rows);
 
-public sealed record AskDailySalesRow(
+public sealed record BranchOpsAgentDailySalesRow(
     DateTime Date,
     int OrderCount,
     decimal TotalSales,
@@ -56,21 +56,21 @@ public sealed record AskDailySalesRow(
     int TotalItemsSold,
     int CancelledOrders);
 
-public sealed record AskTopProductRow(
+public sealed record BranchOpsAgentTopProductRow(
     Guid ProductId,
     string ProductName,
     string CategoryName,
     int TotalQuantitySold,
     decimal TotalRevenue);
 
-public sealed record AskTopProductsReport(
-    AskScopeInfo Scope,
+public sealed record BranchOpsAgentTopProductsReport(
+    BranchOpsAgentScopeInfo Scope,
     int Days,
     DateTime FromUtc,
     DateTime ToUtc,
-    IReadOnlyList<AskTopProductRow> Rows);
+    IReadOnlyList<BranchOpsAgentTopProductRow> Rows);
 
-public sealed record AskBranchPerformanceRow(
+public sealed record BranchOpsAgentBranchPerformanceRow(
     Guid BranchId,
     string BranchName,
     decimal TotalSales,
@@ -78,14 +78,14 @@ public sealed record AskBranchPerformanceRow(
     int EmployeeCount,
     int LowStockItems);
 
-public sealed record AskBranchPerformanceReport(
-    AskScopeInfo Scope,
+public sealed record BranchOpsAgentBranchPerformanceReport(
+    BranchOpsAgentScopeInfo Scope,
     int Days,
     DateTime FromUtc,
     DateTime ToUtc,
-    IReadOnlyList<AskBranchPerformanceRow> Rows);
+    IReadOnlyList<BranchOpsAgentBranchPerformanceRow> Rows);
 
-public sealed record AskLowStockAlert(
+public sealed record BranchOpsAgentLowStockAlert(
     Guid BranchId,
     string BranchName,
     Guid ProductId,
@@ -93,12 +93,12 @@ public sealed record AskLowStockAlert(
     int Quantity,
     int LowStockThreshold);
 
-public sealed record AskLowStockReport(
-    AskScopeInfo Scope,
+public sealed record BranchOpsAgentLowStockReport(
+    BranchOpsAgentScopeInfo Scope,
     DateTime AsOfUtc,
-    IReadOnlyList<AskLowStockAlert> Rows);
+    IReadOnlyList<BranchOpsAgentLowStockAlert> Rows);
 
-public sealed record AskRecentOrder(
+public sealed record BranchOpsAgentRecentOrder(
     Guid Id,
     Guid BranchId,
     string BranchName,
@@ -109,7 +109,7 @@ public sealed record AskRecentOrder(
     int ItemCount,
     DateTime CreatedAt);
 
-public sealed record AskRecentOrdersReport(
-    AskScopeInfo Scope,
+public sealed record BranchOpsAgentRecentOrdersReport(
+    BranchOpsAgentScopeInfo Scope,
     DateTime AsOfUtc,
-    IReadOnlyList<AskRecentOrder> Rows);
+    IReadOnlyList<BranchOpsAgentRecentOrder> Rows);

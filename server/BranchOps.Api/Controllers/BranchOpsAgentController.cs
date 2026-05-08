@@ -13,23 +13,23 @@ namespace BranchOps.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(Roles = "Admin,StockManager,BranchManager")]
-public class AskBranchOpsController(
-    AskBranchOpsRunOrchestrator orchestrator,
+public class BranchOpsAgentController(
+    BranchOpsAgentRunOrchestrator orchestrator,
     IOptions<AiOptions> options,
-    ILogger<AskBranchOpsController> logger) : ControllerBase
+    ILogger<BranchOpsAgentController> logger) : ControllerBase
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
     [HttpPost("stream")]
     public async Task<IActionResult> Stream(
-        [FromBody] AskBranchOpsRequest request,
+        [FromBody] BranchOpsAgentRequest request,
         CancellationToken cancellationToken)
     {
         var message = request.Message?.Trim();
         if (string.IsNullOrWhiteSpace(message))
             return BadRequest(new ApiError("Message is required."));
 
-        var maxLength = Math.Clamp(options.Value.AskBranchOps.MaxMessageLength, 100, 4000);
+        var maxLength = Math.Clamp(options.Value.BranchOpsAgent.MaxMessageLength, 100, 4000);
         if (message.Length > maxLength)
             return BadRequest(new ApiError($"Message must be {maxLength} characters or fewer."));
 
@@ -41,7 +41,7 @@ public class AskBranchOpsController(
         if (!User.IsAdmin() && effectiveBranchId is null)
             return Forbid();
 
-        AskBranchOpsRunStream stream;
+        BranchOpsAgentRunStream stream;
         try
         {
             stream = await orchestrator.StartAsync(
@@ -51,7 +51,7 @@ public class AskBranchOpsController(
                 request.History,
                 cancellationToken);
         }
-        catch (AskBranchOpsRunException ex)
+        catch (BranchOpsAgentRunException ex)
         {
             return BadRequest(new ApiError(ex.Message));
         }
@@ -64,7 +64,7 @@ public class AskBranchOpsController(
 
         await foreach (var evt in stream.Events.ReadAllAsync(cancellationToken))
         {
-            var payload = AskBranchOpsSsePayload.FromEvent(evt);
+            var payload = BranchOpsAgentSsePayload.FromEvent(evt);
             await WriteSseAsync(payload.Type, payload, cancellationToken);
         }
 
@@ -77,7 +77,7 @@ public class AskBranchOpsController(
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Ask BranchOps stream completion failed after the SSE response started.");
+            logger.LogError(ex, "BranchOps Agent stream completion failed after the SSE response started.");
         }
 
         return new EmptyResult();
@@ -88,7 +88,7 @@ public class AskBranchOpsController(
 
     private async Task WriteSseAsync(
         string eventType,
-        AskBranchOpsSsePayload payload,
+        BranchOpsAgentSsePayload payload,
         CancellationToken cancellationToken)
     {
         await Response.WriteAsync($"event: {eventType}\n", cancellationToken);

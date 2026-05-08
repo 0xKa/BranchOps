@@ -36,11 +36,11 @@ import {
   Square,
 } from "lucide-react";
 import { useMemo, useState } from "react";
-import { useAskBranchOpsStream } from "./hooks/use-ask-branchops-stream";
+import { useBranchOpsAgentStream } from "./hooks/use-branchops-agent-stream";
 import type {
-  AskBranchOpsHistoryMessage,
-  AskBranchOpsMessage,
-  AskToolCallEvent,
+  BranchOpsAgentHistoryMessage,
+  BranchOpsAgentMessage,
+  BranchOpsAgentToolCallEvent,
 } from "./types";
 
 const SUGGESTED_PROMPTS = [
@@ -52,15 +52,15 @@ const SUGGESTED_PROMPTS = [
 
 const ALL_BRANCHES_VALUE = "__all__";
 
-export default function AskBranchOpsPage() {
+export default function BranchOpsAgentPage() {
   const user = useUser();
   const isAdmin = user?.role === USER_ROLES.Admin;
   const [question, setQuestion] = useState("");
   const [branchId, setBranchId] = useState(ALL_BRANCHES_VALUE);
-  const stream = useAskBranchOpsStream();
+  const stream = useBranchOpsAgentStream();
   const { data: branches } = useBranches();
 
-  const history = useMemo<AskBranchOpsHistoryMessage[]>(
+  const history = useMemo<BranchOpsAgentHistoryMessage[]>(
     () =>
       stream.messages
         .filter((message) => message.status !== "streaming")
@@ -72,7 +72,7 @@ export default function AskBranchOpsPage() {
   const selectedBranchId =
     isAdmin && branchId !== ALL_BRANCHES_VALUE ? branchId : undefined;
 
-  const ask = (prompt = question) => {
+  const submitQuestion = (prompt = question) => {
     const text = prompt.trim();
     if (!text || stream.isStreaming) return;
 
@@ -87,8 +87,8 @@ export default function AskBranchOpsPage() {
   return (
     <PageContainer>
       <PageHeader
-        title="Ask BranchOps"
-        description="Ask read-only operational questions across sales, products, branches, and stock."
+        title="BranchOps Agent"
+        description="Query read-only operational data across sales, products, branches, and stock."
       >
         {stream.isStreaming ? (
           <Button variant="outline" onClick={stream.cancel}>
@@ -123,7 +123,7 @@ export default function AskBranchOpsPage() {
 
           <div className="flex-1 space-y-4 overflow-auto px-4 py-4">
             {stream.messages.length === 0 ? (
-              <EmptyConversation onPick={ask} />
+              <EmptyConversation onPick={submitQuestion} />
             ) : (
               stream.messages.map((message) => (
                 <MessageBubble key={message.id} message={message} />
@@ -148,10 +148,10 @@ export default function AskBranchOpsPage() {
                 onChange={(event) => setQuestion(event.target.value)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
-                    ask();
+                    submitQuestion();
                   }
                 }}
-                placeholder="Ask about sales, branches, top products, recent orders, or low-stock items."
+                placeholder="Query sales, branches, top products, recent orders, or low-stock items."
                 className="min-h-20 resize-none"
                 disabled={stream.isStreaming}
               />
@@ -159,7 +159,7 @@ export default function AskBranchOpsPage() {
                 className="h-20 w-12 shrink-0"
                 size="icon"
                 disabled={!question.trim() || stream.isStreaming}
-                onClick={() => ask()}
+                onClick={() => submitQuestion()}
                 aria-label="Send question"
               >
                 <Send className="size-4" />
@@ -243,7 +243,7 @@ function EmptyConversation({ onPick }: { onPick: (prompt: string) => void }) {
   );
 }
 
-function MessageBubble({ message }: { message: AskBranchOpsMessage }) {
+function MessageBubble({ message }: { message: BranchOpsAgentMessage }) {
   const isUser = message.role === "user";
 
   return (
@@ -376,7 +376,7 @@ function splitTableRow(line: string) {
     .map((cell) => cell.trim());
 }
 
-function ToolActivityPanel({ tools }: { tools: AskToolCallEvent[] }) {
+function ToolActivityPanel({ tools }: { tools: BranchOpsAgentToolCallEvent[] }) {
   return (
     <aside className="surface-1 rounded-xl border border-border/60 p-4">
       <div className="mb-3">
