@@ -26,7 +26,7 @@ public sealed class AuditAndEventMiddleware(
         Func<FunctionInvocationContext, CancellationToken, ValueTask<object?>> next,
         CancellationToken cancellationToken)
     {
-        if (context.Iteration > options.Value.Replenishment.MaxToolIterations)
+        if (context.Iteration > GetMaxToolIterations())
         {
             context.Terminate = true;
             return new { error = "Maximum tool-call iterations exceeded." };
@@ -50,7 +50,7 @@ public sealed class AuditAndEventMiddleware(
             await audit.WriteAsync(
                 runContext.UserId,
                 "AI.Tool.Completed",
-                "ReplenishmentRun",
+                runContext.EntityType,
                 runContext.RunId,
                 BuildAuditDetails(toolName, toolCallId, argumentsJson, preview, failed: false, error: null),
                 cancellationToken);
@@ -67,7 +67,7 @@ public sealed class AuditAndEventMiddleware(
             await audit.WriteAsync(
                 runContext.UserId,
                 "AI.Tool.Failed",
-                "ReplenishmentRun",
+                runContext.EntityType,
                 runContext.RunId,
                 BuildAuditDetails(toolName, toolCallId, argumentsJson, "null", failed: true, ex.Message),
                 cancellationToken);
@@ -79,6 +79,11 @@ public sealed class AuditAndEventMiddleware(
             throw;
         }
     }
+
+    private int GetMaxToolIterations()
+        => string.Equals(runContext.EntityType, "AskBranchOps", StringComparison.OrdinalIgnoreCase)
+            ? options.Value.AskBranchOps.MaxToolIterations
+            : options.Value.Replenishment.MaxToolIterations;
 
     private static string ToPreviewJson(object? value)
     {

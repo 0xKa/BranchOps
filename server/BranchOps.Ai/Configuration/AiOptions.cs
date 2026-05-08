@@ -8,6 +8,7 @@ public sealed class AiOptions
 {
     public OpenAiSection OpenAI { get; set; } = new();
     public ReplenishmentSection Replenishment { get; set; } = new();
+    public AskBranchOpsSection AskBranchOps { get; set; } = new();
 
     public sealed class OpenAiSection
     {
@@ -31,5 +32,14 @@ public sealed class AiOptions
 
         /// <summary>Cap on the number of products the orchestrator will persist as recommendations per run.</summary>
         public int MaxProductsPerRun { get; set; } = 25;
+    }
+
+    public sealed class AskBranchOpsSection
+    {
+        public int MaxToolIterations { get; set; } = 8;
+        public int DefaultLookbackDays { get; set; } = 30;
+        public int MaxTableRows { get; set; } = 10;
+        public int MaxMessageLength { get; set; } = 1000;
+        public int MaxHistoryMessages { get; set; } = 6;
     }
 }
