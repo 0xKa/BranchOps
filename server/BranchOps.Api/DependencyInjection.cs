@@ -40,7 +40,9 @@ public static class DependencyInjection
         services.AddScoped<ISalesReadModel, SalesReadModelAdapter>();
         services.AddScoped<IProductReadModel, ProductReadModelAdapter>();
         services.AddScoped<IReplenishmentAuditWriter, AuditLogWriterAdapter>();
+        services.AddScoped<IAskBranchOpsReadModel, AskBranchOpsReadModelAdapter>();
         services.AddScoped<ReplenishmentRunOrchestrator>();
+        services.AddScoped<AskBranchOpsRunOrchestrator>();
 
         return services;
     }
