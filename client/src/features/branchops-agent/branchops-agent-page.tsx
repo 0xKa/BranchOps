@@ -35,7 +35,7 @@ import {
   Sparkles,
   Square,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useBranchOpsAgentStream } from "./hooks/use-branchops-agent-stream";
 import type {
   BranchOpsAgentHistoryMessage,
@@ -59,6 +59,7 @@ export default function BranchOpsAgentPage() {
   const [branchId, setBranchId] = useState(ALL_BRANCHES_VALUE);
   const stream = useBranchOpsAgentStream();
   const { data: branches } = useBranches();
+  const transcriptRef = useRef<HTMLDivElement | null>(null);
 
   const history = useMemo<BranchOpsAgentHistoryMessage[]>(
     () =>
@@ -71,6 +72,13 @@ export default function BranchOpsAgentPage() {
 
   const selectedBranchId =
     isAdmin && branchId !== ALL_BRANCHES_VALUE ? branchId : undefined;
+
+  useEffect(() => {
+    const transcript = transcriptRef.current;
+    if (!transcript) return;
+
+    transcript.scrollTop = transcript.scrollHeight;
+  }, [stream.messages]);
 
   const submitQuestion = (prompt = question) => {
     const text = prompt.trim();
@@ -85,7 +93,7 @@ export default function BranchOpsAgentPage() {
   };
 
   return (
-    <PageContainer>
+    <PageContainer className="h-full min-h-0 overflow-hidden">
       <PageHeader
         title="BranchOps Agent"
         description="Query read-only operational data across sales, products, branches, and stock."
@@ -103,9 +111,9 @@ export default function BranchOpsAgentPage() {
         )}
       </PageHeader>
 
-      <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="surface-1 flex min-h-[620px] flex-col rounded-xl border border-border/60">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 px-4 py-3">
+      <section className="grid min-h-0 flex-1 overflow-hidden gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="surface-1 flex min-h-0 flex-col overflow-hidden rounded-xl border border-border/60">
+          <div className="shrink-0 flex flex-wrap items-center justify-between gap-3 border-b border-border/60 px-4 py-3">
             <BranchScopeControl
               isAdmin={isAdmin}
               value={branchId}
@@ -121,7 +129,10 @@ export default function BranchOpsAgentPage() {
             )}
           </div>
 
-          <div className="flex-1 space-y-4 overflow-auto px-4 py-4">
+          <div
+            ref={transcriptRef}
+            className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain px-4 py-4"
+          >
             {stream.messages.length === 0 ? (
               <EmptyConversation onPick={submitQuestion} />
             ) : (
@@ -131,7 +142,7 @@ export default function BranchOpsAgentPage() {
             )}
           </div>
 
-          <div className="border-t border-border/60 p-4">
+          <div className="shrink-0 border-t border-border/60 p-4">
             {stream.error && (
               <div className="mb-3 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                 {stream.error}
@@ -378,13 +389,13 @@ function splitTableRow(line: string) {
 
 function ToolActivityPanel({ tools }: { tools: BranchOpsAgentToolCallEvent[] }) {
   return (
-    <aside className="surface-1 rounded-xl border border-border/60 p-4">
-      <div className="mb-3">
+    <aside className="surface-1 flex min-h-0 flex-col overflow-hidden rounded-xl border border-border/60 p-4">
+      <div className="mb-3 shrink-0">
         <h2 className="text-base font-semibold">Tool Activity</h2>
         <p className="text-sm text-muted-foreground">Read-only data calls used for the answer.</p>
       </div>
 
-      <div className="space-y-2">
+      <div className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
         {tools.length > 0 ? (
           tools.map((tool) => (
             <Collapsible key={`${tool.toolCallId}-${tool.sequence}`} className="rounded-lg border border-border/60">
