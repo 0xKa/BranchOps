@@ -28,6 +28,7 @@ import TopProductsPage from "./features/reports/top-products-page";
 import ExportSalesPage from "./features/reports/export-sales-page";
 import AuditLogPage from "./features/audit-log/audit-log-page";
 import SettingsPage from "./features/settings/settings-page";
+import ReplenishmentAgentPage from "./features/replenishment-agent/replenishment-agent-page";
 
 const { Admin, StockManager, BranchManager, Cashier } = USER_ROLES;
 
@@ -101,6 +102,14 @@ export const router = createBrowserRouter([
                   { path: "inventory", element: <StockLevelsPage /> },
                   { path: "inventory/adjustments", element: <StockAdjustmentsPage /> },
                   { path: "inventory/alerts", element: <LowStockAlertsPage /> },
+                ],
+              },
+
+              // Admin + StockManager + BranchManager
+              {
+                element: <RoleRoute allowedRoles={[Admin, StockManager, BranchManager]} />,
+                children: [
+                  { path: "inventory/replenishment-agent", element: <ReplenishmentAgentPage /> },
                 ],
               },
             ],

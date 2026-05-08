@@ -24,6 +24,7 @@ const BRANCH_SCOPED_PREFIXES = [
   "/Employees",
   "/BranchPhones",
   "/Branches",
+  "/Replenishment",
 ];
 
 // req interceptor: automatically adds JWT access token + branchId for non-Admin users

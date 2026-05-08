@@ -73,6 +73,7 @@ export default function AppSidebar(props: AppSidebarProps) {
         { title: t("nav.stockLevels"), url: "/inventory" },
         { title: t("nav.stockAdjustments"), url: "/inventory/adjustments" },
         { title: t("nav.lowStockAlerts"), url: "/inventory/alerts" },
+        { title: "Replenishment Advisor", url: "/inventory/replenishment-agent" },
       ],
     },
   ];

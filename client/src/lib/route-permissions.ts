@@ -32,6 +32,7 @@ export const ROUTE_PERMISSIONS: Record<string, readonly UserRole[]> = {
     "/inventory": [Admin, StockManager, BranchManager, Cashier],
     "/inventory/adjustments": [Admin, StockManager, BranchManager, Cashier],
     "/inventory/alerts": [Admin, StockManager, BranchManager, Cashier],
+    "/inventory/replenishment-agent": [Admin, StockManager, BranchManager],
 };
 
 /**
