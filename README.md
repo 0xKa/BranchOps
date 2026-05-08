@@ -136,6 +136,13 @@ Current keys:
       "MaxToolIterations": 6,
       "DefaultLookbackDays": 30,
       "MaxProductsPerRun": 3
+    },
+    "AskBranchOps": {
+      "MaxToolIterations": 8,
+      "DefaultLookbackDays": 30,
+      "MaxTableRows": 10,
+      "MaxMessageLength": 1000,
+      "MaxHistoryMessages": 6
     }
   }
 }
@@ -148,6 +155,11 @@ Config meanings:
 - `Ai:Replenishment:MaxToolIterations`: maximum tool-call loop iterations per run.
 - `Ai:Replenishment:DefaultLookbackDays`: default sales-history window for replenishment analysis.
 - `Ai:Replenishment:MaxProductsPerRun`: maximum persisted recommendations per advisor run.
+- `Ai:AskBranchOps:MaxToolIterations`: maximum tool-call loop iterations for one Ask BranchOps answer.
+- `Ai:AskBranchOps:DefaultLookbackDays`: default lookback window for operational questions.
+- `Ai:AskBranchOps:MaxTableRows`: maximum rows returned by Ask BranchOps table-oriented tools.
+- `Ai:AskBranchOps:MaxMessageLength`: maximum user message length accepted by the Ask BranchOps stream endpoint.
+- `Ai:AskBranchOps:MaxHistoryMessages`: maximum recent chat messages sent to the Ask BranchOps agent.
 
 Set the OpenAI API key with user-secrets:
 
@@ -232,6 +244,7 @@ $env:Jwt__Key="YOUR_LONG_JWT_SIGNING_KEY"
 $env:Ai__OpenAI__ApiKey="YOUR_OPENAI_API_KEY"
 $env:Ai__OpenAI__Model="gpt-5-mini"
 $env:Ai__Replenishment__MaxToolIterations="6"
+$env:Ai__AskBranchOps__MaxToolIterations="8"
 ```
 
 ### Run Locally
