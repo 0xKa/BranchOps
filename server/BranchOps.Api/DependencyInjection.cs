@@ -1,6 +1,7 @@
 using BranchOps.Ai;
 using BranchOps.Ai.Abstractions;
 using BranchOps.Api.Ai.Adapters;
+using BranchOps.Api.Ai.Orchestration;
 using BranchOps.Api.Data;
 using BranchOps.Api.Security;
 using BranchOps.Api.Services;
@@ -39,6 +40,7 @@ public static class DependencyInjection
         services.AddScoped<ISalesReadModel, SalesReadModelAdapter>();
         services.AddScoped<IProductReadModel, ProductReadModelAdapter>();
         services.AddScoped<IReplenishmentAuditWriter, AuditLogWriterAdapter>();
+        services.AddScoped<ReplenishmentRunOrchestrator>();
 
         return services;
     }

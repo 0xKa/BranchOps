@@ -19,6 +19,11 @@ if (string.IsNullOrWhiteSpace(connString))
     throw new InvalidOperationException(
         "Database connection string is not configured. Set 'ConnectionStrings:DefaultConnection' via user-secrets, environment variables, or appsettings.Development.json.");
 
+var openAiKey = builder.Configuration["Ai:OpenAI:ApiKey"];
+if (string.IsNullOrWhiteSpace(openAiKey))
+    throw new InvalidOperationException(
+        "OpenAI API key is not configured. Set 'Ai:OpenAI:ApiKey' via user-secrets, environment variables, or appsettings.Development.json.");
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
