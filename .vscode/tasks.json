@@ -4,7 +4,7 @@
     {
       "label": "Run Backend",
       "type": "shell",
-      "command": "dotnet run --launch-profile https",
+      "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}/server/BranchOps.Api/scripts/run-dev.ps1\"",
       "options": {
         "cwd": "${workspaceFolder}/server/BranchOps.Api"
       },
