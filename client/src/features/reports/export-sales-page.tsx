@@ -29,25 +29,87 @@ import {
     type ExportStatus,
 } from "./hooks";
 
-function defaultFromDate(): string {
+type DateRangePreset =
+    | "last7Days"
+    | "last30Days"
+    | "last3Months"
+    | "last6Months"
+    | "lastYear"
+    | "custom";
+type AutomaticDateRangePreset = Exclude<DateRangePreset, "custom">;
+
+const dateRangePresets: DateRangePreset[] = [
+    "last7Days",
+    "last30Days",
+    "last3Months",
+    "last6Months",
+    "lastYear",
+    "custom",
+];
+
+function formatDateInput(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+function dateFromDaysAgo(dayCount: number): string {
     const d = new Date();
-    d.setDate(d.getDate() - 29);
-    return d.toISOString().slice(0, 10);
+    d.setDate(d.getDate() - (dayCount - 1));
+    return formatDateInput(d);
+}
+
+function dateFromMonthsAgo(monthCount: number): string {
+    const today = new Date();
+    const d = new Date(today);
+    d.setDate(1);
+    d.setMonth(d.getMonth() - monthCount);
+    const lastDayOfTargetMonth = new Date(
+        d.getFullYear(),
+        d.getMonth() + 1,
+        0,
+    ).getDate();
+
+    d.setDate(Math.min(today.getDate(), lastDayOfTargetMonth));
+    return formatDateInput(d);
 }
 
 function todayDate(): string {
-    return new Date().toISOString().slice(0, 10);
+    return formatDateInput(new Date());
+}
+
+function getDateRangeForPreset(preset: AutomaticDateRangePreset) {
+    const fromDateByPreset: Record<AutomaticDateRangePreset, string> = {
+        last7Days: dateFromDaysAgo(7),
+        last30Days: dateFromDaysAgo(30),
+        last3Months: dateFromMonthsAgo(3),
+        last6Months: dateFromMonthsAgo(6),
+        lastYear: dateFromMonthsAgo(12),
+    };
+
+    return {
+        fromDate: fromDateByPreset[preset],
+        toDate: todayDate(),
+    };
+}
+
+function defaultFromDate(): string {
+    return getDateRangeForPreset("last30Days").fromDate;
 }
 
 export default function ExportSalesPage() {
     const { t } = useTranslation();
 
+    const [dateRangePreset, setDateRangePreset] =
+        useState<DateRangePreset>("last30Days");
     const [fromDate, setFromDate] = useState(defaultFromDate);
     const [toDate, setToDate] = useState(todayDate);
     const [branchFilter, setBranchFilter] = useState("");
     const [granularity, setGranularity] = useState<ExportGranularity>("OrderSummary");
     const [status, setStatus] = useState<ExportStatus | "">("");
     const [isExporting, setIsExporting] = useState(false);
+    const isCustomDateRange = dateRangePreset === "custom";
 
     const isValid =
         fromDate &&
@@ -56,6 +118,16 @@ export default function ExportSalesPage() {
         (new Date(toDate).getTime() - new Date(fromDate).getTime()) /
             (1000 * 60 * 60 * 24) <=
             366;
+
+    const handleDateRangePresetChange = (preset: DateRangePreset) => {
+        setDateRangePreset(preset);
+
+        if (preset === "custom") return;
+
+        const range = getDateRangeForPreset(preset);
+        setFromDate(range.fromDate);
+        setToDate(range.toDate);
+    };
 
     const handleExport = async () => {
         if (!isValid || isExporting) return;
@@ -96,6 +168,27 @@ export default function ExportSalesPage() {
                         <CalendarRange className="size-4 text-primary" />
                         <span className="text-sm font-medium">{t("exportSales.dateRange")}</span>
                     </div>
+                    <div
+                        aria-label={t("exportSales.quickRanges")}
+                        className="mb-3 flex flex-wrap gap-2"
+                        role="group"
+                    >
+                        {dateRangePresets.map((preset) => {
+                            const isSelected = preset === dateRangePreset;
+                            return (
+                                <Button
+                                    key={preset}
+                                    type="button"
+                                    variant={isSelected ? "default" : "outline"}
+                                    size="lg"
+                                    onClick={() => handleDateRangePresetChange(preset)}
+                                    className={isSelected ? "shadow-(--shadow-md)" : undefined}
+                                >
+                                    {t(`exportSales.${preset}`)}
+                                </Button>
+                            );
+                        })}
+                    </div>
                     <div className="flex flex-wrap items-end gap-3">
                         <div className="space-y-1">
                             <Label className="text-xs">{t("exportSales.from")}</Label>
@@ -103,6 +196,7 @@ export default function ExportSalesPage() {
                                 type="date"
                                 value={fromDate}
                                 onChange={(e) => setFromDate(e.target.value)}
+                                disabled={!isCustomDateRange}
                                 className="w-40 h-8 text-xs"
                             />
                         </div>
@@ -112,6 +206,7 @@ export default function ExportSalesPage() {
                                 type="date"
                                 value={toDate}
                                 onChange={(e) => setToDate(e.target.value)}
+                                disabled={!isCustomDateRange}
                                 className="w-40 h-8 text-xs"
                             />
                         </div>
