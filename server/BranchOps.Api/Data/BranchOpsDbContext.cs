@@ -8,6 +8,8 @@ namespace BranchOps.Api.Data;
 
 public class BranchOpsDbContext(DbContextOptions<BranchOpsDbContext> options) : DbContext(options)
 {
+    public bool SuppressAuditInfo { get; set; }
+
     public DbSet<User> Users { get; set; }
     public DbSet<Branch> Branches { get; set; }
     public DbSet<BranchPhone> BranchPhones { get; set; }
@@ -32,7 +34,9 @@ public class BranchOpsDbContext(DbContextOptions<BranchOpsDbContext> options) : 
     }
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        ApplyAuditInfo();
+        if (!SuppressAuditInfo)
+            ApplyAuditInfo();
+
         return base.SaveChangesAsync(cancellationToken);
     }
 

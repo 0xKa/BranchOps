@@ -17,12 +17,15 @@ public static class SeedImporter
     {
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<BranchOpsDbContext>();
+        var suppressAuditInfo = db.SuppressAuditInfo;
         var logger = scope.ServiceProvider
             .GetRequiredService<ILoggerFactory>()
             .CreateLogger(nameof(SeedImporter));
 
         try
         {
+            db.SuppressAuditInfo = true;
+
             await db.Database.MigrateAsync();
 
             if (await db.Users.AnyAsync())
@@ -75,6 +78,10 @@ public static class SeedImporter
         catch (Exception ex)
         {
             logger.LogError(ex, "Seed import failed.");
+        }
+        finally
+        {
+            db.SuppressAuditInfo = suppressAuditInfo;
         }
     }
 
