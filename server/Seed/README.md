@@ -2,7 +2,7 @@
 
 - File: `init.json`
 - Soft scan: passed
-- Total records: 324
+- Total records: 464
 
 | Section | Records |
 | --- | ---: |
@@ -14,7 +14,7 @@
 | ProductCategories | 6 |
 | Products | 24 |
 | BranchStocks | 30 |
-| Orders | 16 |
-| OrderItems | 36 |
-| StockAdjustments | 71 |
+| Orders | 44 |
+| OrderItems | 92 |
+| StockAdjustments | 127 |
 | AuditLogs | 20 |
