@@ -36,7 +36,10 @@ export default function BranchPerformanceList({
         );
     }
 
-    const maxSales = Math.max(...branches.map((b) => b.totalSales), 1);
+    const topBranches = [...branches]
+        .sort((a, b) => b.totalSales - a.totalSales)
+        .slice(0, 4);
+    const maxSales = Math.max(...topBranches.map((b) => b.totalSales), 1);
 
     return (
         <Card className="flex flex-col border-primary/10">
@@ -47,7 +50,7 @@ export default function BranchPerformanceList({
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                {branches.map((branch) => {
+                {topBranches.map((branch) => {
                     const pct = (branch.totalSales / maxSales) * 100;
                     return (
                         <div
@@ -97,7 +100,7 @@ export function BranchPerformanceSkeleton() {
                 <Skeleton className="h-5 w-36" />
             </CardHeader>
             <CardContent className="space-y-4">
-                {Array.from({ length: 3 }).map((_, i) => (
+                {Array.from({ length: 4 }).map((_, i) => (
                     <div key={i} className="space-y-2 rounded-lg border p-3">
                         <Skeleton className="h-4 w-full" />
                         <Skeleton className="h-1.5 w-full" />
