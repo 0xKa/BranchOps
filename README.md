@@ -4,6 +4,8 @@ BranchOps is a full-stack multi-branch operations system for businesses and rest
 
 The application is split into a React + TypeScript frontend and an ASP.NET Core backend backed by PostgreSQL. AI features live in a separate .NET project and stream results to the browser with Server-Sent Events.
 
+![BranchOps dashboard](docs/imgs/dashboard-page.png)
+
 ## Tech Stack
 
 | Area | Stack |
@@ -54,6 +56,105 @@ BranchOps/
   plan/                           Planning artifacts
   BranchOps.slnx                  .NET solution file
 ```
+
+## Authentication and Roles
+
+Backend roles are defined by `BranchOps.Domain/Auth/UserRole.cs`:
+
+```text
+Admin, StockManager, BranchManager, Cashier, Guest
+```
+
+The frontend mirrors these numeric roles in `client/src/features/auth/types.ts` and centralizes route permissions in `client/src/lib/route-permissions.ts`.
+
+![Security architecture diagram](diagrams/imgs/Security-Architecture-Diagram.png)
+
+High-level route access:
+
+| Area | Roles |
+| --- | --- |
+| Dashboard, settings | Any authenticated user |
+| Admin users, audit log | Admin |
+| Branches, employees, salaries, reports | Admin, BranchManager |
+| POS and order history | Admin, BranchManager, Cashier |
+| Products and inventory views | Admin, StockManager, BranchManager, Cashier |
+| Replenishment Advisor | Admin, StockManager, BranchManager |
+| BranchOps Agent | Admin, StockManager, BranchManager |
+
+For non-admin users, the JWT includes a `BranchId` claim when an employee record exists. The frontend appends that branch id to branch-scoped GET requests, and backend services/controllers enforce role and branch rules for sensitive workflows.
+
+## AI Workflows
+
+![BranchOps AI agent interface](docs/imgs/ai-agent.png)
+
+### Replenishment Advisor
+
+The Replenishment Advisor is available at:
+
+```text
+/inventory/replenishment-agent
+```
+
+It reviews one branch at a time, streams tool activity and narrative output, drafts reorder recommendations, and persists accepted draft recommendations as pending records. Human approval or rejection records decision metadata, but it does not update stock, create purchase orders, or create stock adjustments.
+
+Primary backend flow:
+
+1. `POST /api/Replenishment/runs?branchId=<branch-id>` starts an SSE stream.
+2. The API creates a `ReplenishmentRun`.
+3. The AI agent reads stock, product, and sales data through branch-scoped tools.
+4. Draft recommendations are validated by the orchestrator.
+5. Valid recommendations are persisted up to `Ai:Replenishment:MaxProductsPerRun`.
+6. Run history and details are available from `GET /api/Replenishment/runs` and `GET /api/Replenishment/runs/{id}`.
+7. Users approve or reject recommendations through run recommendation endpoints.
+
+More detail is in `docs/replenishment-advisor-feat-doc.md`.
+
+### BranchOps Agent
+
+The BranchOps Agent is available at:
+
+```text
+/reports/branchops-agent
+```
+
+It is an ephemeral, read-only operational analyst. Conversations are not persisted, tools do not mutate data, and tool calls are audited with entity type `BranchOpsAgent`.
+
+Primary backend flow:
+
+1. `POST /api/BranchOpsAgent/stream` sends a message, optional branch id, and recent in-memory history.
+2. The API sets a transient run context.
+3. The agent streams text and tool activity over SSE.
+4. Admin users can query all branches or one selected branch.
+5. Non-admin users are forced to the branch from their JWT claim.
+
+More detail is in `docs/branchops-agent.md`.
+
+## Database and Migrations
+
+![BranchOps ERD](diagrams/imgs/ERD-dbeaver.png)
+
+EF Core configuration lives under:
+
+```text
+server/BranchOps.Api/Data/
+```
+
+Migrations live under:
+
+```text
+server/BranchOps.Api/Migrations/
+```
+
+The migration sequence includes:
+
+- Initial users
+- Branches, employees, and salaries
+- Products and orders
+- Stock management
+- Audit log
+- Replenishment agent tables
+
+The domain model lives in `server/BranchOps.Domain`, while API-specific EF configuration is kept in `server/BranchOps.Api/Data/Configuration`.
 
 ## Prerequisites
 
@@ -326,30 +427,6 @@ Run backend commands from `server/BranchOps.Api/` unless noted:
 
 VS Code tasks are also configured for `Run Backend`, `Run Frontend`, and `Run All`.
 
-## Authentication and Roles
-
-Backend roles are defined by `BranchOps.Domain/Auth/UserRole.cs`:
-
-```text
-Admin, StockManager, BranchManager, Cashier, Guest
-```
-
-The frontend mirrors these numeric roles in `client/src/features/auth/types.ts` and centralizes route permissions in `client/src/lib/route-permissions.ts`.
-
-High-level route access:
-
-| Area | Roles |
-| --- | --- |
-| Dashboard, settings | Any authenticated user |
-| Admin users, audit log | Admin |
-| Branches, employees, salaries, reports | Admin, BranchManager |
-| POS and order history | Admin, BranchManager, Cashier |
-| Products and inventory views | Admin, StockManager, BranchManager, Cashier |
-| Replenishment Advisor | Admin, StockManager, BranchManager |
-| BranchOps Agent | Admin, StockManager, BranchManager |
-
-For non-admin users, the JWT includes a `BranchId` claim when an employee record exists. The frontend appends that branch id to branch-scoped GET requests, and backend services/controllers enforce role and branch rules for sensitive workflows.
-
 ## Backend API
 
 Most controllers use the route convention:
@@ -374,75 +451,6 @@ Important API areas:
 | `ReplenishmentController` | AI replenishment runs, history, details, approvals, rejections. |
 | `BranchOpsAgentController` | Read-only operational AI analyst streaming endpoint. |
 | `AccountSettingsController` | Profile and password updates for the authenticated user. |
-
-## AI Workflows
-
-### Replenishment Advisor
-
-The Replenishment Advisor is available at:
-
-```text
-/inventory/replenishment-agent
-```
-
-It reviews one branch at a time, streams tool activity and narrative output, drafts reorder recommendations, and persists accepted draft recommendations as pending records. Human approval or rejection records decision metadata, but it does not update stock, create purchase orders, or create stock adjustments.
-
-Primary backend flow:
-
-1. `POST /api/Replenishment/runs?branchId=<branch-id>` starts an SSE stream.
-2. The API creates a `ReplenishmentRun`.
-3. The AI agent reads stock, product, and sales data through branch-scoped tools.
-4. Draft recommendations are validated by the orchestrator.
-5. Valid recommendations are persisted up to `Ai:Replenishment:MaxProductsPerRun`.
-6. Run history and details are available from `GET /api/Replenishment/runs` and `GET /api/Replenishment/runs/{id}`.
-7. Users approve or reject recommendations through run recommendation endpoints.
-
-More detail is in `docs/replenishment-advisor-feat-doc.md`.
-
-### BranchOps Agent
-
-The BranchOps Agent is available at:
-
-```text
-/reports/branchops-agent
-```
-
-It is an ephemeral, read-only operational analyst. Conversations are not persisted, tools do not mutate data, and tool calls are audited with entity type `BranchOpsAgent`.
-
-Primary backend flow:
-
-1. `POST /api/BranchOpsAgent/stream` sends a message, optional branch id, and recent in-memory history.
-2. The API sets a transient run context.
-3. The agent streams text and tool activity over SSE.
-4. Admin users can query all branches or one selected branch.
-5. Non-admin users are forced to the branch from their JWT claim.
-
-More detail is in `docs/branchops-agent.md`.
-
-## Database and Migrations
-
-EF Core configuration lives under:
-
-```text
-server/BranchOps.Api/Data/
-```
-
-Migrations live under:
-
-```text
-server/BranchOps.Api/Migrations/
-```
-
-The migration sequence includes:
-
-- Initial users
-- Branches, employees, and salaries
-- Products and orders
-- Stock management
-- Audit log
-- Replenishment agent tables
-
-The domain model lives in `server/BranchOps.Domain`, while API-specific EF configuration is kept in `server/BranchOps.Api/Data/Configuration`.
 
 ## Development Guidelines
 
